@@ -1,0 +1,19 @@
+{
+    "compilerOptions": 
+    {
+        "target": "ES2015",
+        "jsx": "react",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "outDir": "dist"
+    },
+    "include": 
+    [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ],
+    "exclude": 
+    [
+        "dist"
+    ]
+}

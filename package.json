@@ -1,0 +1,27 @@
+{
+  "name": "electron-tsc-wp",
+  "version": "0.0.0",
+  "description": "React Electron app",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "run": "electron ./dist/main.js"
+  },
+  "author": "Pablo Riedemann",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^8.0.22",
+    "@types/react": "^16.0.2",
+    "@types/react-dom": "^15.5.2",
+    "awesome-typescript-loader": "^3.2.3",
+    "electron": "^1.7.5",
+    "ts-loader": "^2.3.2",
+    "typescript": "^2.4.2",
+    "webpack": "^3.5.4"
+  },
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "false": {}
+}
