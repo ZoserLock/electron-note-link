@@ -18,9 +18,11 @@ gulp.task("clean", function (cb)
 // Copy the non script assets to the destination folder
 gulp.task('copy-assets',['clean'],function(cb)
 {
-     return gulp
-    .src(_inputDit + '/html/*')
-    .pipe(gulp.dest(_outputDir + '/html'));
+
+    gulp.src(_inputDit + '/css/*').pipe(gulp.dest(_outputDir + '/css'));
+    gulp.src(_inputDit + '/html/*').pipe(gulp.dest(_outputDir + '/html'));
+
+    cb();
 });
 
 // Compile all the Typescript code using the tsconfig.json
@@ -29,7 +31,20 @@ gulp.task('build',['clean','copy-assets'],function(cb)
     run('webpack --config '+_webpackConfig,cb);
 });
 
-gulp.task('run',['build'],function(cb)
+// Build the project without post proccesses
+gulp.task('build:develop',['build']);
+
+// Build the project with post proccesses
+gulp.task('build:release',['build','minimize']);
+
+// Compile and run the projectc
+gulp.task('dev',['build:develop'],function(cb)
+{
+    run('electron ./dist/main.js',cb);
+});
+
+// Just run the project
+gulp.task('run',function(cb)
 {
     run('electron ./dist/main.js',cb);
 });
@@ -48,16 +63,8 @@ gulp.task('publish',['build'], function(cb)
     // Run packaging code.
 });
 
-// Utility tasks
-
 // Default task make the whole build
-gulp.task("default", ['run']); 
-
-// Build the project without post proccesses
-gulp.task('build:develop',['build']);
-
-// Build the project with post proccesses
-gulp.task('build:release',['build','minimize']);
+gulp.task("default", ['dev']); 
 
 // Run function to run a command and write the output live.
 function run(command, callback)
