@@ -40,7 +40,7 @@ class Application
 
         this._mainWindow = new BrowserWindow({width: 1024, height: 768});
 
-        this._mainWindow.loadURL('file://'+__dirname+'/index.html');
+        this._mainWindow.loadURL('file://'+__dirname+'/html/index.html');
 
         this._mainWindow.on('closed', () => 
         {

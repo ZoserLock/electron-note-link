@@ -43,7 +43,7 @@ module.exports = [
     Object.assign(
     {
         target: 'electron-renderer',
-        entry: { gui: './src/gui.tsx' },
+        entry: { app: './src/app.tsx' },
     },
     commonConfig)
   ]
