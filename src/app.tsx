@@ -1,9 +1,19 @@
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import * as ReactBoostrap  from 'react-bootstrap';
 
 import Comp from './app/components/comp';
+import Toolbar from './app/components/toolbar';
+
+class Application extends React.Component<any, any> 
+{
+    render() 
+    {
+        return (
+            <Toolbar/>
+          );
+    }
+}
 
 
 function Square(props) 
@@ -15,13 +25,8 @@ function Square(props)
     );
 }
 
-interface BoardData
-{
-    xIsNext: boolean;
-    squares?: string[];
-}
 
-class Board extends React.Component<any, BoardData> 
+class Board extends React.Component<any, any> 
 {
     constructor() 
     {
@@ -117,31 +122,7 @@ class Board extends React.Component<any, BoardData>
     }
 }
 
-class Game extends React.Component<any, any> 
-{
-  render() 
-  {
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
-      </div>
-    );
-  }
-}
-
-// ========================================
-
-
 ReactDOM.render(
-    <div className="container-fluid">
-    <button type="button" className="btn btn-success">Success</button>
-    </div>
-    ,
-  document.getElementById('root')
+    <Application/>
+    ,document.getElementById('root')
 );

@@ -4,9 +4,9 @@
     "files.exclude": 
     {
         "node_modules/": true,
-        ".build/":true,
-        "build/":true,
-        "dist/":true,
+        "build":true,
+        "dist":true,
+        "src/lib":true,
         "package-lock.json":true
     }
 }

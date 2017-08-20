@@ -1,6 +1,13 @@
 // Npm Modules
 import { app, BrowserWindow } from 'electron'
 
+// Local Modules
+// Load Enviromental Variables
+require('./env')
+
+import MainMenu from './app/mainmenu'
+import Debug from './app/tools/debug'
+
 class Application
 {
     private _app:Electron.App;
@@ -15,13 +22,18 @@ class Application
 
     public initialize():void
     {
-        BrowserWindow.addDevToolsExtension("C:/Users/zoser/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0");
+        if(process.env.DEBUG)
+        {
+            BrowserWindow.addDevToolsExtension("C:/Users/zoser/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0");
+        }
+        Debug.log("Testing");
+        MainMenu.initialize();
         this.createMainWindow();
     }
 
     public activate():void
     {
-        if(this._mainWindow==null)
+        if(this._mainWindow == null)
         {
             this.createMainWindow();
         }
@@ -39,7 +51,12 @@ class Application
     {
         console.log(process.cwd());
 
-        this._mainWindow = new BrowserWindow({width: 1280, height: 720});
+        this._mainWindow = new BrowserWindow({
+            width: 1280, 
+            height: 720,
+            minWidth: 800,
+            minHeight: 600,
+        });
 
         this._mainWindow.loadURL('file://'+__dirname+'/html/index.html');
 

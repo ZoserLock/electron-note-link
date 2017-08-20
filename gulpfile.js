@@ -1,16 +1,16 @@
-var exec   = require('child_process').exec;
-var http   = require('https');
-var fs     = require('fs');
-var gulp   = require('gulp');
+const exec   = require('child_process').exec;
+const http   = require('https');
+const fs     = require('fs');
+const gulp   = require('gulp');
+const async  = require("async");
 
-var uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify');
 
 // Constants
 const _outputDir = "dist";
 const _inputDit  = "src";
 const _appPath   = _outputDir + "/main.js";
 const _webpackConfig  = "webpack.config.js";
-
 
 // Clean all the content in the build directory
 gulp.task("clean", function (cb) 
@@ -21,21 +21,39 @@ gulp.task("clean", function (cb)
 // Download some files and update them.
 gulp.task('download-assets',['clean'],function(cb)
 {
-    downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',_inputDit + '/css/boostrap/boostrap.min.css',cb);
+    async.parallel(
+    [
+        function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',_inputDit + '/lib/css/boostrap.min.css',callback)},
+        function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'  ,_inputDit + '/lib/js/bootstrap.min.js',callback)},
+        function(callback){downloadFile('https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js'                     ,_inputDit + '/lib/js/tether.min.js',callback)},
+        function(callback){downloadFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js' ,_inputDit + '/lib/js/popper.min.js',callback)},
+        function(callback){downloadFile('https://code.jquery.com/jquery-3.2.1.min.js'                               ,_inputDit + '/lib/js/jquery-3.2.1.min.js',callback)},
+    ], 
+    function(err, results) 
+    {
+        cb(err);
+    });
 });
 
 // Copy the non script assets to the destination folder
 gulp.task('copy-assets',['clean','download-assets'],function(cb)
 {
-
     gulp.src(_inputDit + '/css/**/*').pipe(gulp.dest(_outputDir + '/css'));
+    gulp.src(_inputDit + '/lib/**/*').pipe(gulp.dest(_outputDir + '/lib'));
     gulp.src(_inputDit + '/html/**/*').pipe(gulp.dest(_outputDir + '/html'));
 
     cb();
 });
 
+// this function is to copy the debug or release env file to have compilation variables
+gulp.task('generate-env',['clean'],function(cb)
+{
+    fs.createReadStream('env.debug').pipe(fs.createWriteStream(_inputDit+'/env.ts')).on('finish', cb);
+});
+
+
 // Compile all the Typescript code using the tsconfig.json
-gulp.task('build',['clean','copy-assets','download-assets'],function(cb)
+gulp.task('build',['clean','copy-assets','download-assets','generate-env'],function(cb)
 {
     run('webpack --config '+_webpackConfig,cb);
 });
@@ -100,7 +118,6 @@ function downloadFile(url,target, callback)
     var file = fs.createWriteStream(target);
     var request = http.get(url, function(response) 
     {
-        response.pipe(file);
-        callback();
+        response.pipe(file).on('finish', callback);
     });
 }
