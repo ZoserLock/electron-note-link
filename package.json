@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/node": "^8.0.22",
     "@types/react": "^16.0.2",
+    "@types/react-bootstrap": "0.0.52",
     "@types/react-dom": "^15.5.2",
     "electron": "^1.7.5",
     "gulp": "^3.9.1",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "react": "^15.6.1",
+    "react-bootstrap": "^0.31.2",
     "react-dom": "^15.6.1"
   },
   "false": {}

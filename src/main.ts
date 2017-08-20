@@ -15,6 +15,7 @@ class Application
 
     public initialize():void
     {
+        BrowserWindow.addDevToolsExtension("C:/Users/zoser/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0");
         this.createMainWindow();
     }
 
@@ -38,14 +39,18 @@ class Application
     {
         console.log(process.cwd());
 
-        this._mainWindow = new BrowserWindow({width: 1024, height: 768});
+        this._mainWindow = new BrowserWindow({width: 1280, height: 720});
 
         this._mainWindow.loadURL('file://'+__dirname+'/html/index.html');
+
+        this._mainWindow.webContents.openDevTools();
 
         this._mainWindow.on('closed', () => 
         {
             this._mainWindow = null
         });
+
+        
     }
 
 }
