@@ -7,17 +7,21 @@ require('./env')
 
 import MainMenu from './app/mainmenu'
 import Debug from './app/tools/debug'
+import PersistenceManager from './app/persistence/persistenceManager';
 
 class Application
 {
     private _app:Electron.App;
     private _mainWindow:Electron.BrowserWindow;
+    private _persistenceManager:PersistenceManager;
 
     constructor(app:Electron.App)
     {
         this._app = app;
         this._app.on('ready',()=>this.initialize());
         this._app.on('window-all-closed', ()=>this.quit());
+
+        this._persistenceManager = new PersistenceManager();
     }
 
     public initialize():void
@@ -28,7 +32,9 @@ class Application
         }
         Debug.log("Testing");
         MainMenu.initialize();
-        this.createMainWindow();
+        this.createMainWindow(); 
+
+        this._persistenceManager.listFolderFiles();
     }
 
     public activate():void

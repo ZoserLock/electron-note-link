@@ -16,7 +16,7 @@ class Application extends React.Component<any, any>
 }
 
 
-function Square(props) 
+function Square(props:any) 
 {
     return (
       <button className="square" onClick={props.onClick}>
@@ -76,7 +76,7 @@ class Board extends React.Component<any, any>
         return null;
     }
 
-    renderSquare(i) 
+    renderSquare(i:number) 
     {
         return <Square 
                     value = {this.state.squares[i]} 

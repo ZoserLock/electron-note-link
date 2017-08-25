@@ -3,6 +3,15 @@ import { Menu } from 'electron';
 const template:Electron.MenuItemConstructorOptions[] =  
 [
     {
+        label: 'File',
+        submenu:
+        [
+            {label:'New Note'},
+            {type:'separator'},
+            {label:'Exit'}
+        ]
+    },
+    {
         label: 'Edit',
         submenu: 
         [

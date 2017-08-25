@@ -1,5 +1,3 @@
-
-
 export default class Debug
 {
     public static log(text:string)

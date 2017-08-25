@@ -5,6 +5,8 @@
         "jsx": "react",
         "module": "commonjs",
         "moduleResolution": "node",
+        "sourceMap": true,
+        "noImplicitAny": true,
         "outDir": "dist"
     },
     "include": 
