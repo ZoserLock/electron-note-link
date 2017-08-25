@@ -1,4 +1,5 @@
-const path = require('path')
+const path = require('path');
+const webpack = require('webpack');
 
 const commonConfig = 
 {
@@ -15,7 +16,8 @@ const commonConfig =
     },
     node: 
     {
-        __dirname: false
+        __dirname: false,
+        __filename:false
     },
     resolve: 
     {
@@ -30,7 +32,11 @@ const commonConfig =
     {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js'
-    }
+    },
+    plugins: 
+    [
+      new webpack.DefinePlugin({ 'global.GENTLY': false })
+    ]
 }
 
 module.exports = [
