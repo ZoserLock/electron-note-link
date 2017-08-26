@@ -1,5 +1,5 @@
 // Load Npm Modules
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain , Menu } from 'electron'
 
 // Load local Modules
 import Debug            from '../tools/debug'
@@ -13,8 +13,8 @@ export default class Application
 {
     private static sInstance:Application;
 
-    private _app:Electron.App;
     private _mainWindow:Electron.BrowserWindow;
+    private _exiting:boolean;
 
     // Singleton functions
     static get instance(): Application 
@@ -24,15 +24,14 @@ export default class Application
 
     static initialize():void
     {
-        this.sInstance = new Application(app);
+        this.sInstance = new Application();
     }
 
     // Member functions
-    private constructor(app:Electron.App)
+    private constructor()
     {
-        this._app = app;
-        this._app.on('ready',() => this.initialize());
-        this._app.on('window-all-closed', () => this.quit());
+        this._exiting = false;
+        app.on("ready",() => this.initialize());
     }
 
     // Entry function of the application
@@ -40,18 +39,19 @@ export default class Application
     {
         Debug.log("Initializing Application");
 
-        Configuration.initialize();
-        DataManager.initialize();
-        GlobalShortcut.initialize();
-        ActionManager.initialize();
+        Configuration   .initialize();
+        DataManager     .initialize();
+        ActionManager   .initialize();
 
-        MainMenu.initialize();
+        GlobalShortcut  .initialize();
+        MainMenu        .initialize();
 
-        this.initializeMainWindow(); 
+        this.createTrayIcon();
+        this.createMainWindow(); 
         
         if(process.env.DEBUG)
         {
-          //  this.initializeDebug();
+            this.initializeDebug();
         }
     }
 
@@ -62,19 +62,35 @@ export default class Application
         this._mainWindow.webContents.openDevTools();        
     }
 
-    // Function called when all windows are closed 
-    private quit():void
+    private createTrayIcon():void
     {
-        Debug.log("All windows closed");
-        if (process.platform !== 'darwin') 
-        {
-            Debug.log("Application Quit");
-            this._app.quit();
-        }
-    }
+        var appIcon = new Tray(__dirname + '/img/tray.ico');
 
+        var contextMenu = Menu.buildFromTemplate([
+            {
+                label: 'Show App', click: () => 
+                {
+                    this._mainWindow.show();
+                }
+            },
+            {
+                label: 'Exit', click: () => 
+                {
+                    this.exit();
+                }
+            }
+        ])
+        appIcon.setContextMenu(contextMenu);
+        appIcon.setHighlightMode('always');
+
+        appIcon.on('click', () => 
+        {
+            this._mainWindow.show();
+        });
+
+    }
     // Function to create the main windows of the application
-    private initializeMainWindow():void
+    private createMainWindow():void
     {
         this._mainWindow = new BrowserWindow(
         {
@@ -86,19 +102,37 @@ export default class Application
 
         this._mainWindow.loadURL('file://' + __dirname + '/html/index.html');
 
+        this._mainWindow.on('close', (event:any) => 
+        {
+            if(!this._exiting)
+            {
+                event.preventDefault()
+                this._mainWindow.hide();
+            }
+            return false;
+        });
+
         this._mainWindow.on('closed', () => 
         {
             this._mainWindow = null;
         });
+
+
     }
 
     public exit():void
     {
         Debug.log("Exit called by user");
+        this._exiting = true;
+        app.quit();
+    }
 
+    public sendUIMessage(channel:string, data?:any):void
+    {
         if(this._mainWindow != null)
         {
-            this._mainWindow.close();
+            this._mainWindow.webContents.send(channel,data);
         }
     }
 }
+

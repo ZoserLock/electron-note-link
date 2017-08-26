@@ -12,7 +12,7 @@ export default class LogAction extends Action
         this._text = text;
     }
 
-    public execute()
+    public execute():void
     {
         Debug.log("Log: " + this._text);
     }

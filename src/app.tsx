@@ -2,16 +2,35 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-import Comp from './app/ui/components/comp';
-import Toolbar from './app/ui/components/toolbar';
+import {ipcRenderer} from 'electron'; 
 
-class Application extends React.Component<any, any> 
+import Toolbar from './app/ui/components/toolbar';
+import UIManager from './app/core/uiManager';
+
+class ApplicationWindow extends React.Component<any, any> 
 {
+    constructor()
+    {
+        super();
+
+        this.state = 
+        {
+            name:"Zoser Default",
+        };
+
+        ipcRenderer.on('data',(event:any,data:any)=>this.dataReceived(event,data));
+    }
+
+    public dataReceived(event:any,data:any):void
+    {
+        console.log(data.name);
+
+        this.setState({name:data.name});
+    }
+
     render() 
     {
-        return (
-            <Toolbar/>
-          );
+        return <Toolbar name={this.state.name}/>;
     }
 }
 
@@ -122,7 +141,9 @@ class Board extends React.Component<any, any>
     }
 }
 
+UIManager.initialize();
+
 ReactDOM.render(
-    <Application/>
+    <ApplicationWindow/>
     ,document.getElementById('root')
 );

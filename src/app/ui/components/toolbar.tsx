@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {ipcRenderer} from 'electron'; 
 
 export default class Toolbar extends React.Component<any, any> 
 {
@@ -13,7 +14,7 @@ export default class Toolbar extends React.Component<any, any>
     {
         return (
             <nav className="navbar navbar-expand">
-                <a className="navbar-brand" href="#">Navbar</a>
+                <a className="navbar-brand" href="#">{this.props.name}</a>
                 <ul className="navbar-nav mr-auto">
                 <li className="nav-item active">
                     <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>

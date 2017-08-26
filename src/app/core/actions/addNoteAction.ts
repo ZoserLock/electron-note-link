@@ -15,7 +15,7 @@ export default class AddNoteAction extends Action
         this.text = text;
     }
 
-    public execute()
+    public execute():void
     {
         Debug.log("Log: " + this.text);
     }

@@ -1,4 +1,4 @@
-
+import { ipcMain } from 'electron'
 // Local Modules
 import Action from './action'
 
@@ -17,7 +17,7 @@ export default class ActionManager
         this.sInstance = new ActionManager();
     }
 
-    public execute(action:Action)
+    public execute(action:Action):void
     {
         action.execute();
     }

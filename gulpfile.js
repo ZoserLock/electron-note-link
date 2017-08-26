@@ -41,6 +41,7 @@ gulp.task('copy-assets',['clean','download-assets'],function(cb)
     gulp.src(_inputDit + '/css/**/*').pipe(gulp.dest(_outputDir + '/css'));
     gulp.src(_inputDit + '/lib/**/*').pipe(gulp.dest(_outputDir + '/lib'));
     gulp.src(_inputDit + '/html/**/*').pipe(gulp.dest(_outputDir + '/html'));
+    gulp.src(_inputDit + '/img/**/*').pipe(gulp.dest(_outputDir + '/img'));
 
     cb();
 });
