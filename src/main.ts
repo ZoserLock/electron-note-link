@@ -1,82 +1,74 @@
-// Npm Modules
+// Load Npm Modules
 import { app, BrowserWindow } from 'electron'
 
-// Local Modules
 // Load Enviromental Variables
 require('./env')
 
-import MainMenu from './app/mainmenu'
+// Load local Modules
+import MainMenu from './app/mainMenu'
 import Debug from './app/tools/debug'
-import PersistenceManager from './app/persistence/persistenceManager';
+import StorageManager from './app/core/storageManager';
 
 class Application
 {
-    private _app:Electron.App;
-    private _mainWindow:Electron.BrowserWindow;
-    private _persistenceManager:PersistenceManager;
+    private app:Electron.App;
+    private mainWindow:Electron.BrowserWindow;
 
     constructor(app:Electron.App)
     {
-        this._app = app;
-        this._app.on('ready',()=>this.initialize());
-        this._app.on('window-all-closed', ()=>this.quit());
-
-        this._persistenceManager = new PersistenceManager();
+        this.app = app;
+        this.app.on('ready',()=>this.initialize());
+        this.app.on('window-all-closed', ()=>this.quit());
     }
 
-    public initialize():void
+    // Function called when electron is ready
+    private initialize():void
     {
+        MainMenu.initialize();
+        StorageManager.initialize();
+
+        this.initializeMainWindow(); 
+
         if(process.env.DEBUG)
         {
-            BrowserWindow.addDevToolsExtension("C:/Users/zoser/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0");
+            this.initializeDebug();
         }
-        Debug.log("Testing");
-        MainMenu.initialize();
-        this.createMainWindow(); 
-
-        this._persistenceManager.listFolderFiles();
     }
 
-    public activate():void
+    // Function called only in debug enviroment
+    private initializeDebug()
     {
-        if(this._mainWindow == null)
-        {
-            this.createMainWindow();
-        }
+        BrowserWindow.addDevToolsExtension("C:/Users/zoser/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0");
+        this.mainWindow.webContents.openDevTools();        
     }
 
-    public quit():void
+    // Function called when all windows are closed
+    private quit():void
     {
         if (process.platform !== 'darwin') 
         {
-            this._app.quit();
+            this.app.quit();
         }
     }
 
-    public createMainWindow():void
+    public initializeMainWindow():void
     {
-        console.log(process.cwd());
-
-        this._mainWindow = new BrowserWindow({
+        this.mainWindow = new BrowserWindow(
+        {
             width: 1280, 
             height: 720,
             minWidth: 800,
             minHeight: 600,
         });
 
-        this._mainWindow.loadURL('file://'+__dirname+'/html/index.html');
+        this.mainWindow.loadURL('file://' + __dirname + '/html/index.html');
 
-        this._mainWindow.webContents.openDevTools();
-
-        this._mainWindow.on('closed', () => 
+        this.mainWindow.on('closed', () => 
         {
-            this._mainWindow = null
+            this.mainWindow = null
         });
-
-        
     }
-
 }
 
-// Create Application
+// Create and initialize Application
 const application = new Application(app);

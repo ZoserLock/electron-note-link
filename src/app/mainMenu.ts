@@ -6,7 +6,7 @@ const template:Electron.MenuItemConstructorOptions[] =
         label: 'File',
         submenu:
         [
-            {label:'New Note'},
+            {label:'New Note',click:()=>{alert("Clicked")}},
             {type:'separator'},
             {label:'Exit'}
         ]
