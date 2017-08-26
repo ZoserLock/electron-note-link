@@ -4,7 +4,7 @@ export default class Debug
     {
         if(process.env.DEBUG)
         {
-            console.log(text); 
+            console.log(" -> "+text); 
         }
     }
 }

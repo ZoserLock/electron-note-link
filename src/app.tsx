@@ -2,8 +2,8 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-import Comp from './app/components/comp';
-import Toolbar from './app/components/toolbar';
+import Comp from './app/ui/components/comp';
+import Toolbar from './app/ui/components/toolbar';
 
 class Application extends React.Component<any, any> 
 {

@@ -11,6 +11,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/bookshelf": "^0.9.6",
+    "@types/fs-extra": "^4.0.0",
     "@types/knex": "0.0.59",
     "@types/node": "^8.0.25",
     "@types/react": "^16.0.5",
@@ -27,6 +28,7 @@
   "dependencies": {
     "bookshelf": "^0.10.4",
     "dropbox": "^2.5.7",
+    "fs-extra": "^4.0.1",
     "knex": "^0.13.0",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",

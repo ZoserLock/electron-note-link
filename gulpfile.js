@@ -98,9 +98,6 @@ function run(command, callback)
 {
     let process = exec(command, function (err, stdout, stderr) 
     {
-        console.log(stdout);
-        console.log(stderr); 
-
         if(callback != undefined)
         {
              callback(err);
