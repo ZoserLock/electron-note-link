@@ -25,7 +25,6 @@ gulp.task('download-assets',['clean'],function(cb)
     [
         function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',_inputDit + '/lib/css/boostrap.min.css',callback)},
         function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'  ,_inputDit + '/lib/js/bootstrap.min.js',callback)},
-        function(callback){downloadFile('https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js'                     ,_inputDit + '/lib/js/tether.min.js',callback)},
         function(callback){downloadFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js' ,_inputDit + '/lib/js/popper.min.js',callback)},
         function(callback){downloadFile('https://code.jquery.com/jquery-3.2.1.min.js'                               ,_inputDit + '/lib/js/jquery-3.2.1.min.js',callback)},
     ], 

@@ -8,12 +8,14 @@ import MainMenu         from '../ui/mainMenu'
 import GlobalShortcut   from '../ui/globalShortcut'
 import DataManager      from '../core/DataManager';
 import ActionManager    from '../core/actionManager';
+import Director         from '../core/director';
 
 export default class Application
 {
     private static sInstance:Application;
 
     private _mainWindow:Electron.BrowserWindow;
+    private _trayIcon:Electron.Tray;
     private _exiting:boolean;
 
     // Singleton functions
@@ -42,7 +44,7 @@ export default class Application
         Configuration   .initialize();
         DataManager     .initialize();
         ActionManager   .initialize();
-
+        Director        .initialize();
         GlobalShortcut  .initialize();
         MainMenu        .initialize();
 
@@ -53,6 +55,7 @@ export default class Application
         {
             this.initializeDebug();
         }
+        
     }
 
     // Function called only in debug enviroment
@@ -64,7 +67,7 @@ export default class Application
 
     private createTrayIcon():void
     {
-        var appIcon = new Tray(__dirname + '/img/tray.ico');
+        this._trayIcon = new Tray(__dirname + '/img/tray.ico');
 
         var contextMenu = Menu.buildFromTemplate([
             {
@@ -80,10 +83,10 @@ export default class Application
                 }
             }
         ])
-        appIcon.setContextMenu(contextMenu);
-        appIcon.setHighlightMode('always');
+        this._trayIcon.setContextMenu(contextMenu);
+        this._trayIcon.setHighlightMode('always');
 
-        appIcon.on('click', () => 
+        this._trayIcon.on('click', () => 
         {
             this._mainWindow.show();
         });

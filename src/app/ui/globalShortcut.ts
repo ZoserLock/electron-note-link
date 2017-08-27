@@ -11,10 +11,9 @@ export default class GlobalShortcuts
 {
     public static initialize() : void
     {
-        globalShortcut.register("CommandOrControl+X", () =>
+        globalShortcut.register("CommandOrControl+R", () =>
         {
             // Check window visibility
-            Application.instance.sendUIMessage("data",{name:"toolba!"});
         });
     }
 }

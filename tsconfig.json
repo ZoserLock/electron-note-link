@@ -8,6 +8,8 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "noImplicitReturns":true,
+        "noImplicitThis":true,
+        
         "outDir": "dist"
     },
     "include": 
