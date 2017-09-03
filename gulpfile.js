@@ -1,4 +1,5 @@
 const exec   = require('child_process').exec;
+const spawn  = require('child_process').spawn;
 const http   = require('https');
 const fs     = require('fs');
 const gulp   = require('gulp');
@@ -67,13 +68,13 @@ gulp.task('build:release',['build','minimize']);
 // Compile and run the projectc
 gulp.task('dev',['build:develop'],function(cb)
 {
-    run('electron ./dist/main.js',cb);
+    run('electron .',cb);
 });
 
 // Just run the project
 gulp.task('run',function(cb)
 {
-    run('electron ./dist/main.js',cb);
+    run("electron .",cb);
 });
 
 // Minimize the output files
@@ -96,7 +97,7 @@ gulp.task("default", ['dev']);
 // Run function to run a command and write the output live.
 function run(command, callback)
 {
-    let process = exec(command, function (err, stdout, stderr) 
+    let process = exec(command, function (err, stdout, stderr)
     {
         if(callback != undefined)
         {

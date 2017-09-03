@@ -1,14 +1,15 @@
-var Dropbox = require("dropbox");
+
+import { app} from 'electron'
+
+import Debug from "../tools/debug"
+import NoteStorage from "../notes/noteStorage"
+
 
 export default class DataManager
 {
+    // Singleton 
     private static sInstance:DataManager;
 
-    // Dropbox Tests
-    private _accessToken:string = "YsFlkCHsMjgAAAAAAAAQ5wvm5d9uwKj9fxjG_OTQKG-95gazgB4ZY1RIUT_ddOYM";
-    private _dropbox:any;
-
-    // Get/Set
     static get instance(): DataManager 
     {
         return this.sInstance;
@@ -19,21 +20,43 @@ export default class DataManager
         this.sInstance = new DataManager();
     }
 
+    // Member Variables
+
+    private _noteStorages: Array<NoteStorage> = new Array<NoteStorage>();
+
+    // Member Functions
     private constructor()
     {
-        this._dropbox = new Dropbox({ accessToken: this._accessToken });
+        this._noteStorages = new Array<NoteStorage>();
+        Debug.log("storages path: "+app.getPath('userData'));
+        Debug.logError("storages undefined ERROR");
+      //  this.CheckStorageIntegrety();
     }
 
-    public listFolderFiles():void
+
+    private CheckStorageIntegrety():void
     {
-        this._dropbox.filesListFolder({path: ""})
-        .then(function(response:any) 
+        let storages:string = window.localStorage.getItem("nl-storages");
+
+        if(storages === null || storages === "")
         {
-            console.log(response);
-        })
-        .catch(function(error:any) 
+            Debug.log("storages undefined");
+
+        }
+
+        for(let a = 0; a < this._noteStorages.length; ++a)
         {
-            console.log(error);
-        });
+
+        }
+    }
+    
+    private CreateStorageDefinitions()
+    {
+
+    }
+
+    public SaveNote():void
+    {
+
     }
 }

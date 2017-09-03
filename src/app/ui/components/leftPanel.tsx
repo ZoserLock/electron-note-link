@@ -9,32 +9,36 @@ export default class LeftPanel extends React.Component<any, any>
     {
         super(props);
 
-        ipcRenderer.on('update:LeftPanel',(event:any,data:any)=>this.dataReceived(event,data));
-
         this.state =
         {
             notebooks:null
         }  
+    }
+ 
+    public componentDidMount() 
+    {
+        ipcRenderer.addListener('update:LeftPanel',(event:any,data:any)=>this.updateRequested(event,data));
 
         UIManager.instance.sendMessage("update:LeftPanel");
     }
- 
-    public dataReceived(event:any,data:any):void
-    {
-        console.log(data.notebooks);
 
+    public componentWillUnmount()
+    {
+        ipcRenderer.removeListener('update:LeftPanel',(event:any,data:any)=>this.updateRequested(event,data));
+    }
+
+    public updateRequested(event:any,data:any):void
+    {
         let notebooks = data.notebooks.map((notebook:any) =>
+        {
+            if(notebook.name === data.current)
             {
-                if(notebook.name == data.current)
-                {
-                    return <button type="button" className="list-group-item list-group-item-action level-2 active" key={notebook.name}>{notebook.name}</button>
-                }
-            
-                return <button type="button" className="list-group-item list-group-item-action level-2" key={notebook.name}>{notebook.name}</button>
-                
+                return <button type="button" className="list-group-item list-group-item-action level-2 active" key={notebook.name}>{notebook.name}</button>
             }
-           
-        )
+        
+            return <button type="button" className="list-group-item list-group-item-action level-2" key={notebook.name}>{notebook.name}</button>
+            
+        });
 
         this.setState({notebooks:notebooks});
 
