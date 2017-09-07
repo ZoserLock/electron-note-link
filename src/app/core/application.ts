@@ -6,7 +6,7 @@ import Debug            from '../tools/debug'
 import Configuration    from '../tools/configuration'
 import MainMenu         from '../ui/mainMenu'
 import GlobalShortcut   from '../ui/globalShortcut'
-import DataManager      from '../core/DataManager';
+import DataManager      from '../core/dataManager';
 import ActionManager    from '../core/actionManager';
 import Director         from '../core/director';
 

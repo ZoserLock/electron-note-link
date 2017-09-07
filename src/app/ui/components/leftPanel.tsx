@@ -1,7 +1,8 @@
-import * as React from 'react';
-import {ipcRenderer} from 'electron'; 
+import * as React from "react";
+import {ipcRenderer} from "electron"; 
 
 import UIManager from "../../core/uiManager";
+import NotebookStorage  from "../../notes/notebookStorage";
 
 export default class LeftPanel extends React.Component<any, any> 
 {
@@ -17,30 +18,24 @@ export default class LeftPanel extends React.Component<any, any>
  
     public componentDidMount() 
     {
-        ipcRenderer.addListener('update:LeftPanel',(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.addListener("update:LeftPanel",(event:any,data:any)=>this.updateRequested(event,data));
 
         UIManager.instance.sendMessage("update:LeftPanel");
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener('update:LeftPanel',(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.removeListener("update:LeftPanel",(event:any,data:any)=>this.updateRequested(event,data));
     }
 
-    public updateRequested(event:any,data:any):void
+    public updateRequested(event:any, data:any):void
     {
-        let notebooks = data.notebooks.map((notebook:any) =>
+        let storages = data.storages.map((storage:NotebookStorage) =>
         {
-            if(notebook.name === data.current)
-            {
-                return <button type="button" className="list-group-item list-group-item-action level-2 active" key={notebook.name}>{notebook.name}</button>
-            }
-        
-            return <button type="button" className="list-group-item list-group-item-action level-2" key={notebook.name}>{notebook.name}</button>
-            
+            return <button type="button" className="list-group-item list-group-item-action level-2" key={storage.id}>{storage.path}</button>
         });
 
-        this.setState({notebooks:notebooks});
+        this.setState({notebooks:storages});
 
         this.forceUpdate();
     }

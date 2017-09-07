@@ -1,10 +1,14 @@
 
 import {ipcMain} from "electron"; 
 
+import Debug from "../tools/debug";
 import Application from "./application";
+import DataManager from "./dataManager";
+import NotebookStorage from "../notes/notebookStorage";
 
 export default class Director
 {
+    // Singleton
     private static sInstance:Director;
 
     // Get/Set
@@ -15,19 +19,26 @@ export default class Director
 
     static initialize():void
     {
+        Debug.log("Inityializer moment: "+DataManager.instance);
         this.sInstance = new Director();
     }
 
+    // Static Variables 
+
+
+    // Member Variables
     private constructor()
     {
         ipcMain.on("update:LeftPanel",()=>this.updateLeftPanel());
         ipcMain.on("update:Toolbar",()=>this.updateToolbar());
+
     }
 
     public updateLeftPanel()
     {
-        let notebooks = [{name:"Notebook1"},{name:"Notebook2"},{name:"Notebook3"},{name:"Notebook4"}]
-        Application.instance.sendUIMessage("update:LeftPanel",{notebooks:notebooks,current:"Notebook2"});   
+        Debug.log("updateLeftPanel moment: "+DataManager.instance);
+        let storages:Array<NotebookStorage> = DataManager.instance.noteStorages;
+        Application.instance.sendUIMessage("update:LeftPanel",{storages:storages, current:"Notebook2"});
     }
 
     public updateToolbar()

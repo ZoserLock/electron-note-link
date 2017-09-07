@@ -5,16 +5,11 @@
         "jsx": "react",
         "module": "commonjs",
         "moduleResolution": "node",
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "noImplicitReturns":true,
-        "noImplicitThis":true,
-        "outDir": "dist"
+        "outDir": "test/build"
     },
     "include": 
     [
-        "src/**/*.ts",
-        "src/**/*.tsx"
+        "test/**/*.ts"
     ],
     "exclude": 
     [

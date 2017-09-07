@@ -9,7 +9,11 @@ const uglify = require('gulp-uglify');
 
 // Constants
 const _outputDir = "dist";
-const _inputDit  = "src";
+const _outputTestDir = "test/build/test";
+
+const _inputDir  = "src";
+const _inputTestDir  = "test";
+
 const _appPath   = _outputDir + "/main.js";
 const _webpackConfig  = "webpack.config.js";
 
@@ -24,10 +28,10 @@ gulp.task('download-assets',['clean'],function(cb)
 {
     async.parallel(
     [
-        function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',_inputDit + '/lib/css/boostrap.min.css',callback)},
-        function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'  ,_inputDit + '/lib/js/bootstrap.min.js',callback)},
-        function(callback){downloadFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js' ,_inputDit + '/lib/js/popper.min.js',callback)},
-        function(callback){downloadFile('https://code.jquery.com/jquery-3.2.1.min.js'                               ,_inputDit + '/lib/js/jquery-3.2.1.min.js',callback)},
+        function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css',_inputDir + '/lib/css/boostrap.min.css',callback)},
+        function(callback){downloadFile('https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js'  ,_inputDir + '/lib/js/bootstrap.min.js',callback)},
+        function(callback){downloadFile('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js' ,_inputDir + '/lib/js/popper.min.js',callback)},
+        function(callback){downloadFile('https://code.jquery.com/jquery-3.2.1.min.js'                               ,_inputDir + '/lib/js/jquery-3.2.1.min.js',callback)},
     ], 
     function(err, results) 
     {
@@ -38,10 +42,10 @@ gulp.task('download-assets',['clean'],function(cb)
 // Copy the non script assets to the destination folder
 gulp.task('copy-assets',['clean','download-assets'],function(cb)
 {
-    gulp.src(_inputDit + '/css/**/*').pipe(gulp.dest(_outputDir + '/css'));
-    gulp.src(_inputDit + '/lib/**/*').pipe(gulp.dest(_outputDir + '/lib'));
-    gulp.src(_inputDit + '/html/**/*').pipe(gulp.dest(_outputDir + '/html'));
-    gulp.src(_inputDit + '/img/**/*').pipe(gulp.dest(_outputDir + '/img'));
+    gulp.src(_inputDir + '/css/**/*').pipe(gulp.dest(_outputDir + '/css'));
+    gulp.src(_inputDir + '/lib/**/*').pipe(gulp.dest(_outputDir + '/lib'));
+    gulp.src(_inputDir + '/html/**/*').pipe(gulp.dest(_outputDir + '/html'));
+    gulp.src(_inputDir + '/img/**/*').pipe(gulp.dest(_outputDir + '/img'));
 
     cb();
 });
@@ -49,7 +53,7 @@ gulp.task('copy-assets',['clean','download-assets'],function(cb)
 // this function is to copy the debug or release env file to have compilation variables
 gulp.task('generate-env',['clean'],function(cb)
 {
-    fs.createReadStream('env.debug').pipe(fs.createWriteStream(_inputDit+'/env.ts')).on('finish', cb);
+    fs.createReadStream('env.debug').pipe(fs.createWriteStream(_inputDir+'/env.ts')).on('finish', cb);
 });
 
 
@@ -77,6 +81,7 @@ gulp.task('run',function(cb)
     run("electron .",cb);
 });
 
+
 // Minimize the output files
 gulp.task('minimize',['build'], function(cb)
 {
@@ -92,7 +97,28 @@ gulp.task('publish',['build'], function(cb)
 });
 
 // Default task make the whole build
-gulp.task("default", ['dev']); 
+gulp.task("default", ["dev"]); 
+
+
+// Test Build
+
+gulp.task("clean:tests", function (cb) 
+{
+    run('rm -rf ' + _outputTestDir + '/*' ,cb);
+});
+
+gulp.task("build:tests",["clean:tests"],function(cb)
+{
+    run("tsc -p tsconfig.tests.json",cb);
+});
+
+gulp.task('test',["build:tests"],function(cb)
+{
+    run("mocha " + _outputTestDir,cb);
+});
+
+
+// Utility Functions
 
 // Run function to run a command and write the output live.
 function run(command, callback)
