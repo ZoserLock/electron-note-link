@@ -113,7 +113,7 @@ export default class DataManager
             // Save Update
             if(dataRaw.version != undefined)
             {
-                if(dataRaw.version!=this.sVersion)
+                if(dataRaw.version != this.sVersion)
                 {
                     // Convert DataRaw
                 }

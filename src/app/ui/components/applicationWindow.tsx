@@ -2,6 +2,9 @@ import { ipcRenderer } from 'electron';
 import * as React from 'react';
 
 import LeftPanel from './leftPanel';
+import LeftViewport from './leftViewport';
+import RightViewport from './rightViewport';
+import StatusBar from './statusBar';
 import Toolbar from './toolbar';
 
 export default class ApplicationWindow extends React.Component<any, any> 
@@ -30,16 +33,15 @@ export default class ApplicationWindow extends React.Component<any, any>
     render() 
     {
         return(
-        <div>
-            <Toolbar/>
-            <div className="container-fluid">
-                <div className="row">
+            <div className="ui-window">
+                <Toolbar/>
+                <div className="ui-main">
                     <LeftPanel/>
-                    <main className="col-sm-10" role="main">
-                    </main>
+                    <LeftViewport/>
+                    <RightViewport/>
                 </div>
+                <StatusBar/>
             </div>
-        </div>
         );
     }
 }

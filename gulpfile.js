@@ -17,6 +17,9 @@ const _inputTestDir  = "test";
 const _appPath   = _outputDir + "/main.js";
 const _webpackConfig  = "webpack.config.js";
 
+///////////////////////////////////////////////////////
+// Primary Build
+
 // Clean all the content in the build directory
 gulp.task("clean", function (cb) 
 {
@@ -40,7 +43,7 @@ gulp.task('download-assets',['clean'],function(cb)
 });
 
 // Copy the non script assets to the destination folder
-gulp.task('copy-assets',['clean','download-assets'],function(cb)
+gulp.task('copy-assets',['clean'],function(cb)
 {
     gulp.src(_inputDir + '/css/**/*').pipe(gulp.dest(_outputDir + '/css'));
     gulp.src(_inputDir + '/lib/**/*').pipe(gulp.dest(_outputDir + '/lib'));
@@ -58,7 +61,7 @@ gulp.task('generate-env',['clean'],function(cb)
 
 
 // Compile all the Typescript code using the tsconfig.json
-gulp.task('build',['clean','copy-assets','download-assets','generate-env'],function(cb)
+gulp.task('build',['clean','copy-assets','generate-env'],function(cb)
 {
     run('webpack --config '+_webpackConfig,cb);
 });
@@ -100,6 +103,7 @@ gulp.task('publish',['build'], function(cb)
 gulp.task("default", ["dev"]); 
 
 
+///////////////////////////////////////////////////////
 // Test Build
 
 gulp.task("clean:tests", function (cb) 
@@ -118,6 +122,7 @@ gulp.task('test',["build:tests"],function(cb)
 });
 
 
+///////////////////////////////////////////////////////
 // Utility Functions
 
 // Run function to run a command and write the output live.

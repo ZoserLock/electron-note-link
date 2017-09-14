@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
-import UIManager from "../../core/uiManager";
+import UIManager from "../uiManager";
 import NotebookStorage  from "../../notes/notebookStorage";
 
 export default class LeftPanel extends React.Component<any, any> 
@@ -43,11 +43,12 @@ export default class LeftPanel extends React.Component<any, any>
     public render() 
     {
         return (
-            <div className="list-group col-sm-2 sidebar">
-                <button type="button" className="list-group-item list-group-item-action">Notebooks</button>
-                {this.state.notebooks}
-                <button type="button" className="list-group-item list-group-item-action">Favs</button>
-                <button type="button" className="list-group-item list-group-item-action">Trash</button>
+            <div className="ui-sidebar">
+                <ul className="wtree">
+                    <li>All Notes</li>
+                    <li>Favorites</li>
+                    <li>Trash</li>
+                </ul>
             </div>
         );
     }

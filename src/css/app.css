@@ -1,14 +1,84 @@
-.sidebar
+body
 {
-    padding: 10px;
+    margin: 0;
 }
 
-.level-2
+
+.ui-window
 {
-    margin-left: 20px;
+    display: flex;
+    flex-flow: column;
+    height: 100vh; 
 }
 
-.level-3
+.ui-main
 {
-    margin-left: 40px;
+    background-color: #00FFB8;
+    flex: 1;
+    display: flex;
 }
+
+.ui-sidebar
+{
+    background-color: #7952C9;
+    width: 200px;
+}
+
+
+.ui-left-viewport
+{
+    background-color: #FFAE00;
+    width: 300px;
+    overflow-y: scroll;
+}
+
+.ui-right-viewport
+{
+    background-color: #52C98F;
+    flex: 1;
+    overflow-y: scroll;
+}
+
+/*Main Window Tool Bar*/
+.ui-toolbar
+{
+    display: flex;
+    background-color: red;
+    height: 40px;
+}
+
+.ui-toolbar-item
+{
+    margin: 5px;
+    min-width: 100px;
+}
+
+.ui-toolbar-spacer
+{
+    margin-left: auto;
+}
+
+/*Main Window Status Bar*/
+.ui-statusbar
+{
+    display: flex;
+    background-color: #152E42;
+    height: 20px;
+}
+
+
+/* List */
+.wtree li{
+    display: block;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    position: relative;
+    background-color: white;
+    cursor: pointer;
+  }
+
+  ul {
+    padding-left: 10px;
+  }

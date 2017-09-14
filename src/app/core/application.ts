@@ -4,8 +4,8 @@ import { app, BrowserWindow, Tray, ipcMain , Menu } from 'electron'
 // Load local Modules
 import Debug            from '../tools/debug'
 import Configuration    from '../tools/configuration'
-import MainMenu         from '../ui/mainMenu'
-import GlobalShortcut   from '../ui/globalShortcut'
+import MainMenu         from '../core/mainMenu'
+import GlobalShortcut   from '../core/globalShortcut'
 import DataManager      from '../core/dataManager';
 import ActionManager    from '../core/actionManager';
 import Director         from '../core/director';
