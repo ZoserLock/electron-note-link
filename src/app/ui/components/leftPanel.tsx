@@ -1,8 +1,17 @@
+// Global
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
-import UIManager from "../uiManager";
+// Local
+import Debug from "../../tools/debug";
 import NotebookStorage  from "../../notes/notebookStorage";
+
+// UI
+import UIManager from "../uiManager";
+import StorageItem from "../components/leftPanel/storageItem";
+
+
+
 
 export default class LeftPanel extends React.Component<any, any> 
 {
@@ -12,7 +21,7 @@ export default class LeftPanel extends React.Component<any, any>
 
         this.state =
         {
-            notebooks:null
+            storages:null
         }  
     }
  
@@ -30,18 +39,19 @@ export default class LeftPanel extends React.Component<any, any>
 
     public updateRequested(event:any, data:any):void
     {
-        let storages = data.storages.map((storage:NotebookStorage) =>
+        let storages = data.storages.map((storage:any) =>
         {
-            return <button type="button" className="list-group-item list-group-item-action level-2" key={storage.id}>{storage.path}</button>
+            return  <StorageItem key={storage._id} storage={storage}/>
         });
 
-        this.setState({notebooks:storages});
+        this.setState({storages:storages});
 
         this.forceUpdate();
     }
 
     public render() 
     {
+
         return (
             <div className="ui-sidebar">
                 <ul className="wtree">
@@ -49,6 +59,7 @@ export default class LeftPanel extends React.Component<any, any>
                     <li>Favorites</li>
                     <li>Trash</li>
                 </ul>
+                {this.state.storages}
             </div>
         );
     }

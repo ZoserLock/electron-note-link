@@ -4,7 +4,10 @@ import * as path from "path";
 import * as fs from "fs-extra";
 
 import Debug from "../tools/debug";
+
 import NotebookStorage from "../notes/notebookStorage";
+import Notebook from "../notes/notebook";
+import Note from "../notes/note";
 
 export default class DataManager
 {
@@ -55,23 +58,19 @@ export default class DataManager
         if(!this.loadStorages())
         {
             Debug.log("Creating new Storage File!");
-            this.createStorageDefinitions();
+            this.clearStorages();
+            this.createStorages();
             this.saveStorages();
         }
     }
     
-    private createStorageDefinitions():void
+    private createStorages():void
     {
         this._noteStorages = new Array<NotebookStorage>();
-        this._noteStorages.push(new NotebookStorage("Storage_001","Path01"));
-        this._noteStorages.push(new NotebookStorage("Storage_002","Path013"));
-        this._noteStorages.push(new NotebookStorage("Storage_003","Path014"));
     }
 
-    public clearStorages():boolean
+    private clearStorages():boolean
     {
-        this._noteStorages = new Array<NotebookStorage>();
-
         try 
         {
             fs.removeSync(this._savePath);
@@ -79,17 +78,24 @@ export default class DataManager
         }
         catch(e)
         {
-            Debug.log("Clear Storage Failed: "+e);
+            Debug.logError("Clear Storage Failed: "+e);
             return false;
         }
     }
 
     public saveStorages():boolean
     {
+        let storageInfo:any[] = [];
+        
+        for(let a = 0;a < this._noteStorages.length; ++a)
+        {
+            storageInfo.push(this._noteStorages[a].getFullPath());
+        }
+
         let saveFile:any =
         {
-            version:1,
-            storages:this._noteStorages,
+            version: this.sVersion,
+            storages:storageInfo,
         }
 
         try 
@@ -99,23 +105,27 @@ export default class DataManager
         }
         catch(e)
         {
-            Debug.log("Save Storage Failed: "+e);
-            return false;
+            Debug.logError("Save Storage Failed: "+e);
         }
+
+        return false;
     }
 
     public loadStorages():boolean
     {
+        return false;
 
-        try 
+    /*    try 
         {
             const dataRaw = fs.readJsonSync(this._savePath);
+
             // Save Update
             if(dataRaw.version != undefined)
             {
                 if(dataRaw.version != this.sVersion)
                 {
                     // Convert DataRaw
+                    return false;
                 }
             }
 
@@ -130,29 +140,126 @@ export default class DataManager
                     {
                         let storage = dataRaw.storages[a];
 
-                        let noteStorage:NotebookStorage = new NotebookStorage(storage._id,storage._path);
+                        let noteStorage:NotebookStorage = new NotebookStorage(storage.id,storage.path);
                         this._noteStorages.push(noteStorage);
                     }
 
                     for(var a = 0;a < this._noteStorages.length; ++a)
                     {
                         let noteStorage:NotebookStorage = this._noteStorages[a];
-                        Debug.log(noteStorage.GetName());
                     }
                 
                 }
             }
+
             return true;
         }
         catch(e)
         {
-            Debug.log("Load Storage Failed: "+e);
+            Debug.logError("Load Storage Failed: "+e);
         }
-        return false;
+        return false;*/
     }
 
-    public saveNote():void
+    ////////////////////
+    // Save Functions
+    public addStorage(storage:NotebookStorage):boolean
     {
+        for(let a = 0; a < this._noteStorages.length; ++a)
+        {
+            if(this._noteStorages[a].id == storage.id)
+            {
+                Debug.logError("ID already Exist in the storages");
+                return false;
+            }
+        }
 
+        let result:boolean = this.saveStorage(storage);
+
+        if(result)
+        {
+            this._noteStorages.push(storage);
+            this.saveStorages();
+        }
+       
+        return result;
+    }
+
+    public getStorage(id:string):NotebookStorage
+    {
+        for(let a = 0; a < this._noteStorages.length; ++a)
+        {
+            if(this._noteStorages[a].id == id)
+            {
+                return this._noteStorages[a];
+            }
+        }
+        return null;
+    }
+
+    public saveStorage(storage:NotebookStorage):boolean
+    {
+        let notebooks:Notebook[] = storage.notebooks;
+        
+        for(let a = 0;a < notebooks.length; ++a)
+        {
+            this.saveNotebook(notebooks[a]);
+        }
+
+        try 
+        {
+            fs.writeJsonSync(storage.getFullPath(), storage.getSaveObject());
+        }
+        catch(e)
+        {
+            Debug.logError("Save Note Failed: "+e);
+            return false;
+        }
+
+        return true;
+    }
+    
+    public saveNotebook(notebook:Notebook):boolean
+    {
+        let notes:Note[] = notebook.notes;
+
+        for(let a = 0;a < notes.length; ++a)
+        {
+            this.saveNote(notes[a]);
+        }
+
+        try 
+        {
+            fs.writeJsonSync(notebook.path+"/"+notebook.id+".json", notebook.getSaveObject());
+        }
+        
+        catch(e)
+        {
+            Debug.logError("Save Note Failed: "+e);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public saveNote(note:Note):boolean
+    {
+        if(note.isDirty())
+        {
+            note.clearDirty();
+
+            try 
+            {
+                fs.writeJsonSync(note.path, note);
+                return true;
+            }
+            catch(e)
+            {
+                Debug.logError("Save Note Failed: "+e);
+                return false;
+            }
+        }
+        return true;
     }
 }

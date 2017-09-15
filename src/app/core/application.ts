@@ -61,8 +61,7 @@ export default class Application
     // Function called only in debug enviroment
     private initializeDebug():void
     {
-        BrowserWindow.addDevToolsExtension("C:/Users/zoser/AppData/Local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0");
-        this._mainWindow.webContents.openDevTools();        
+        this._mainWindow.webContents.toggleDevTools();
     }
 
     private createTrayIcon():void

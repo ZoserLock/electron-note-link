@@ -18,13 +18,29 @@ body
     display: flex;
 }
 
+/************/
+/* Side Bar */
 .ui-sidebar
 {
     background-color: #7952C9;
     width: 200px;
+    overflow-y: scroll;
 }
 
+.ui-sidebar-storage-item
+{
+    display: block;
+    background-color: #F800AE;
+    padding: 10px;
+}
 
+.ui-sidebar-storage-item button
+{
+    float: right;
+}
+
+/*********************/
+/* Left Viewport Bar */
 .ui-left-viewport
 {
     background-color: #FFAE00;
@@ -32,6 +48,8 @@ body
     overflow-y: scroll;
 }
 
+/*********************/
+/* Right Viewport Bar */
 .ui-right-viewport
 {
     background-color: #52C98F;

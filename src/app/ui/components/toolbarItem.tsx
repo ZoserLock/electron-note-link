@@ -7,13 +7,15 @@ export default class ToolbarItem extends React.Component<any, any>
         super(props);
     }
     
+    private getClassName():string
+    {
+        return "ui-toolbar-item";
+    }
+
     public render() 
     {
         return (
-
-            <li className="nav-item hidden-md">
-                <a className="nav-link" href="#" onClick={this.props.onClick}>{this.props.children}</a>
-            </li>
+            <button className={this.getClassName()} onClick={this.props.onClick}>{this.props.name}</button>
         );
     }
 

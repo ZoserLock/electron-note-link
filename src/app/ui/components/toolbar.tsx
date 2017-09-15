@@ -1,7 +1,9 @@
-import * as React from 'react';
-import {ipcRenderer} from 'electron'; 
+import * as React from "react";
+import {ipcRenderer} from "electron"; 
 
-import ToolbarItem from './toolbarItem'; 
+// UI
+import UIManager from "../uiManager"
+import ToolbarItem from "./toolbarItem"; 
 
 export default class Toolbar extends React.Component<any, any> 
 {
@@ -10,18 +12,23 @@ export default class Toolbar extends React.Component<any, any>
         super(props);
     }
 
-    public onNewNoteClick()
+    private createNewNote():void
     {
-        console.log("new Note Click");
+        UIManager.instance.sendMessage("action:NewNote");
+    }
+
+    private createNewNotebookStorage():void
+    {
+        UIManager.instance.sendMessage("action:NewNotebookStorage");
     }
 
     public render() 
     {
         return (
             <header className="ui-toolbar">
-                <button className="ui-toolbar-item">1</button>
-                <button className="ui-toolbar-item">2</button>
-                <button className="ui-toolbar-item">3</button>
+                <ToolbarItem name="New Note" onClick={()=>this.createNewNote()}/>
+                <ToolbarItem name="New Storage" onClick={()=>this.createNewNotebookStorage()}/>
+                <ToolbarItem/>
             </header>
         );
     }
