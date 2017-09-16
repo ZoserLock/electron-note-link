@@ -5,6 +5,7 @@ export default class Notebook
 
     private _id:string;
     private _path:string;
+    private _name:string;
     private _notes:Note[];
 
     // Get/set
@@ -18,24 +19,45 @@ export default class Notebook
         return this._path;
     }
 
+    get name(): string
+    {
+        return this._name;
+    }
+
     get notes(): Note[]
     {
         return this._notes;
     }
 
     // Member Functions
-    constructor(id:string,path:string)
+    constructor()
     {
         this._notes = new Array<Note>();
-        this._id   = id;
-        this._path = path;
+        this._id   = "";
+        this._path = "";
     }
 
-    public addNote(note:Note)
+    public static create(id:string, path:string):Notebook
+    {
+        let notebook:Notebook = new Notebook();
+        notebook._id   = id;
+        notebook._path = path;
+        return notebook;
+    }
+
+    public static createFromData(data:any):Notebook
+    {
+        let notebook:Notebook = new Notebook();
+        Object.assign(notebook, data);
+        return notebook;
+    }
+    
+    public addNote(note:Note):void
     {
         this.notes.push(note);
     }
 
+    // Save Stuff
     public getSaveObject():any
     {
         let noteIds:any[] = [];

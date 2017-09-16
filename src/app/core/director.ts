@@ -124,11 +124,14 @@ export default class Director
 
         if(storage != null)
         {
-            let notebook = new Notebook(uuid(),storage.path+"/notebooks");
+            let notebook:Notebook = Notebook.create(uuid(), storage.path+"/notebooks");
+
             if(DataManager.instance.saveNotebook(notebook))
             {
                 storage.addNotebook(notebook);
             }
+
+            this.updateLeftPanel();
         }
         else
         {

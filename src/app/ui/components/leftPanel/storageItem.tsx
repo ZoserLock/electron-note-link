@@ -5,27 +5,28 @@ import {ipcRenderer} from "electron";
 // Local
 import Debug from "../../../tools/debug";
 import NotebookStorage from "../../../notes/notebookStorage";
+import Notebook from "../../../notes/Notebook";
 
 // UI
 import UIManager from "../../uiManager"
 
-export default class storageItem extends React.Component<any, any> 
+interface StorageItemData
+{
+    storage:NotebookStorage;
+}
+
+export default class StorageItem extends React.Component<StorageItemData, StorageItemData> 
 {
     constructor(props: any)
     {
         super(props);
-
-        this.state =
-        {
-            isSelected:false
-        }  
     }
 
     private onAddButtonClick()
     {
         let data =
         {
-            storage:this.props.storage._id
+            storage:this.props.storage.id
         }
 
         UIManager.instance.sendMessage("action:NewNotebook",data);
@@ -33,11 +34,23 @@ export default class storageItem extends React.Component<any, any>
 
     public render() 
     {
+        let notebooks = this.props.storage.notebooks.map((notebookData:any) =>
+        {
+            let notebook = Notebook.createFromData(notebookData);
+            return  <li key = {notebook.id}>{notebook.id}</li>
+        });
+
         return (
-            <div className="ui-sidebar-storage-item"> 
-                <span>{this.props.storage._id}</span> 
-                <button onClick={()=>this.onAddButtonClick()}>+</button>
+            <div>
+                <div className="ui-sidebar-storage-item"> 
+                    <span>{this.props.storage.id}</span> 
+                    <button onClick={()=>this.onAddButtonClick()}>+</button>
+                </div>
+                <ul className="wtree">
+                    {notebooks}
+                </ul>
             </div>
+
         );
     }
 

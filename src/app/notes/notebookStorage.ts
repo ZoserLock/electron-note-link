@@ -38,6 +38,11 @@ export default class NotebookStorage
         this._id   = id;
         this._path = path;
     }
+    
+    public static createFromData(data:any)
+    {
+
+    }
 
     public addNotebook(notebook:Notebook):void
     {
@@ -46,7 +51,7 @@ export default class NotebookStorage
 
     public getFullPath():string
     {
-        return this._path + "/" + this.id + ".json";
+        return this._path + "/notelink.json";
     }
 
     public getSaveObject():any

@@ -7,6 +7,15 @@ export default class Debug
             console.log(" -> "+text); 
         }
     }
+    
+    public static logVar(obj:any)
+    {
+        if(process.env.DEBUG)
+        {
+            let json:string = JSON.stringify(obj);
+            console.log(" -> "+json); 
+        }
+    }
 
     public static logError(text:string)
     {

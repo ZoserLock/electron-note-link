@@ -100,7 +100,7 @@ export default class DataManager
 
         try 
         {
-            fs.writeJsonSync(this._savePath,saveFile);
+            fs.writeJsonSync(this._savePath,saveFile,{spaces:4});
             return true;
         }
         catch(e)
@@ -208,7 +208,7 @@ export default class DataManager
 
         try 
         {
-            fs.writeJsonSync(storage.getFullPath(), storage.getSaveObject());
+            fs.writeJsonSync(storage.getFullPath(), storage.getSaveObject(),{spaces:4});
         }
         catch(e)
         {
@@ -230,7 +230,7 @@ export default class DataManager
 
         try 
         {
-            fs.writeJsonSync(notebook.path+"/"+notebook.id+".json", notebook.getSaveObject());
+            fs.writeJsonSync(notebook.path+"/"+notebook.id+".json", notebook.getSaveObject(),{spaces:4});
         }
         
         catch(e)
