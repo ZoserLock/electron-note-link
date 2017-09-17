@@ -31,17 +31,27 @@ export default class NotebookStorage
 
     // Member functions
 
-    constructor(id:string, path:string)
+    constructor()
     {
         this._notebooks = new Array<Notebook>();
 
-        this._id   = id;
-        this._path = path;
+        this._id   = "";
+        this._path = "";
     }
     
-    public static createFromData(data:any)
+    public static create(id:string, path:string):NotebookStorage
     {
+        let storage:NotebookStorage = new NotebookStorage();
+        storage._id   = id;
+        storage._path = path;
+        return storage;
+    }
 
+    public static createFromData(data:any):NotebookStorage
+    {
+        let storage:NotebookStorage = new NotebookStorage();
+        Object.assign(storage, data);
+        return storage;
     }
 
     public addNotebook(notebook:Notebook):void

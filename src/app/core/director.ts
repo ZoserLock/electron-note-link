@@ -106,7 +106,7 @@ export default class Director
     //Actions
     private actionNewNotebookStorage():void
     {
-        let storage = new NotebookStorage(uuid(),"E:/Tests/NoteLinkData");
+        let storage = NotebookStorage.create(uuid(),"E:/Tests/NoteLinkData");
 
         DataManager.instance.addStorage(storage);
 
@@ -117,7 +117,6 @@ export default class Director
     {
         
         let storageId = data.storage;
-
         Debug.log("actionNewNotebook id:"+storageId);
 
         let storage:NotebookStorage = DataManager.instance.getStorage(storageId);

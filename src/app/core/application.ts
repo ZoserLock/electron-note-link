@@ -1,14 +1,14 @@
 // Load Npm Modules
-import { app, BrowserWindow, Tray, ipcMain , Menu } from 'electron'
+import { app, BrowserWindow, Tray, ipcMain , Menu } from "electron"
 
 // Load local Modules
-import Debug            from '../tools/debug'
-import Configuration    from '../tools/configuration'
-import MainMenu         from '../core/mainMenu'
-import GlobalShortcut   from '../core/globalShortcut'
-import DataManager      from '../core/dataManager';
-import ActionManager    from '../core/actionManager';
-import Director         from '../core/director';
+import Debug            from "../tools/debug"
+import Configuration    from "../tools/configuration"
+import MainMenu         from "../core/mainMenu"
+import GlobalShortcut   from "../core/globalShortcut"
+import DataManager      from "../core/dataManager";
+import ActionManager    from "../core/actionManager";
+import Director         from "../core/director";
 
 export default class Application
 {
@@ -61,31 +61,31 @@ export default class Application
     // Function called only in debug enviroment
     private initializeDebug():void
     {
-        this._mainWindow.webContents.toggleDevTools();
+         this._mainWindow.webContents.toggleDevTools();
     }
 
     private createTrayIcon():void
     {
-        this._trayIcon = new Tray(__dirname + '/img/tray.ico');
+        this._trayIcon = new Tray(__dirname + "/img/tray.ico");
 
         var contextMenu = Menu.buildFromTemplate([
             {
-                label: 'Show App', click: () => 
+                label: "Show NoteLink", click: () => 
                 {
                     this._mainWindow.show();
                 }
             },
             {
-                label: 'Exit', click: () => 
+                label: "Exit", click: () => 
                 {
                     this.exit();
                 }
             }
         ])
         this._trayIcon.setContextMenu(contextMenu);
-        this._trayIcon.setHighlightMode('always');
+        this._trayIcon.setHighlightMode("always");
 
-        this._trayIcon.on('click', () => 
+        this._trayIcon.on("click", () => 
         {
             this._mainWindow.show();
         });
@@ -102,9 +102,9 @@ export default class Application
             minHeight: 600,
         });
 
-        this._mainWindow.loadURL('file://' + __dirname + '/html/index.html');
+        this._mainWindow.loadURL("file://" + __dirname + "/html/index.html");
 
-        this._mainWindow.on('close', (event:any) => 
+        this._mainWindow.on("close", (event:any) => 
         {
             if(!this._exiting)
             {
@@ -114,7 +114,7 @@ export default class Application
             return false;
         });
 
-        this._mainWindow.on('closed', () => 
+        this._mainWindow.on("closed", () => 
         {
             this._mainWindow = null;
         });
