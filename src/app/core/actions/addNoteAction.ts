@@ -1,9 +1,9 @@
 // Load Npm Modules
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow } from "electron"
 
 // Local Modules
-import Action from '../action'
-import Debug from '../../tools/debug'
+import Action from "../action"
+import Debug from "../../tools/debug"
 
 export default class AddNoteAction extends Action
 {

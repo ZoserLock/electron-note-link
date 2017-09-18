@@ -1,6 +1,6 @@
 // Local Modules
-import Action from '../action'
-import Debug from '../../tools/debug'
+import Action from "../action"
+import Debug from "../../tools/debug"
 
 export default class LogAction extends Action
 {

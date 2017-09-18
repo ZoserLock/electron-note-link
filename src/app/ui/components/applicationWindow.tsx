@@ -1,11 +1,11 @@
-import { ipcRenderer } from 'electron';
-import * as React from 'react';
+import { ipcRenderer } from "electron";
+import * as React from "react";
 
-import LeftPanel from './leftPanel';
-import LeftViewport from './leftViewport';
-import RightViewport from './rightViewport';
-import StatusBar from './statusBar';
-import Toolbar from './toolbar';
+import LeftPanel from "./leftPanel";
+import LeftViewport from "./leftViewport";
+import RightViewport from "./rightViewport";
+import StatusBar from "./statusBar";
+import Toolbar from "./toolbar";
 
 export default class ApplicationWindow extends React.Component<any, any> 
 {
@@ -19,7 +19,7 @@ export default class ApplicationWindow extends React.Component<any, any>
             toolbar:null,
         };
 
-        ipcRenderer.on('data',(event:any,data:any)=>this.dataReceived(event,data));
+        ipcRenderer.on("data",(event:any,data:any)=>this.dataReceived(event,data));
     }
 
     public dataReceived(event:any,data:any):void

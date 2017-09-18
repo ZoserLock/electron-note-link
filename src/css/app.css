@@ -39,6 +39,29 @@ body
     float: right;
 }
 
+.ui-sidebar-storage-item-notebooks
+{
+    display: block;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    padding-left: 10px;
+    position: relative;
+    background-color: white;
+    cursor: pointer;
+}
+
+.ui-sidebar-storage-item-notebooks
+{
+    background-color: white;
+}
+
+.ui-sidebar-storage-item-notebooks .selected
+{
+    background-color: blue;
+}
+
 /*********************/
 /* Left Viewport Bar */
 .ui-left-viewport
@@ -84,19 +107,8 @@ body
     height: 20px;
 }
 
-
-/* List */
-.wtree li{
-    display: block;
-    border: 1px solid #ddd;
-    text-decoration: none;
-    list-style-type: none;
-    margin: 10px 0 10px 10px;
-    position: relative;
-    background-color: white;
-    cursor: pointer;
-  }
-
-  ul {
-    padding-left: 10px;
-  }
+/*Misc*/
+.text-unselect 
+{
+    user-select: none;
+}

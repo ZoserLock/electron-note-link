@@ -1,7 +1,7 @@
-import * as React from 'react';
-import {ipcRenderer} from 'electron'; 
+import * as React from "react";
+import {ipcRenderer} from "electron"; 
 
-import ToolbarItem from './toolbarItem'; 
+import ToolbarItem from "./toolbarItem"; 
 
 export default class RightViewport extends React.Component<any, any> 
 {

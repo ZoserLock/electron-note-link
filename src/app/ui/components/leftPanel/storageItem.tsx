@@ -9,6 +9,7 @@ import Notebook from "../../../notes/Notebook";
 
 // UI
 import UIManager from "../../uiManager"
+import NotebookItem from "./notebookItem";
 
 interface StorageItemData
 {
@@ -20,6 +21,8 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
     constructor(props: any)
     {
         super(props);
+
+        Debug.log("Storage Item Created");
     }
 
     private onAddButtonClick()
@@ -34,11 +37,24 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
 
     public render() 
     {
-        let notebooks = this.props.storage.notebooks.map((notebookData:any) =>
+        let notebookContent = this.props.storage.notebooks.map((notebookData:any) =>
         {
             let notebook = Notebook.createFromData(notebookData);
-            return  <li key = {notebook.id}>{notebook.id}</li>
+            return  <NotebookItem key = {notebook.id} notebook={notebook}/>
         });
+
+        let notebooks;
+
+        if(notebookContent.length > 0)
+        {
+            notebooks = 
+            (  
+                <ul className="ui-sidebar-storage-item-notebooks">
+                    {notebookContent}
+                </ul>
+            );
+        }
+        
 
         return (
             <div>
@@ -46,9 +62,7 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
                     <span>{this.props.storage.name}</span> 
                     <button onClick={()=>this.onAddButtonClick()}>+</button>
                 </div>
-                <ul className="wtree">
-                    {notebooks}
-                </ul>
+                {notebooks}
             </div>
 
         );

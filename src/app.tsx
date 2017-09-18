@@ -1,8 +1,8 @@
 // Node Imports
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import * as React from "react"
+import * as ReactDOM from "react-dom"
 
-import {ipcRenderer} from 'electron'; 
+import {ipcRenderer} from "electron"; 
 
 // Local Imports
 import ApplicationWindow from "./app/ui/components/applicationWindow";
@@ -14,5 +14,5 @@ UIManager.initialize();
 // Render the actual application
 ReactDOM.render(
     <ApplicationWindow/>
-    ,document.getElementById('root')
+    ,document.getElementById("root")
 );

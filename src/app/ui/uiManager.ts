@@ -1,5 +1,5 @@
 
-import {ipcRenderer} from 'electron'; 
+import {ipcRenderer} from "electron"; 
 
 export default class UIManager
 {

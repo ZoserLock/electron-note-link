@@ -1,6 +1,6 @@
-import { ipcMain } from 'electron'
+import { ipcMain } from "electron"
 // Local Modules
-import Action from './action'
+import Action from "./action"
 
 export default class ActionManager
 {

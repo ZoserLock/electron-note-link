@@ -46,8 +46,6 @@ export default class LeftPanel extends React.Component<any, any>
         });
 
         this.setState({storages:storages});
-
-        this.forceUpdate();
     }
 
     public render() 

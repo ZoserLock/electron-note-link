@@ -5,7 +5,7 @@ export default class DataController
 
     }
 
-    protected GetFile()
+    protected saveNote()
     {
         
     }

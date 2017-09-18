@@ -28,18 +28,12 @@ export default class Director
     }
 
     // Member Variables
-    private _currentNotebookStorage:NotebookStorage;
     private _currentNotebook:Notebook;
 
     //Get/Set
     get currentNotebook(): Notebook 
     {
         return this._currentNotebook;
-    }
-
-    get currentNotebookStorage(): NotebookStorage 
-    {
-        return this._currentNotebookStorage;
     }
 
     // Member Functions
@@ -57,19 +51,27 @@ export default class Director
         ipcMain.on("action:NewNotebook",(event:any,data:any)=>this.actionNewNotebook(event,data));
         ipcMain.on("action:NewNotebookStorage",()=>this.actionNewNotebookStorage());
 
+        // Notebook
+        ipcMain.on("action:SelectNotebook",(event:any,data:any)=>this.actionSelectNotebook(event,data));
     }
 
     private intializeContextVariables():void
     {
+        if( this._currentNotebook!=null)
+        {
+            this._currentNotebook.SetAsUnselected();
+            this._currentNotebook = null;
+        }
+
         let storages = DataManager.instance.noteStorages;
         if(storages.length > 0)
         {
-            this._currentNotebookStorage = storages[0];
-            let notebooks = this._currentNotebookStorage.notebooks;
+            let notebooks = storages[0].notebooks;
 
             if(notebooks.length > 0)
             {
                 this._currentNotebook = notebooks[0];
+                this._currentNotebook.SetAsSelected();
             }
         }
     }
@@ -81,14 +83,14 @@ export default class Director
     {
         let storages:Array<NotebookStorage> = DataManager.instance.noteStorages;
 
-        let currentStorage:String = "";
+        let selectedNotebookId:String = "";
 
-        if(this._currentNotebookStorage!=null)
+        if(this._currentNotebook != null)
         {
-            currentStorage = this._currentNotebookStorage.id;
+            selectedNotebookId = this._currentNotebook.id;
         }
 
-        Application.instance.sendUIMessage("update:LeftPanel",{storages:storages, currentStorage:currentStorage});
+        Application.instance.sendUIMessage("update:LeftPanel",{storages:storages, selectedNotebookId:selectedNotebookId});
     }
 
     public updateToolbar():void
@@ -109,6 +111,7 @@ export default class Director
         let storage = NotebookStorage.create(uuid(),"E:/Tests/NoteLinkData");
 
         DataManager.instance.addStorage(storage);
+        DataManager.instance.saveStorage(storage);
 
         this.updateLeftPanel();
     }
@@ -125,6 +128,7 @@ export default class Director
 
             if(DataManager.instance.saveNotebook(notebook))
             {
+                DataManager.instance.addNotebook(notebook);
                 storage.addNotebook(notebook);
                 DataManager.instance.saveStorage(storage);
             }
@@ -143,6 +147,26 @@ export default class Director
         {
         //    DataManager.instance.createNewNote(this._currentNotebook);
             Debug.log("[Action] New Note");
+        }
+    }
+
+
+    private actionSelectNotebook(event:any, data:any):void
+    {
+        if( this._currentNotebook!=null)
+        {
+            this._currentNotebook.SetAsUnselected();
+            this._currentNotebook = null;
+        }
+
+        let notebook:Notebook = DataManager.instance.getNotebook(data.notebookId);
+
+        if(notebook!=null)
+        {
+            this._currentNotebook = notebook;
+            this._currentNotebook.SetAsSelected();
+
+            this.updateLeftPanel();
         }
     }
 

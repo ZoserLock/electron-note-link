@@ -5,7 +5,7 @@ import { Menu, MenuItem } from "electron";
 import Application      from "../core/application"
 import ActionManager    from "../core/actionManager";
 import AddNoteAction    from "../core/actions/addNoteAction";
-import Configuration    from '../tools/configuration';
+import Configuration    from "../tools/configuration";
 
 export default class MainMenu
 {
@@ -31,8 +31,8 @@ export default class MainMenu
             submenu:
             [
                 {
-                    label:'New Note',
-                    accelerator: 'CmdOrCtrl+P',
+                    label:"New Note",
+                    accelerator: "CmdOrCtrl+P",
                     click:() =>
                     {
                         let newNoteAction:AddNoteAction = new AddNoteAction("New note");
@@ -40,11 +40,11 @@ export default class MainMenu
                     }
                 },
                 {
-                    type:'separator'
+                    type:"separator"
                 },
                 {
-                    label:'Exit',
-                    accelerator: 'CmdOrCtrl+X',
+                    label:"Exit",
+                    accelerator: "CmdOrCtrl+X",
                     click:() =>
                     {
                         Application.instance.exit();

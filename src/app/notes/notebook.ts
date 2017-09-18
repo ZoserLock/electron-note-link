@@ -9,6 +9,8 @@ export default class Notebook
     private _name:string;
     private _notes:Note[];
 
+    private _selected:boolean;
+    
     // Get/set
     get id(): string
     {
@@ -30,6 +32,10 @@ export default class Notebook
         return this._notes;
     }
 
+    get isSelected(): boolean
+    {
+        return this._selected;
+    }
     // Member Functions
     constructor()
     {
@@ -68,6 +74,15 @@ export default class Notebook
         this.notes.push(note);
     }
 
+    public SetAsSelected():void
+    {
+        this._selected = true;
+    }
+
+    public SetAsUnselected():void
+    {
+        this._selected = false;
+    }
     // Save Stuff
     public getSaveObject():any
     {
@@ -75,4 +90,6 @@ export default class Notebook
 
         return saveObject
     }
+
+
 }

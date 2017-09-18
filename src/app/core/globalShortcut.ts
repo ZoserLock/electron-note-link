@@ -1,11 +1,11 @@
 // Node Modules
-import {globalShortcut } from 'electron';
+import {globalShortcut } from "electron";
 
 // Local Modules
-import ActionManager    from '../core/actionManager';
-import LogAction        from '../core/actions/logAction';
-import Application      from '../core/application';
-import Configuration    from '../tools/configuration';
+import ActionManager    from "../core/actionManager";
+import LogAction        from "../core/actions/logAction";
+import Application      from "../core/application";
+import Configuration    from "../tools/configuration";
 
 export default class GlobalShortcuts
 {

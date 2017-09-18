@@ -3,11 +3,29 @@ import { app} from "electron";
 import * as Path from "path";
 import * as fs from "fs-extra";
 
+
 import Debug from "../tools/debug";
 
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
 import Note from "../notes/note";
+
+
+
+interface NotebookMap 
+{
+    [id: string]: Notebook;
+}
+
+interface StorageMap 
+{
+    [id: string]: NotebookStorage;
+}
+
+interface NoteMap 
+{
+    [id: string]: Note;
+}
 
 export default class DataManager
 {
@@ -23,51 +41,58 @@ export default class DataManager
     {
         DataManager.sInstance = new DataManager();
     }
+
     // Static variables
     private sSaveFileName:string = "data.json";
     private sVersion:number = 1;
 
     // Member Variables
     private _savePath:string;
-    private _noteStorages: Array<NotebookStorage> = new Array<NotebookStorage>();
+
+    private _storageList: Array<NotebookStorage> = new Array<NotebookStorage>();
+
+    // Data maps
+    private _storages: StorageMap ={};
+    private _notebooks: NotebookMap = {};
+    private _notes: NoteMap = {};
 
     // Get/Set
     
     get noteStorages(): Array<NotebookStorage>  
     {
-        return this._noteStorages;
+        return this._storageList;
     }
 
     // Member Functions
     private constructor()
     {
-        this._noteStorages = new Array<NotebookStorage>();
+        this._storageList = new Array<NotebookStorage>();
         this._savePath = Path.join(app.getPath("userData"),this.sSaveFileName);
         
-        Debug.log("Save File Location: "+this._savePath);
+        Debug.log("[DataManager] Save File Location: "+this._savePath);
 
         this.checkStorageIntegrety();
     }
 
     private checkStorageIntegrety():void
     {
-        Debug.log("Checking storage Integrety...");
+        Debug.log("[DataManager] Checking storage integrety...");
 
-        if(!this.loadStorages())
+        if(!this.loadApplicationData())
         {
-            Debug.log("Creating new Storage File!");
-            this.clearStorages();
-            this.createStorages();
-            this.saveStorages();
+            Debug.log("[DataManager] Creating new Storage File!");
+            this.clearApplicationData();
+            this.createApplicationData();
+            this.saveApplicationData();
         }
     }
     
-    private createStorages():void
+    private createApplicationData():void
     {
-        this._noteStorages = new Array<NotebookStorage>();
+        this._storageList = new Array<NotebookStorage>();
     }
 
-    private clearStorages():boolean
+    private clearApplicationData():boolean
     {
         try 
         {
@@ -81,13 +106,13 @@ export default class DataManager
         }
     }
 
-    public saveStorages():boolean
+    public saveApplicationData():boolean
     {
         let storageInfo:any[] = [];
         
-        for(let a = 0;a < this._noteStorages.length; ++a)
+        for(let a = 0;a < this._storageList.length; ++a)
         {
-            storageInfo.push(this._noteStorages[a].getFullPath());
+            storageInfo.push(this._storageList[a].getFullPath());
         }
 
         let saveFile:any =
@@ -109,7 +134,7 @@ export default class DataManager
         return false;
     }
 
-    public loadStorages():boolean
+    public loadApplicationData():boolean
     {
         let dataRaw;
         try 
@@ -138,7 +163,7 @@ export default class DataManager
         {
             if(dataRaw.storages instanceof Array)
             {
-                this._noteStorages = new Array<NotebookStorage>();
+                this._storageList = new Array<NotebookStorage>();
             
                 for(var a = 0;a < dataRaw.storages.length; ++a)
                 {
@@ -157,12 +182,12 @@ export default class DataManager
                     }
 
                     let noteStorage:NotebookStorage = NotebookStorage.createFromSavedData(storageDataRaw, Path.dirname(storagePath));
-                    this._noteStorages.push(noteStorage);
+                    this.loadStorage(noteStorage);
                 }
 
-                for(var a = 0;a < this._noteStorages.length; ++a)
+                for(var a = 0;a < this._storageList.length; ++a)
                 {
-                    let noteStorage:NotebookStorage = this._noteStorages[a];
+                    let noteStorage:NotebookStorage = this._storageList[a];
 
                     let notebooksFolder = noteStorage.getNotebooksFolderPath();
 
@@ -177,8 +202,8 @@ export default class DataManager
                         continue;
                     }
 
-                    Debug.logVar(files);
 
+                    // Load Storage Notebooks
                     for(var b = 0;b < files.length; ++b)
                     {
                         let notebookPath = files[b];
@@ -201,7 +226,14 @@ export default class DataManager
                         }
 
                         let notebook:Notebook = Notebook.createFromSavedData(notebookDataRaw, notebooksFolder);
+                        this.addNotebook(notebook);
                         noteStorage.addNotebook(notebook);
+                        
+                        // Load Notebook Notes
+                        for(var c = 0;c < noteStorage.notebooks.length; ++c)
+                        {
+                            //If i had one!
+                        }
                     }
                 }
             }
@@ -211,72 +243,131 @@ export default class DataManager
     }
 
     ////////////////////
-    // Save Functions
-    public addStorage(storage:NotebookStorage):boolean
+    // Storage Functions
+    public addStorage(storage:NotebookStorage):void
     {
-        for(let a = 0; a < this._noteStorages.length; ++a)
+        if(this._storages[storage.id] == undefined)
         {
-            if(this._noteStorages[a].folderPath == storage.folderPath)
+            for(let a = 0; a < this._storageList.length; ++a)
             {
-                Debug.logError("Storage Already exist in that path");
-                return false;
+                if(Path.normalize(this._storageList[a].folderPath) == Path.normalize(storage.folderPath))
+                {
+                    Debug.logError("Storage Already exist in that path");
+                    return;
+                }
             }
-        }
 
-        let result:boolean = this.saveStorage(storage);
-
-        if(result)
-        {
-            this._noteStorages.push(storage);
-            this.saveStorages();
-        }
-       
-        return result;
-    }
-
-    public getStorage(id:string):NotebookStorage
-    {
-        for(let a = 0; a < this._noteStorages.length; ++a)
-        {
-            if(this._noteStorages[a].id == id)
-            {
-                return this._noteStorages[a];
-            }
-        }
-        return null;
-    }
-
-    public saveStorage(storage:NotebookStorage):boolean
-    {
-        let notebooks:Notebook[] = storage.notebooks;
+            this._storages[storage.id] = storage;
+            this._storageList.push(storage);
         
-        for(let a = 0;a < notebooks.length; ++a)
+            this.saveApplicationData();
+        }
+        else
         {
-            this.saveNotebook(notebooks[a]);
+            Debug.logError("Storage Already exist in the list");
+        }
+    }
+
+    public saveStorage(storage:NotebookStorage, cascade:boolean = false):boolean
+    {
+        if(cascade)
+        {
+            for(let a = 0; a < storage.notebooks.length ;++a)
+            {
+                this.deleteNotebook(storage.notebooks[a], true);
+            }
         }
 
         try 
         {
+            fs.ensureDirSync(storage.folderPath);
             fs.writeJsonSync(storage.getFullPath(), storage.getSaveObject(),{spaces:4});
         }
         catch(e)
         {
-            Debug.logError("Save Note Failed: "+e);
+            Debug.logError("Save Storage Failed: " + e);
             return false;
         }
 
         return true;
     }
-    
-    public saveNotebook(notebook:Notebook):boolean
-    {
-        let notes:Note[] = notebook.notes;
 
-        for(let a = 0;a < notes.length; ++a)
+    public loadStorage(storage:NotebookStorage, cascade:boolean = false):void
+    {
+        if(this._storages[storage.id] == undefined)
         {
-            this.saveNote(notes[a]);
+            this._storages[storage.id] = storage;
+            this._storageList.push(storage);
+        }
+    }
+
+    public getStorage(id:string):NotebookStorage
+    {
+        if(this._storages[id] != undefined)
+        {
+            return this._storages[id];
         }
 
+        return null;
+    }
+
+    public deleteStorage(storage:NotebookStorage, cascade:boolean):boolean
+    {
+        if(this._storages[storage.id] != undefined)
+        {
+            // Delete Files
+            try 
+            {
+                let path = storage.getFullPath();
+                if(fs.lstatSync(path).isFile())
+                {
+                    fs.removeSync(path);
+                }
+            }
+            catch(e)
+            {
+                Debug.logError("Delete Storage Failed: "+e);
+                return false;
+            }
+
+            // Clear lists
+            for(let a = 0;a < this._storageList.length ;++a)
+            {
+                if(this._storageList[a] == storage)
+                {
+                    this._storageList.splice(a,1);
+                    break;
+                }
+            }
+
+            delete this._storages[storage.id];
+
+            // Delete Cascade
+            if(cascade)
+            {
+                for(let a = 0;a < storage.notebooks.length ;++a)
+                {
+                    this.deleteNotebook(storage.notebooks[a], true);
+                }
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    ///////////////////////
+    // Notebook Functions
+    public addNotebook(notebook:Notebook):void
+    {
+        if(this._notebooks[notebook.id] == undefined)
+        {
+            this._notebooks[notebook.id] = notebook;
+        }
+    }
+
+    public saveNotebook(notebook:Notebook, cascade:boolean = false):boolean
+    {
         try 
         {
             fs.ensureDirSync(notebook.folderPath);
@@ -292,7 +383,26 @@ export default class DataManager
         return true;
     }
 
+    public getNotebook(id:string):Notebook
+    {
+        if(this._notebooks[id] != undefined)
+        {
+            return this._notebooks[id];
+        }
+        return null;
+    }
 
+    public deleteNotebook(notebook:Notebook, cascade:boolean = false):boolean
+    {
+        if(this._notebooks[notebook.id] != undefined)
+        {
+            delete this._notebooks[notebook.id];
+            return true;
+        }
+        return false;
+    }
+    
+    // Note operations
     public saveNote(note:Note):boolean
     {
         if(note.isDirty)
