@@ -1,7 +1,7 @@
 
 import {ipcMain} from "electron"; 
-import * as uuid from "uuid/v4"
-
+import * as uuid from "uuid/v4";
+import * as Path from "path";
 
 import Debug from "../tools/debug";
 import Application from "./application";
@@ -115,19 +115,18 @@ export default class Director
     
     private actionNewNotebook(event:any, data:any):void
     {
-        
         let storageId = data.storage;
-        Debug.log("actionNewNotebook id:"+storageId);
 
         let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
 
         if(storage != null)
         {
-            let notebook:Notebook = Notebook.create(uuid(), storage.path+"/notebooks");
+            let notebook:Notebook = Notebook.create(uuid(), Path.join(storage.folderPath,"/notebooks"));
 
             if(DataManager.instance.saveNotebook(notebook))
             {
                 storage.addNotebook(notebook);
+                DataManager.instance.saveStorage(storage);
             }
 
             this.updateLeftPanel();

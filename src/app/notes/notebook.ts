@@ -1,10 +1,11 @@
-import Note from "./note"
+
+import Debug from "../tools/debug";
+import Note from "./note";
 
 export default class Notebook
 {
-
     private _id:string;
-    private _path:string;
+    private _folderPath:string;
     private _name:string;
     private _notes:Note[];
 
@@ -14,9 +15,9 @@ export default class Notebook
         return this._id;
     }
 
-    get path(): string
+    get folderPath(): string
     {
-        return this._path;
+        return this._folderPath;
     }
 
     get name(): string
@@ -33,15 +34,25 @@ export default class Notebook
     constructor()
     {
         this._notes = new Array<Note>();
+        this._name = "Unammed Notebook";
         this._id   = "";
-        this._path = "";
+        this._folderPath = "";
     }
 
     public static create(id:string, path:string):Notebook
     {
         let notebook:Notebook = new Notebook();
         notebook._id   = id;
-        notebook._path = path;
+        notebook._folderPath = path;
+        return notebook;
+    }
+
+    public static createFromSavedData(data:any, path:string):Notebook
+    {
+        let notebook:Notebook = new Notebook();
+        notebook._id   = data.id;
+        notebook._name = data.name;
+        notebook._folderPath = path;
         return notebook;
     }
 
@@ -60,14 +71,7 @@ export default class Notebook
     // Save Stuff
     public getSaveObject():any
     {
-        let noteIds:any[] = [];
-
-        for(let a = 0;a < this._notes.length; ++a)
-        {
-            noteIds.push(this._notes[a].id);
-        }
-
-        let saveObject = {id:this._id,  path:this._path, notes:noteIds};
+        let saveObject = {id:this._id, name:this._name};
 
         return saveObject
     }

@@ -7,6 +7,7 @@ export default class Note
     private _text:string;
 
     private _dirty:boolean;
+    private _loaded:boolean;
 
     // Get/Set
     
@@ -30,15 +31,24 @@ export default class Note
         return this._text;
     }
 
+    get loaded(): boolean
+    {
+        return this._loaded;
+    }
+
+    get isDirty(): boolean
+    {
+        return this._dirty;
+    }
+
     // Member functions
     constructor()
     {
+        this._id     = "";
+        this._title = "Unammed Note";
 
-    }
-
-    public isDirty():boolean
-    {
-        return this._dirty;
+        this._loaded = false;
+        this._dirty  = false;
     }
 
     public setDirty():void

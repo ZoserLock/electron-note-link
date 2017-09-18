@@ -43,7 +43,7 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
         return (
             <div>
                 <div className="ui-sidebar-storage-item"> 
-                    <span>{this.props.storage.id}</span> 
+                    <span>{this.props.storage.name}</span> 
                     <button onClick={()=>this.onAddButtonClick()}>+</button>
                 </div>
                 <ul className="wtree">

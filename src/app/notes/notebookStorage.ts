@@ -1,11 +1,17 @@
 
+import * as Path from "path";
+
+import Debug from "../tools/debug";
 import Notebook from "./notebook"
 
 export default class NotebookStorage
 {
+    private sNotebooksFolderName:string = "notebooks";
+    private sNotelinkStorageName:string = "notelink.json";
+
     private _id:string;
     private _name:string;
-    private _path:string;
+    private _folderPath:string;
     private _notebooks:Notebook[];
 
     // Get/Set
@@ -19,9 +25,9 @@ export default class NotebookStorage
         return this._name;
     }
 
-    get path(): string
+    get folderPath(): string
     {
-        return this._path;
+        return this._folderPath;
     }
 
     get notebooks(): Notebook[]
@@ -35,15 +41,25 @@ export default class NotebookStorage
     {
         this._notebooks = new Array<Notebook>();
 
+        this._name = "Unammed Storage";
         this._id   = "";
-        this._path = "";
+        this._folderPath = "";
     }
     
     public static create(id:string, path:string):NotebookStorage
     {
         let storage:NotebookStorage = new NotebookStorage();
         storage._id   = id;
-        storage._path = path;
+        storage._folderPath = path;
+        return storage;
+    }
+
+    public static createFromSavedData(data:any, path:string):NotebookStorage
+    {
+        let storage:NotebookStorage = new NotebookStorage();
+        storage._id   = data.id;
+        storage._name = data.name;
+        storage._folderPath = path;
         return storage;
     }
 
@@ -61,20 +77,19 @@ export default class NotebookStorage
 
     public getFullPath():string
     {
-        return this._path + "/notelink.json";
+        return Path.join(this._folderPath,this.sNotelinkStorageName);
+    }
+
+    public getNotebooksFolderPath():string
+    {
+        return Path.join(this._folderPath,this.sNotebooksFolderName);
     }
 
     public getSaveObject():any
     {
-        let notebookIds:any[] = [];
-        
-        for(let a = 0;a < this._notebooks.length; ++a)
-        {
-            notebookIds.push(this._notebooks[a].id);
-        }
-        
-        let saveObject = {id:this._id,  path:this._path ,notebooks:notebookIds};
+        let saveObject = {id:this._id, name:this._name};
 
         return saveObject
+ 
     }
 }

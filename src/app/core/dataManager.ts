@@ -1,6 +1,6 @@
 
 import { app} from "electron";
-import * as path from "path";
+import * as Path from "path";
 import * as fs from "fs-extra";
 
 import Debug from "../tools/debug";
@@ -35,16 +35,14 @@ export default class DataManager
     
     get noteStorages(): Array<NotebookStorage>  
     {
-        Debug.log("noteStorages: DataManager");
         return this._noteStorages;
     }
-
 
     // Member Functions
     private constructor()
     {
         this._noteStorages = new Array<NotebookStorage>();
-        this._savePath = path.join(app.getPath("userData"),this.sSaveFileName);
+        this._savePath = Path.join(app.getPath("userData"),this.sSaveFileName);
         
         Debug.log("Save File Location: "+this._savePath);
 
@@ -113,52 +111,103 @@ export default class DataManager
 
     public loadStorages():boolean
     {
-        return false;
-
-    /*    try 
+        let dataRaw;
+        try 
         {
-            const dataRaw = fs.readJsonSync(this._savePath);
-
-            // Save Update
-            if(dataRaw.version != undefined)
-            {
-                if(dataRaw.version != this.sVersion)
-                {
-                    // Convert DataRaw
-                    return false;
-                }
-            }
-
-            // Load storage
-            if(dataRaw.storages != undefined)
-            {
-                if(dataRaw.storages instanceof Array)
-                {
-                    this._noteStorages = new Array<NotebookStorage>();
-                
-                    for(var a = 0;a < dataRaw.storages.length; ++a)
-                    {
-                        let storage = dataRaw.storages[a];
-
-                        let noteStorage:NotebookStorage = new NotebookStorage(storage.id,storage.path);
-                        this._noteStorages.push(noteStorage);
-                    }
-
-                    for(var a = 0;a < this._noteStorages.length; ++a)
-                    {
-                        let noteStorage:NotebookStorage = this._noteStorages[a];
-                    }
-                
-                }
-            }
-
-            return true;
+            dataRaw = fs.readJsonSync(this._savePath);
         }
         catch(e)
         {
-            Debug.logError("Load Storage Failed: "+e);
+            Debug.logError("Load Storage List Failed: "+e);
+            return false;
         }
-        return false;*/
+
+        // Handle Save Version mismatch
+        if(dataRaw.version != undefined)
+        {
+            if(dataRaw.version != this.sVersion)
+            {
+                Debug.log("Different File Version Implement Conversion");
+                // Convert DataRaw
+                return false;
+            }
+        }
+
+        // Load storage
+        if(dataRaw.storages != undefined)
+        {
+            if(dataRaw.storages instanceof Array)
+            {
+                this._noteStorages = new Array<NotebookStorage>();
+            
+                for(var a = 0;a < dataRaw.storages.length; ++a)
+                {
+                    let storagePath = dataRaw.storages[a];
+
+                    let storageDataRaw;
+
+                    try 
+                    {
+                        storageDataRaw = fs.readJsonSync(storagePath);
+                    }
+                    catch(e)
+                    {
+                        Debug.logError("Load Storage Failed: "+e);
+                        continue;
+                    }
+
+                    let noteStorage:NotebookStorage = NotebookStorage.createFromSavedData(storageDataRaw, Path.dirname(storagePath));
+                    this._noteStorages.push(noteStorage);
+                }
+
+                for(var a = 0;a < this._noteStorages.length; ++a)
+                {
+                    let noteStorage:NotebookStorage = this._noteStorages[a];
+
+                    let notebooksFolder = noteStorage.getNotebooksFolderPath();
+
+                    let files:string[] = [];
+                    try 
+                    {
+                        files = fs.readdirSync(notebooksFolder);
+                    }
+                    catch(e)
+                    {
+                        Debug.logError("Read Notebook Folder Failed for Notebook"+noteStorage.getFullPath() +" Error:"+ e);
+                        continue;
+                    }
+
+                    Debug.logVar(files);
+
+                    for(var b = 0;b < files.length; ++b)
+                    {
+                        let notebookPath = files[b];
+
+                        if(Path.extname(notebookPath) !== ".json") 
+                        {
+                            continue;
+                        }
+
+                        let notebookDataRaw;
+                        
+                        try 
+                        {
+                            notebookDataRaw = fs.readJsonSync(Path.join(notebooksFolder,notebookPath));
+                        }
+                        catch(e)
+                        {
+                            Debug.logError("Load Notebook Failed: "+e);
+                            continue;
+                        }
+
+                        let notebook:Notebook = Notebook.createFromSavedData(notebookDataRaw, notebooksFolder);
+                        noteStorage.addNotebook(notebook);
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     ////////////////////
@@ -167,9 +216,9 @@ export default class DataManager
     {
         for(let a = 0; a < this._noteStorages.length; ++a)
         {
-            if(this._noteStorages[a].id == storage.id)
+            if(this._noteStorages[a].folderPath == storage.folderPath)
             {
-                Debug.logError("ID already Exist in the storages");
+                Debug.logError("Storage Already exist in that path");
                 return false;
             }
         }
@@ -230,9 +279,10 @@ export default class DataManager
 
         try 
         {
-            fs.writeJsonSync(notebook.path+"/"+notebook.id+".json", notebook.getSaveObject(),{spaces:4});
+            fs.ensureDirSync(notebook.folderPath);
+
+            fs.writeJsonSync(Path.join(notebook.folderPath, notebook.id + ".json"), notebook.getSaveObject(),{spaces:4});
         }
-        
         catch(e)
         {
             Debug.logError("Save Note Failed: "+e);
@@ -245,7 +295,7 @@ export default class DataManager
 
     public saveNote(note:Note):boolean
     {
-        if(note.isDirty())
+        if(note.isDirty)
         {
             note.clearDirty();
 
