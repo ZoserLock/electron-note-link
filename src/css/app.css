@@ -3,6 +3,7 @@ body
     margin: 0;
 }
 
+::-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #AAA; } ::-webkit-scrollbar-button:hover{ background-color: #AAA; } ::-webkit-scrollbar-thumb{ background-color: #CCC; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; } ::-webkit-scrollbar-track{ background-color: #efefef; } ::-webkit-scrollbar-track:hover{ background-color: #7d7d7d; border-radius: 0px; } ::-webkit-scrollbar{ width: 7px; }
 
 .ui-window
 {
@@ -42,19 +43,11 @@ body
 .ui-sidebar-storage-item-notebooks
 {
     display: block;
-    border: 1px solid #ddd;
     text-decoration: none;
     list-style-type: none;
     margin: 10px 0 10px 10px;
     padding-left: 10px;
-    position: relative;
-    background-color: white;
     cursor: pointer;
-}
-
-.ui-sidebar-storage-item-notebooks
-{
-    background-color: white;
 }
 
 .ui-sidebar-storage-item-notebooks .selected
@@ -62,12 +55,57 @@ body
     background-color: blue;
 }
 
+.ui-sidebar-notebook-item
+{
+    background-color: rgb(255, 255, 255);
+}
+
+.ui-sidebar-notebook-item:hover
+{
+    background-color: rgb(37, 150, 107);
+}
+
+
 /*********************/
-/* Left Viewport Bar */
-.ui-left-viewport
+/* Left Viewport Bar Note List */
+.ui-note-list
 {
     background-color: #FFAE00;
     width: 300px;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.ui-note-list-header
+{
+    background-color: #00C3FF;
+    padding: 10px;
+}
+
+.ui-note-list-header button
+{
+    float: right;
+}
+
+.ui-note-list-item 
+{
+    display: block;
+    text-decoration: none;
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    padding-left: 10px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.ui-note-list-item:hover
+{
+    background-color: rgb(37, 150, 107);
+}
+
+.ui-note-list-content
+{
     overflow-y: scroll;
 }
 

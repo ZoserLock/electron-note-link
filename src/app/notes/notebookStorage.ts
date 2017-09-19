@@ -59,6 +59,7 @@ export default class NotebookStorage
         let storage:NotebookStorage = new NotebookStorage();
         storage._id   = data.id;
         storage._name = data.name;
+        
         storage._folderPath = path;
         return storage;
     }

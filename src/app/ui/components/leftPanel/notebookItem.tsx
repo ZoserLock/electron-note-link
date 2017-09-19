@@ -48,6 +48,7 @@ export default class NotebookItem extends React.Component<NotebookItemData, Note
     public render() 
     {
         let displayClass = (this.props.notebook.isSelected)? "selected text-unselect": "text-unselect";
+        displayClass += " ui-sidebar-notebook-item";
         return (
             <li className={displayClass} onClick={()=>this.onItemClick()}>
                 <span>{this.props.notebook.name}</span> 

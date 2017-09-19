@@ -2,7 +2,7 @@ import { ipcRenderer } from "electron";
 import * as React from "react";
 
 import LeftPanel from "./leftPanel";
-import LeftViewport from "./leftViewport";
+import NoteList from "./noteList";
 import RightViewport from "./rightViewport";
 import StatusBar from "./statusBar";
 import Toolbar from "./toolbar";
@@ -37,7 +37,7 @@ export default class ApplicationWindow extends React.Component<any, any>
                 <Toolbar/>
                 <div className="ui-main">
                     <LeftPanel/>
-                    <LeftViewport/>
+                    <NoteList/>
                     <RightViewport/>
                 </div>
                 <StatusBar/>
