@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 
 // Local
 import Debug from "../../../tools/debug";
-import Notebook from "../../../notes/Notebook";
+import Notebook from "../../../notes/notebook";
 
 // UI
 import UIManager from "../../uiManager"

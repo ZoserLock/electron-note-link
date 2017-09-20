@@ -6,6 +6,8 @@ export default class Note
     private _title:string;
     private _text:string;
 
+    private _selected:boolean;
+
     private _dirty:boolean;
     private _loaded:boolean;
 
@@ -29,6 +31,11 @@ export default class Note
     get text(): string
     {
         return this._text;
+    }
+
+    get isSelected(): boolean
+    {
+        return this._selected;
     }
 
     get loaded(): boolean
@@ -85,6 +92,16 @@ export default class Note
     public clearDirty():void
     {
         this._dirty = false;
+    }
+
+    public SetAsSelected():void
+    {
+        this._selected = true;
+    }
+
+    public SetAsUnselected():void
+    {
+        this._selected = false;
     }
 
     public getSaveObject():any

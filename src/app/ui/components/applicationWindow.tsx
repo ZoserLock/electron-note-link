@@ -3,7 +3,7 @@ import * as React from "react";
 
 import LeftPanel from "./leftPanel";
 import NoteList from "./noteList";
-import RightViewport from "./rightViewport";
+import NoteView from "./noteView";
 import StatusBar from "./statusBar";
 import Toolbar from "./toolbar";
 
@@ -38,7 +38,7 @@ export default class ApplicationWindow extends React.Component<any, any>
                 <div className="ui-main">
                     <LeftPanel/>
                     <NoteList/>
-                    <RightViewport/>
+                    <NoteView/>
                 </div>
                 <StatusBar/>
             </div>

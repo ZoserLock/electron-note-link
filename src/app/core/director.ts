@@ -24,17 +24,22 @@ export default class Director
 
     static initialize():void
     {
-        Debug.log("Inityializer moment: "+DataManager.instance);
         this.sInstance = new Director();
     }
 
     // Member Variables
-    private _currentNotebook:Notebook;
+    private _selectedNotebook:Notebook;
+    private _selectedNote:Note;
 
     //Get/Set
-    get currentNotebook(): Notebook 
+    get selectedNotebook(): Notebook 
     {
-        return this._currentNotebook;
+        return this._selectedNotebook;
+    }
+
+    get selectedNote(): Note 
+    {
+        return this._selectedNote;
     }
 
     // Member Functions
@@ -55,14 +60,15 @@ export default class Director
 
         // Notebook
         ipcMain.on("action:SelectNotebook",(event:any,data:any)=>this.actionSelectNotebook(event,data));
+        ipcMain.on("action:SelectNote",(event:any,data:any)=>this.actionSelectNote(event,data));
     }
 
     private intializeContextVariables():void
     {
-        if( this._currentNotebook!=null)
+        if( this._selectedNotebook!=null)
         {
-            this._currentNotebook.SetAsUnselected();
-            this._currentNotebook = null;
+            this._selectedNotebook.SetAsUnselected();
+            this._selectedNotebook = null;
         }
 
         let storages = DataManager.instance.noteStorages;
@@ -72,8 +78,14 @@ export default class Director
 
             if(notebooks.length > 0)
             {
-                this._currentNotebook = notebooks[0];
-                this._currentNotebook.SetAsSelected();
+                this._selectedNotebook = notebooks[0];
+                this._selectedNotebook.SetAsSelected();
+                
+                if(this._selectedNotebook.notes.length>0)
+                {
+                    this._selectedNote = this._selectedNotebook.notes[0];
+                    this._selectedNote.SetAsSelected();
+                }
             }
         }
     }
@@ -87,9 +99,9 @@ export default class Director
 
         let selectedNotebookId:String = "";
 
-        if(this._currentNotebook != null)
+        if(this._selectedNotebook != null)
         {
-            selectedNotebookId = this._currentNotebook.id;
+            selectedNotebookId = this._selectedNotebook.id;
         }
 
         Application.instance.sendUIMessage("update:LeftPanel",{storages:storages, selectedNotebookId:selectedNotebookId});
@@ -97,12 +109,21 @@ export default class Director
 
     public updateNoteList():void
     {
-        if(this._currentNotebook != null)
+        let notes:Note[] = [];
+
+        if(this._selectedNotebook != null)
         {
-            Application.instance.sendUIMessage("update:NoteList",{notes:this._currentNotebook.notes});
+            notes = this._selectedNotebook.notes;
         }
+
+        Application.instance.sendUIMessage("update:NoteList",{notes:notes});
     }
 
+    public updateNoteView():void
+    {
+        Application.instance.sendUIMessage("update:NoteView",{notes:this._selectedNotebook.notes});
+    }
+    
     public updateToolbar():void
     {
         // To be implemented
@@ -153,39 +174,79 @@ export default class Director
 
     private actionNewNote():void
     {
-        if(this._currentNotebook != null)
+        if(this._selectedNotebook != null)
         {
-            let note:Note = Note.create(uuid(), Path.join(this._currentNotebook.folderPath,this._currentNotebook.id));
+            let note:Note = Note.create(uuid(), Path.join(this._selectedNotebook.folderPath,this._selectedNotebook.id));
             
             if(DataManager.instance.addNote(note))
             {
                 DataManager.instance.saveNote(note);
-                this._currentNotebook.addNote(note);
+                this._selectedNotebook.addNote(note);
                 this.updateNoteList();
             }
         }
     }
 
-
     private actionSelectNotebook(event:any, data:any):void
     {
-        if( this._currentNotebook!=null)
+        if( this._selectedNotebook!=null)
         {
-            this._currentNotebook.SetAsUnselected();
-            this._currentNotebook = null;
+            this._selectedNotebook.SetAsUnselected();
+            this._selectedNotebook = null;
         }
 
         let notebook:Notebook = DataManager.instance.getNotebook(data.notebookId);
 
         if(notebook!=null)
         {
-            this._currentNotebook = notebook;
-            this._currentNotebook.SetAsSelected();
+            this._selectedNotebook = notebook;
+            this._selectedNotebook.SetAsSelected();
+
+            if(this._selectedNotebook.notes.length > 0)
+            {
+                if( this._selectedNote != null)
+                {
+                    this._selectedNote.SetAsUnselected();
+                    this._selectedNote = null;
+                }
+
+                let note = this._selectedNotebook.notes[0];
+
+                this._selectedNote = note;
+                this._selectedNote.SetAsSelected();
+                this.updateNoteView();
+            }
+
 
             this.updateLeftPanel();
             this.updateNoteList();
+
+   
+
         }
     }
+
+    private actionSelectNote(event:any, data:any):void
+    {
+
+        if( this._selectedNote != null)
+        {
+            this._selectedNote.SetAsUnselected();
+            this._selectedNote = null;
+        }
+
+        let note:Note = DataManager.instance.getNote(data.noteId);
+
+        if(note != null)
+        {
+            this._selectedNote = note;
+            this._selectedNote.SetAsSelected();
+
+            this.updateNoteList();
+            this.updateNoteView();
+        }
+    }
+
 
   
 }

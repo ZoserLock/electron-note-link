@@ -23,18 +23,22 @@ export default class NoteListItem extends React.Component<NoteListItemData, Note
 
     private onItemClick()
     {
-       /* let data =
+        let data =
         {
-            storage:this.props.storage.id
+            noteId:this.props.note.id
         }
 
-        UIManager.instance.sendMessage("action:NewNotebook",data);*/
+        UIManager.instance.sendMessage("action:SelectNote",data);
     }
 
     public render() 
     {
+        let displayClass = "ui-note-list-item";
+
+        displayClass += (this.props.note.isSelected)? " selected": "";
+      
         return (
-            <li className="ui-note-list-item" onClick={()=>this.onItemClick()}>
+            <li className={displayClass} onClick={()=>this.onItemClick()}>
                 <span>{this.props.note.title}</span> 
             </li>
         );

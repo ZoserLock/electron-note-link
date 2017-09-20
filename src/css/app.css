@@ -66,8 +66,8 @@ body
 }
 
 
-/*********************/
-/* Left Viewport Bar Note List */
+/********************************/
+/* Left Viewport Bar - NoteList */
 .ui-note-list
 {
     background-color: #FFAE00;
@@ -99,6 +99,11 @@ body
     cursor: pointer;
 }
 
+.ui-note-list-item.selected
+{
+    background-color: blue;
+}
+
 .ui-note-list-item:hover
 {
     background-color: rgb(37, 150, 107);
@@ -109,9 +114,9 @@ body
     overflow-y: scroll;
 }
 
-/*********************/
-/* Right Viewport Bar */
-.ui-right-viewport
+/*********************************/
+/* Right Viewport Bar - NoteView */
+.ui-note-view
 {
     background-color: #52C98F;
     flex: 1;
