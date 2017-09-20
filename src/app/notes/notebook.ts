@@ -1,3 +1,4 @@
+import * as Path from "path";
 
 import Debug from "../tools/debug";
 import Note from "./note";
@@ -83,7 +84,13 @@ export default class Notebook
     {
         this._selected = false;
     }
+
     // Save Stuff
+    public getNotesFolderPath():string
+    {
+        return Path.join(this._folderPath,this._id);
+    }
+
     public getSaveObject():any
     {
         let saveObject = {id:this._id, name:this._name};

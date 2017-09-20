@@ -2,7 +2,7 @@ export default class Note
 {
   
     private _id:string;
-    private _path:string;
+    private _folderPath:string;
     private _title:string;
     private _text:string;
 
@@ -16,9 +16,9 @@ export default class Note
         return this._id;
     }
 
-    get path(): string
+    get folderPath(): string
     {
-        return this._path;
+        return this._folderPath;
     }
 
     get title(): string
@@ -44,11 +44,37 @@ export default class Note
     // Member functions
     constructor()
     {
-        this._id     = "";
+        this._id    = "";
         this._title = "Unammed Note";
+        this._text  =""
 
         this._loaded = false;
         this._dirty  = false;
+    }
+
+    public static create(id:string, path:string):Note
+    {
+        let note:Note = new Note();
+        note._id   = id;
+        note._folderPath = path;
+        return note;
+    }
+
+    public static createFromSavedData(data:any, path:string):Note
+    {
+        let note:Note = new Note();
+        note._id = data.id;
+        note._title = data.title;
+        note._text = data.text;
+        note._folderPath = path;
+        return note;
+    }
+
+    public static createFromData(data:any):Note
+    {
+        let note:Note = new Note();
+        Object.assign(note, data);
+        return note;
     }
 
     public setDirty():void
@@ -63,7 +89,7 @@ export default class Note
 
     public getSaveObject():any
     {
-        let saveObject = {id:this._id,  path:this._path, title:this._title,text:this._text};
+        let saveObject = {id:this._id, title:this._title, text:this._text};
 
         return saveObject
     }

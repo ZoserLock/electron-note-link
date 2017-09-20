@@ -5,7 +5,7 @@ import {ipcRenderer} from "electron";
 // Local
 import Debug from "../../../tools/debug";
 import NotebookStorage from "../../../notes/notebookStorage";
-import Notebook from "../../../notes/Notebook";
+import Notebook from "../../../notes/notebook";
 
 // UI
 import UIManager from "../../uiManager"
@@ -17,9 +17,9 @@ export default class NoteListHeader extends React.Component<any, any>
         super(props);
     }
 
-    private onAddButtonClick()
+    private onAddNoteClick()
     {
-       // UIManager.instance.sendMessage("action:NewNotebook",data);
+        UIManager.instance.sendMessage("action:NewNote");
     }
 
     public render() 
@@ -27,7 +27,7 @@ export default class NoteListHeader extends React.Component<any, any>
         return (
             <div className="ui-note-list-header"> 
                 Note List
-                <button>+</button>
+                <button onClick={()=>this.onAddNoteClick()}>+</button>
             </div>
 
         );

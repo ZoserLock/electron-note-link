@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 
 // Local
 import Debug from "../../../tools/debug";
-import Notebook from "../../../notes/Notebook";
+import Note from "../../../notes/note";
 
 // UI
 import UIManager from "../../uiManager"
@@ -17,28 +17,26 @@ export default class NoteListContent extends React.Component<any, any>
         super(props);
     }
 
-    private onAddButtonClick()
-    {
-        let data =
-        {
-            storage:this.props.storage.id
-        }
-
-        UIManager.instance.sendMessage("action:NewNotebook",data);
-    }
-
     public render() 
     {
+        let notes = this.props.notes.map((note:Note) =>
+        {
+            return  <NoteListItem key = {note.id} note = {note}/>
+        });
+
+        if(notes.length > 0)
+        {
+            return (
+                <div className="ui-note-list-content"> 
+                    <ul>
+                    {notes}
+                    </ul>
+                </div>
+            );    
+        }
+
         return (
             <div className="ui-note-list-content"> 
-                <ul>
-                    <NoteListItem/>
-                    <NoteListItem/>
-                    <NoteListItem/>
-                    <NoteListItem/>
-                    <NoteListItem/>
-                    <NoteListItem/>
-                </ul>
             </div>
         );
     }

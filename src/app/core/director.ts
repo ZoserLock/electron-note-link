@@ -9,6 +9,7 @@ import DataManager from "./dataManager";
 
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
+import Note from "../notes/note";
 
 export default class Director
 {
@@ -43,6 +44,7 @@ export default class Director
 
         // Update Events
         ipcMain.on("update:LeftPanel",()=>this.updateLeftPanel());
+        ipcMain.on("update:NoteList" ,()=>this.updateNoteList());
         ipcMain.on("update:Toolbar"  ,()=>this.updateToolbar());
         ipcMain.on("update:Statusbar",()=>this.updateStatusbar());
 
@@ -91,6 +93,14 @@ export default class Director
         }
 
         Application.instance.sendUIMessage("update:LeftPanel",{storages:storages, selectedNotebookId:selectedNotebookId});
+    }
+
+    public updateNoteList():void
+    {
+        if(this._currentNotebook != null)
+        {
+            Application.instance.sendUIMessage("update:NoteList",{notes:this._currentNotebook.notes});
+        }
     }
 
     public updateToolbar():void
@@ -145,8 +155,14 @@ export default class Director
     {
         if(this._currentNotebook != null)
         {
-        //    DataManager.instance.createNewNote(this._currentNotebook);
-            Debug.log("[Action] New Note");
+            let note:Note = Note.create(uuid(), Path.join(this._currentNotebook.folderPath,this._currentNotebook.id));
+            
+            if(DataManager.instance.addNote(note))
+            {
+                DataManager.instance.saveNote(note);
+                this._currentNotebook.addNote(note);
+                this.updateNoteList();
+            }
         }
     }
 
@@ -167,6 +183,7 @@ export default class Director
             this._currentNotebook.SetAsSelected();
 
             this.updateLeftPanel();
+            this.updateNoteList();
         }
     }
 

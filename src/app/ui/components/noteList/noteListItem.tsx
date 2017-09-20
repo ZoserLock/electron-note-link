@@ -4,12 +4,17 @@ import {ipcRenderer} from "electron";
 
 // Local
 import Debug from "../../../tools/debug";
-import Notebook from "../../../notes/Notebook";
+import Note from "../../../notes/note";
 
 // UI
 import UIManager from "../../uiManager"
 
-export default class NoteListItem extends React.Component<any, any> 
+interface NoteListItemData
+{
+    note:Note;
+}
+
+export default class NoteListItem extends React.Component<NoteListItemData, NoteListItemData> 
 {
     constructor(props: any)
     {
@@ -18,21 +23,20 @@ export default class NoteListItem extends React.Component<any, any>
 
     private onItemClick()
     {
-        let data =
+       /* let data =
         {
             storage:this.props.storage.id
         }
 
-        UIManager.instance.sendMessage("action:NewNotebook",data);
+        UIManager.instance.sendMessage("action:NewNotebook",data);*/
     }
 
     public render() 
     {
         return (
             <li className="ui-note-list-item" onClick={()=>this.onItemClick()}>
-                <span>Note</span> 
+                <span>{this.props.note.title}</span> 
             </li>
-
         );
     }
 

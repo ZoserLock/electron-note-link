@@ -57,6 +57,9 @@ export default class DataManager
     private _notebooks: NotebookMap = {};
     private _notes: NoteMap = {};
 
+    // Performance Counter
+    private _noteLoadedCount = 0;
+
     // Get/Set
     
     get noteStorages(): Array<NotebookStorage>  
@@ -138,6 +141,7 @@ export default class DataManager
 
     private loadApplicationData():boolean
     {
+        console.time("load App Data");
         let dataRaw;
         try 
         {
@@ -165,6 +169,8 @@ export default class DataManager
         this.loadNotebooks();
         this.loadNotes();
 
+        console.timeEnd("load App Data");
+        Debug.log("Notes Loaded: "+this._noteLoadedCount);
         return true;
     }
 
@@ -220,7 +226,6 @@ export default class DataManager
                 continue;
             }
 
-
             // Load Storage Notebooks
             for(let b = 0;b < files.length; ++b)
             {
@@ -258,17 +263,57 @@ export default class DataManager
         {
             let notebook:Notebook = this._notebookList[a];
 
-            // Load Notebook Notes
-            for(var c = 0;c < notebook.notes.length; ++c)
+            let noteFolder = notebook.getNotesFolderPath();
+
+            let files:string[] = [];
+
+            try 
             {
-                //If i had one!
+                files = fs.readdirSync(noteFolder);
             }
+            catch(e)
+            {
+                // File does not exist. No notes. Continue!
+                continue;
+            }
+
+            // Load Notes
+            for(let b = 0;b < files.length; ++b)
+            {
+                let notePath:string = files[b];
+
+                if(Path.extname(notePath) !== ".json") 
+                {
+                    continue;
+                }
+                
+                let noteDataRaw:any;
+                
+                try 
+                {
+                    
+                    noteDataRaw = fs.readJsonSync(Path.join(noteFolder,notePath));
+                }
+                catch(e)
+                {
+                    Debug.logError("Load Notebook Failed: "+e);
+                    continue;
+                }
+
+                let note:Note = Note.createFromSavedData(noteDataRaw, noteFolder);
+                
+                this.addNote(note);
+                notebook.addNote(note);
+
+                this._noteLoadedCount++;
+            }
+            
         }
     }
    
     ////////////////////
     // Storage Functions
-    public addStorage(storage:NotebookStorage,saveApplicationData:boolean = true):boolean
+    public addStorage(storage:NotebookStorage, saveApplicationData:boolean = true):boolean
     {
         if(this._storages[storage.id] == undefined)
         {
@@ -380,13 +425,15 @@ export default class DataManager
 
     ///////////////////////
     // Notebook Functions
-    public addNotebook(notebook:Notebook):void
+    public addNotebook(notebook:Notebook):boolean
     {
         if(this._notebooks[notebook.id] == undefined)
         {
             this._notebooks[notebook.id] = notebook;
             this._notebookList.push(notebook);
+            return true;
         }
+        return false;
     }
 
     public saveNotebook(notebook:Notebook, cascade:boolean = false):boolean
@@ -419,30 +466,64 @@ export default class DataManager
     {
         if(this._notebooks[notebook.id] != undefined)
         {
+            for(let a = 0;a < this._notebookList.length ;++a)
+            {
+                if(this._notebookList[a] == notebook)
+                {
+                    this._storageList.splice(a,1);
+                    break;
+                }
+            }
+
             delete this._notebooks[notebook.id];
             return true;
         }
         return false;
     }
     
-    // Note operations
+    ////////////////////
+    // Note Functions
+    public addNote(note:Note):boolean
+    {
+        if(this._notebooks[note.id] == undefined)
+        {
+            this._notes[note.id] = note;
+            return true;
+        }
+        return false;
+    }
+
     public saveNote(note:Note):boolean
     {
-        if(note.isDirty)
+        try 
         {
-            note.clearDirty();
-
-            try 
-            {
-                fs.writeJsonSync(note.path, note);
-                return true;
-            }
-            catch(e)
-            {
-                Debug.logError("Save Note Failed: "+e);
-                return false;
-            }
+            fs.ensureDirSync(note.folderPath);
+            fs.writeJsonSync(Path.join(note.folderPath,note.id + ".json"), note.getSaveObject(),{spaces:4});
+            return true;
         }
-        return true;
+        catch(e)
+        {
+            Debug.logError("Save Note Failed: "+e);
+            return false;
+        }
+    }
+
+    public getNote(id:string):Note
+    {
+        if(this._notes[id] != undefined)
+        {
+            return this._notes[id];
+        }
+        return null;
+    }
+
+    public deleteNote(note:Note):boolean
+    {
+        if(this._notes[note.id] != undefined)
+        {
+            delete this._notes[note.id];
+            return true;
+        }
+        return false;
     }
 }
