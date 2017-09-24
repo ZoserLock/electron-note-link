@@ -31,10 +31,7 @@ gulp.task("download-assets",["clean"],function(cb)
 {
     async.parallel(
     [
-        function(callback){downloadFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css",_inputDir + "/lib/css/boostrap.min.css",callback)},
-        function(callback){downloadFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"  ,_inputDir + "/lib/js/bootstrap.min.js",callback)},
-        function(callback){downloadFile("https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" ,_inputDir + "/lib/js/popper.min.js",callback)},
-        function(callback){downloadFile("https://code.jquery.com/jquery-3.2.1.min.js"                               ,_inputDir + "/lib/js/jquery-3.2.1.min.js",callback)},
+        function(callback){downloadFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css",_inputDir + "/lib/css/boostrap.min.css",callback)}
     ], 
     function(err, results) 
     {
@@ -93,15 +90,8 @@ gulp.task("minimize",["build"], function(cb)
     .pipe(gulp.dest(_outputDir));
 });
 
-// Build and run the project
-gulp.task("publish",["build"], function(cb)
-{
-    // Run packaging code.
-});
-
 // Default task make the whole build
 gulp.task("default", ["dev"]); 
-
 
 ///////////////////////////////////////////////////////
 // Test Build

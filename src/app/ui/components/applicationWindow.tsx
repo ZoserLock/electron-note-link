@@ -1,6 +1,8 @@
 import { ipcRenderer } from "electron";
 import * as React from "react";
 
+import Debug from "../../tools/debug"
+
 import LeftPanel from "./leftPanel";
 import NoteList from "./noteList";
 import NoteView from "./noteView";
@@ -32,6 +34,7 @@ export default class ApplicationWindow extends React.Component<any, any>
     
     render() 
     {
+        Debug.log("Render Application window");
         return(
             <div className="ui-window">
                 <Toolbar/>

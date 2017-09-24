@@ -35,7 +35,8 @@ const commonConfig =
     },
     plugins: 
     [
-      new webpack.DefinePlugin({ "global.GENTLY": false })
+      new webpack.DefinePlugin({ "global.GENTLY": false }),
+      new webpack.SourceMapDevToolPlugin({ filename: '[name].js.map' })
     ]
 }
 

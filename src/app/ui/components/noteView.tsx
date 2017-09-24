@@ -6,10 +6,15 @@ import Debug from "../../tools/debug";
 
 // UI
 import UIManager from "../uiManager";
-import NoteListHeader from "./noteList/noteListHeader"; 
-import NoteListContent from "./noteList/noteListContent"; 
+import NoteViewHeader from "./noteView/noteViewHeader"; 
+import NoteViewContent from "./noteView/noteViewContent";
 
-export default class NoteView extends React.Component<any, any> 
+interface NoteViewData
+{
+    note:Note;
+}
+
+export default class NoteView extends React.Component<any, NoteViewData> 
 {
     constructor(props: any)
     {
@@ -17,7 +22,7 @@ export default class NoteView extends React.Component<any, any>
 
         this.state =
         {
-            note:[]
+            note:null
         }
     }
     public componentDidMount() 
@@ -34,19 +39,25 @@ export default class NoteView extends React.Component<any, any>
 
     public updateRequested(event:any, data:any):void
     {
-        /*let notes:Note[] = data.notes.map((noteData:any) =>
-        {
-            return Note.createFromData(noteData);
-        });
+        let note:Note = Note.createFromData(data.note);
 
-        this.setState({notes:notes});*/
+      /*  Debug.log("Text: " + note.text);
+        Debug.log("Title:" + note.title);
+        Debug.logVar(data);*/
+
+        this.setState({note:note});
     }
 
 
     public render() 
     {
+        let currentPanel =  <NoteViewContent note={this.state.note}/>
+
         return (
-            <div className="ui-note-view"> Right Viewport</div>
+            <div className="ui-note-view"> 
+                <NoteViewHeader/>
+                {currentPanel}
+            </div>
         );
     }
 

@@ -31,6 +31,11 @@ export default class Director
     private _selectedNotebook:Notebook;
     private _selectedNote:Note;
 
+
+    //Change Check
+
+    private _changeCheckLevel = 0;
+
     //Get/Set
     get selectedNotebook(): Notebook 
     {
@@ -58,19 +63,19 @@ export default class Director
         ipcMain.on("action:NewNotebook",(event:any,data:any)=>this.actionNewNotebook(event,data));
         ipcMain.on("action:NewNotebookStorage",()=>this.actionNewNotebookStorage());
 
-        // Notebook
-        ipcMain.on("action:SelectNotebook",(event:any,data:any)=>this.actionSelectNotebook(event,data));
-        ipcMain.on("action:SelectNote",(event:any,data:any)=>this.actionSelectNote(event,data));
+        ipcMain.on("action:SelectNotebook",(event:any,data:any)=>
+        {
+            this.selectNotebook(data.notebookId);
+        });
+        
+        ipcMain.on("action:SelectNote",(event:any,data:any) =>
+        {
+            this.selectNote(data.noteId);
+        });
     }
 
     private intializeContextVariables():void
     {
-        if( this._selectedNotebook!=null)
-        {
-            this._selectedNotebook.SetAsUnselected();
-            this._selectedNotebook = null;
-        }
-
         let storages = DataManager.instance.noteStorages;
         if(storages.length > 0)
         {
@@ -121,7 +126,7 @@ export default class Director
 
     public updateNoteView():void
     {
-        Application.instance.sendUIMessage("update:NoteView",{notes:this._selectedNotebook.notes});
+        Application.instance.sendUIMessage("update:NoteView",{note:this.selectedNote});
     }
     
     public updateToolbar():void
@@ -183,11 +188,12 @@ export default class Director
                 DataManager.instance.saveNote(note);
                 this._selectedNotebook.addNote(note);
                 this.updateNoteList();
+
             }
         }
     }
 
-    private actionSelectNotebook(event:any, data:any):void
+    private selectNotebook(notebookId:string):void
     {
         if( this._selectedNotebook!=null)
         {
@@ -195,7 +201,7 @@ export default class Director
             this._selectedNotebook = null;
         }
 
-        let notebook:Notebook = DataManager.instance.getNotebook(data.notebookId);
+        let notebook:Notebook = DataManager.instance.getNotebook(notebookId);
 
         if(notebook!=null)
         {
@@ -204,38 +210,24 @@ export default class Director
 
             if(this._selectedNotebook.notes.length > 0)
             {
-                if( this._selectedNote != null)
-                {
-                    this._selectedNote.SetAsUnselected();
-                    this._selectedNote = null;
-                }
-
                 let note = this._selectedNotebook.notes[0];
-
-                this._selectedNote = note;
-                this._selectedNote.SetAsSelected();
-                this.updateNoteView();
+                this.selectNote(note.id);
             }
-
 
             this.updateLeftPanel();
             this.updateNoteList();
-
-   
-
         }
     }
 
-    private actionSelectNote(event:any, data:any):void
+    private selectNote(noteId:string):void
     {
-
         if( this._selectedNote != null)
         {
             this._selectedNote.SetAsUnselected();
             this._selectedNote = null;
         }
 
-        let note:Note = DataManager.instance.getNote(data.noteId);
+        let note:Note = DataManager.instance.getNote(noteId);
 
         if(note != null)
         {
@@ -247,6 +239,30 @@ export default class Director
         }
     }
 
+    ////////////////
+    // Change Check
+    private beginChangeCheck():void
+    {
+        this._changeCheckLevel++;
+    }
+
+    private endChangeCheck():void
+    {
+        this._changeCheckLevel--;
+        if(this._changeCheckLevel == 0)
+        {
+            this.flushChanges();
+        }
+        else if(this._changeCheckLevel < 0)
+        {
+            Debug.logError("Invalid Change Set. Did you end an already ended change check?");
+        }
+    }
+
+    private flushChanges():void
+    {
+
+    }
 
   
 }

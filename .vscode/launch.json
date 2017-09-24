@@ -1,0 +1,21 @@
+{
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Debug Electron Main",
+                "type": "node",
+                "request": "launch",
+                "cwd": "${workspaceRoot}",
+                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+                "windows": {
+                  "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+                },
+                "args" : ["."],
+                "runtimeArgs": [
+                    "--remote-debugging-port=9222"
+                ],
+
+                "sourceMaps": true
+            }
+        ]
+    }

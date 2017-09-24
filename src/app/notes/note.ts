@@ -53,8 +53,9 @@ export default class Note
     {
         this._id    = "";
         this._title = "Unammed Note";
-        this._text  =""
+        this._text  = "";
 
+        this._selected = false;
         this._loaded = false;
         this._dirty  = false;
     }

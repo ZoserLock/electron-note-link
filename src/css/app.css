@@ -111,7 +111,7 @@ body
 
 .ui-note-list-content
 {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /*********************************/
@@ -120,9 +120,23 @@ body
 {
     background-color: #52C98F;
     flex: 1;
-    overflow-y: scroll;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
+.ui-note-view-header
+{
+    background-color: #648792;
+    height: 30px;
+    padding: 10px;
+}
+
+.ui-note-view-content
+{
+    background-color: #BFD1D6;
+    overflow-y: auto;
+}
 /*Main Window Tool Bar*/
 .ui-toolbar
 {
