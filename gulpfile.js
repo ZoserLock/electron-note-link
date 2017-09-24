@@ -53,7 +53,7 @@ gulp.task("copy-assets",["clean"],function(cb)
 // this function is to copy the debug or release env file to have compilation variables
 gulp.task("generate-env",["clean"],function(cb)
 {
-    fs.createReadStream("env.debug").pipe(fs.createWriteStream(_inputDir+"/env.ts")).on("finish", cb);
+    fs.createReadStream("env/env.debug").pipe(fs.createWriteStream(_inputDir+"/env.ts")).on("finish", cb);
 });
 
 
