@@ -24,7 +24,7 @@ body
 .ui-sidebar
 {
     background-color: #7952C9;
-    width: 200px;
+    flex: 0 0 200px;
     overflow-y: scroll;
 }
 
@@ -71,7 +71,7 @@ body
 .ui-note-list
 {
     background-color: #FFAE00;
-    width: 300px;
+    flex: 0 0 300px;
     display: flex;
     flex-direction: column;
     
@@ -120,22 +120,31 @@ body
 {
     background-color: #52C98F;
     flex: 1;
-    padding: 20px;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 .ui-note-view-header
 {
     background-color: #648792;
-    height: 30px;
-    padding: 10px;
+    flex: 0 0 30px;
+    margin: 20px 20px 0 20px;
+    overflow: hidden;
 }
 
 .ui-note-view-content
 {
+    margin: 0 20px 0 20px;
     background-color: #BFD1D6;
+    overflow-x: hidden;
     overflow-y: auto;
+}
+
+.ui-note-view-content-editor
+{
+    margin: 0 20px 0 20px;
+    background-color: #BFD1D6;
 }
 /*Main Window Tool Bar*/
 .ui-toolbar
@@ -169,3 +178,10 @@ body
 {
     user-select: none;
 }
+
+/*Code Mirror*/
+.CodeMirror {
+    border: 1px solid #eee;
+    height: auto;
+  }
+  

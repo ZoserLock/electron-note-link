@@ -15,6 +15,7 @@ import UIManager from "../../uiManager"
 interface NoteViewContentData
 {
     note:Note;
+    onClick:any;
 }
 
 export default class NoteViewContent extends React.Component<NoteViewContentData, NoteViewContentData> 
@@ -34,7 +35,7 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
             var reactElement = htmlToReactParser.parse(htmlInput);
 
             return (
-                <div className="ui-note-view-content"> 
+                <div className="ui-note-view-content" onClick={this.props.onClick}> 
                     {reactElement}
                 </div>
             );
