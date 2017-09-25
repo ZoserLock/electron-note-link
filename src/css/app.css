@@ -137,6 +137,7 @@ body
 {
     margin: 0 20px 0 20px;
     background-color: #BFD1D6;
+    flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -180,8 +181,8 @@ body
 }
 
 /*Code Mirror*/
-.CodeMirror {
+.CodeMirror 
+{
     border: 1px solid #eee;
     height: auto;
-  }
-  
+}

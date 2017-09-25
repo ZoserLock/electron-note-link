@@ -14,8 +14,8 @@ import UIManager from "../../uiManager"
 
 interface NoteViewContentData
 {
-    note:Note;
-    onClick:any;
+    text:string;
+    onDoubleClick:any;
 }
 
 export default class NoteViewContent extends React.Component<NoteViewContentData, NoteViewContentData> 
@@ -27,15 +27,16 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
 
     public render() 
     {
-        if(this.props.note != null)
+        Debug.log("NoteViewContent Render");
+        if(this.props.text != null)
         {
             var md = new Markdown();            
-            var htmlInput = md.render(this.props.note.text);
+            var htmlInput = md.render(this.props.text);
             var htmlToReactParser = new HtmlToReactParser();
             var reactElement = htmlToReactParser.parse(htmlInput);
 
             return (
-                <div className="ui-note-view-content" onClick={this.props.onClick}> 
+                <div className="ui-note-view-content" onDoubleClick={this.props.onDoubleClick}> 
                     {reactElement}
                 </div>
             );

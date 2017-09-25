@@ -10,6 +10,8 @@ import NoteListContent from "./noteList/noteListContent";
 
 export default class NoteList extends React.Component<any, any> 
 {
+    private _updateRequestedEvent: (event: any, data: any) => void;
+
     constructor(props: any)
     {
         super(props);
@@ -18,17 +20,20 @@ export default class NoteList extends React.Component<any, any>
         {
             notes:[]
         }
+
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
+
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener("update:NoteList",(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.addListener("update:NoteList",this._updateRequestedEvent);
 
         UIManager.instance.sendMessage("update:NoteList");
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:NoteList",(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.removeListener("update:NoteList",this._updateRequestedEvent);
     }
 
     public updateRequested(event:any, data:any):void

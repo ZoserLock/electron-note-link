@@ -36,12 +36,12 @@ export default class NoteViewContentEditor extends React.Component<any, any>
             lineNumbers: true,
             lineWrapping:true,
             mode:"text/x-markdown",
-            highlightFormatting:true
+            highlightFormatting:true,
         };
 
         return (
             <div className="ui-note-view-content-editor"> 
-                <CodeMirror value={this.state.code} onChange={this.updateCode} options={options} />
+                <CodeMirror value={this.state.code} onChange={this.props.onCodeChanged} options={options} />
             </div>
         );
     }

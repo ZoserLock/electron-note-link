@@ -17,21 +17,10 @@ export default class ApplicationWindow extends React.Component<any, any>
 
         this.state = 
         {
-            name:"Zoser Default",
             toolbar:null,
         };
-
-        ipcRenderer.on("data",(event:any,data:any)=>this.dataReceived(event,data));
     }
 
-    public dataReceived(event:any,data:any):void
-    {
-        console.log(data.name);
-
-        this.setState({name:data.name});
-    }
-
-    
     render() 
     {
         Debug.log("Render Application window");

@@ -33,6 +33,11 @@ export default class Note
         return this._text;
     }
 
+    set text(value:string)
+    {
+        this._text = value;
+    }
+    
     get isSelected(): boolean
     {
         return this._selected;

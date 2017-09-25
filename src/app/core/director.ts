@@ -52,9 +52,10 @@ export default class Director
     {
         this.intializeContextVariables();
 
-        // Update Events
+        // Update UI Events
         ipcMain.on("update:LeftPanel",()=>this.updateLeftPanel());
         ipcMain.on("update:NoteList" ,()=>this.updateNoteList());
+        ipcMain.on("update:NoteView" ,()=>this.updateNoteView());
         ipcMain.on("update:Toolbar"  ,()=>this.updateToolbar());
         ipcMain.on("update:Statusbar",()=>this.updateStatusbar());
 
@@ -71,6 +72,11 @@ export default class Director
         ipcMain.on("action:SelectNote",(event:any,data:any) =>
         {
             this.selectNote(data.noteId);
+        });
+
+        ipcMain.on("action:UpdateNote",(event:any,data:any) =>
+        {
+            this.updateNote(data.id,data.text);
         });
     }
 
@@ -139,7 +145,21 @@ export default class Director
         // To be implemented
     }
 
+    public updateNote(id:string,text:string):void
+    {
+        let note:Note = DataManager.instance.getNote(id);
 
+        if(note != null)
+        {
+            note.text = text;
+            DataManager.instance.saveNote(note);
+
+            if(note == this._selectedNote)
+            {
+                this.updateNoteView();
+            }
+        }
+    }
     ///////////
     //Actions
     private actionNewNotebookStorage():void

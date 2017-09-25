@@ -15,6 +15,9 @@ import StorageItem from "../components/leftPanel/storageItem";
 
 export default class LeftPanel extends React.Component<any, any> 
 {
+
+    private _updateRequestedEvent: (event: any, data: any) => void;
+
     constructor(props: any)
     {
         super(props);
@@ -23,18 +26,20 @@ export default class LeftPanel extends React.Component<any, any>
         {
             storages:null
         }  
+
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
     }
  
     public componentDidMount() 
     {
-        ipcRenderer.addListener("update:LeftPanel",(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.addListener("update:LeftPanel",this._updateRequestedEvent);
 
         UIManager.instance.sendMessage("update:LeftPanel");
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:LeftPanel",(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.removeListener("update:LeftPanel",this._updateRequestedEvent);
     }
 
     public updateRequested(event:any, data:any):void

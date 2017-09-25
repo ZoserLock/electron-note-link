@@ -1,7 +1,7 @@
 // Global
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
-import reactOnClickOutside from 'react-onclickoutside'
+import applyOnClickOutside from 'react-onclickoutside'
 
 // Local
 import Note from "../../notes/note";
@@ -21,8 +21,8 @@ interface NoteViewData
 
 class NoteView extends React.Component<any, NoteViewData> 
 {
-
-    // myAdd: (baseValue: number, increment: number) => number 
+    private _updateRequestedEvent: (event: any, data: any) => void;
+    private _newText:string ="";
 
     constructor(props: any)
     {
@@ -33,23 +33,28 @@ class NoteView extends React.Component<any, NoteViewData>
             note:null,
             editorMode:false
         }
+
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener("update:NoteView",(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.addListener("update:NoteView",this._updateRequestedEvent);
 
         UIManager.instance.sendMessage("update:NoteView");
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:NoteView",(event:any,data:any)=>this.updateRequested(event,data));
+        ipcRenderer.removeListener("update:NoteView",this._updateRequestedEvent);
     }
 
-    public updateRequested(event:any, data:any):void
+    public componentWillUpdate(nextProps:any, nextState:NoteViewData)
     {
-        let note:Note = Note.createFromData(data.note);
-        this.setState({note:note});
+        if(this.state.editorMode == true && nextState.editorMode == false)
+        {
+            Debug.log("Updating: "+this.state.note.title);
+            UIManager.instance.sendMessage("action:UpdateNote",{id:this.state.note.id,text:this._newText});
+        }
     }
 
     private handleClickOutside(event:any)
@@ -62,13 +67,33 @@ class NoteView extends React.Component<any, NoteViewData>
         this.setState({editorMode:true});
     }
 
+    private onCodeChanged(newCode:any)
+    {
+        Debug.log("Code Changed");
+        this._newText = newCode;
+    }
+
+    public updateRequested(event:any, data:any):void
+    {
+        let note:Note = Note.createFromData(data.note);
+        this._newText = note.text;
+        this.setState({note:note});
+    }
+
     public render() 
     {
-        let currentPanel =  <NoteViewContent note={this.state.note} onClick={()=>this.onContentClick()}/>
+        let currentPanel;
 
-        if(this.state.editorMode)
+        if(this.state.note != null)
         {
-            currentPanel =  <NoteViewContentEditor code={this.state.note.text}/>
+            if(this.state.editorMode)
+            {
+                currentPanel = <NoteViewContentEditor code={this.state.note.text} onCodeChanged = {(code:any)=>this.onCodeChanged(code)}/>
+            }
+            else
+            {
+                currentPanel = <NoteViewContent text={this.state.note.text} onDoubleClick={()=>this.onContentClick()}/>
+            }
         }
 
         return (
@@ -81,4 +106,4 @@ class NoteView extends React.Component<any, NoteViewData>
 
 }
 
-export default reactOnClickOutside(NoteView);
+export default applyOnClickOutside(NoteView);
