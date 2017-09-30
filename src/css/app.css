@@ -165,6 +165,29 @@ body
 {
     margin-left: auto;
 }
+/*Main Window window Bar*/
+.ui-windowbar
+{
+    display: flex;
+    background-color: #1B5AD8;
+    height: 32px;
+}
+
+.ui-windowbar-right-button
+{
+    display: flex;
+    background-color: #1B5AD8;
+    height: 32px;
+}
+.ui-windowbar-left-button
+{
+    width: 60px;
+}
+
+.ui-windowbar-center
+{
+    -webkit-app-region: drag;
+}
 
 /*Main Window Status Bar*/
 .ui-statusbar

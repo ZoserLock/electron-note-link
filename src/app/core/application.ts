@@ -100,6 +100,7 @@ export default class Application
             height: 720,
             minWidth: 800,
             minHeight: 600,
+            frame:false,
         });
 
         this._mainWindow.loadURL("file://" + __dirname + "/html/index.html");
