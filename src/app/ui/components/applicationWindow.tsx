@@ -12,9 +12,9 @@ import WindowBar from "./windowBar";
 
 export default class ApplicationWindow extends React.Component<any, any> 
 {
-    constructor()
+    constructor(props: any)
     {
-        super();
+        super(props);
 
         this.state = 
         {

@@ -1,8 +1,7 @@
 // Global
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
-import * as CodeMirror from "react-codemirror";
-import 'codemirror/mode/markdown/markdown.js';
+import * as CodeMirror from "react-codemirror2";
 
 // Local
 import Debug from "../../../tools/debug";
@@ -41,8 +40,9 @@ export default class NoteViewContentEditor extends React.Component<any, any>
 
         return (
             <div className="ui-note-view-content-editor"> 
-                <CodeMirror value={this.state.code} onChange={this.props.onCodeChanged} options={options} />
+    
             </div>
         );
+        //            <CodeMirror value={this.state.code} onChange={this.props.onCodeChanged} options={options} />
     }
 }
