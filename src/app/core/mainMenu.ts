@@ -3,8 +3,6 @@ import { Menu, MenuItem } from "electron";
 
 // Local Modules
 import Application      from "../core/application"
-import ActionManager    from "../core/actionManager";
-import AddNoteAction    from "../core/actions/addNoteAction";
 import Configuration    from "../tools/configuration";
 
 export default class MainMenu
@@ -35,8 +33,8 @@ export default class MainMenu
                     accelerator: "CmdOrCtrl+P",
                     click:() =>
                     {
-                        let newNoteAction:AddNoteAction = new AddNoteAction("New note");
-                        ActionManager.instance.execute(newNoteAction);
+                    /*    let newNoteAction:AddNoteAction = new AddNoteAction("New note");
+                        ActionManager.instance.execute(newNoteAction);*/
                     }
                 },
                 {

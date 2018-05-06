@@ -7,7 +7,6 @@ import Configuration    from "../tools/configuration"
 import MainMenu         from "../core/mainMenu"
 import GlobalShortcut   from "../core/globalShortcut"
 import DataManager      from "../core/dataManager";
-import ActionManager    from "../core/actionManager";
 import Director         from "../core/director";
 
 export default class Application
@@ -43,7 +42,6 @@ export default class Application
 
         Configuration   .initialize();
         DataManager     .initialize();
-        ActionManager   .initialize();
         Director        .initialize();
         GlobalShortcut  .initialize();
         MainMenu        .initialize();
