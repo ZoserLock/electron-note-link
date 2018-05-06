@@ -3,6 +3,7 @@ import {ipcRenderer} from "electron";
 
 // UI
 import ToolbarItem from "./toolbarItem"; 
+import Message from "../../core/message";
 
 export default class WindowBar extends React.Component<any, any> 
 {
@@ -11,23 +12,28 @@ export default class WindowBar extends React.Component<any, any>
         super(props);
     }
 
-    private createNewNote():void
+    private onMinimize():void
     {
-        ipcRenderer.send("action:NewNote");
+        ipcRenderer.send(Message.windowMinimize);
     }
 
-    private createNewNotebookStorage():void
+    private onMaximize():void
     {
-        ipcRenderer.send("action:NewNotebookStorage");
+        ipcRenderer.send(Message.windowMaximize);
+    }
+
+    private onClose():void
+    {
+        ipcRenderer.send(Message.windowClose);
     }
 
     public render() 
     {
         return (
             <header className="ui-windowbar">
-                <ToolbarItem name="New Note" onClick={()=>this.createNewNote()}/>
-                <ToolbarItem name="New Storage" onClick={()=>this.createNewNotebookStorage()}/>
-                <ToolbarItem/>
+                <ToolbarItem name="Close" onClick={()=>this.onClose()}/>
+                <ToolbarItem name="Maximize" onClick={()=>this.onMaximize()}/>
+                <ToolbarItem name="Minimize" onClick={()=>this.onMinimize()}/>
             </header>
         );
     }

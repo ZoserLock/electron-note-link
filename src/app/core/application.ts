@@ -13,6 +13,7 @@ import Director         from "../core/director";
 import LeftPanelController from "../controllers/leftPanelController";
 import NoteListController from "../controllers/noteListController";
 import NoteViewController from "../controllers/noteViewController";
+import Message from "./message";
 
 export default class Application
 {
@@ -60,6 +61,11 @@ export default class Application
         this.createTrayIcon();
         this.createMainWindow(); 
         
+        ipcMain.on(Message.windowMinimize,()=>this.WindowMinimize());
+        ipcMain.on(Message.windowMaximize,()=>this.WindowMaximize());
+        ipcMain.on(Message.windowClose   ,()=>this.WindowClose());
+
+
          // Initialize Active Presenters
         this._leftPanelController = new LeftPanelController(this._mainWindow);
         this._noteListController  = new NoteListController(this._mainWindow);
@@ -149,6 +155,38 @@ export default class Application
         if(this._mainWindow != null)
         {
             this._mainWindow.webContents.send(channel,data);
+        }
+    }
+
+    // Window command
+    public WindowMinimize():void
+    {
+        if(this._mainWindow != null)
+        {
+            this._mainWindow.minimize();
+        }
+    }
+
+    public WindowMaximize():void
+    {
+        if(this._mainWindow != null)
+        {
+            if(this._mainWindow.isMaximized())
+            {
+                this._mainWindow.unmaximize();
+            }
+            else
+            {
+                this._mainWindow.maximize();
+            }
+        }
+    }
+
+    public WindowClose():void
+    {
+        if(this._mainWindow != null)
+        {
+            this._mainWindow.close();
         }
     }
 }

@@ -165,28 +165,28 @@ body
 {
     margin-left: auto;
 }
+
 /*Main Window window Bar*/
 .ui-windowbar
 {
-    display: flex;
-    background-color: #1B5AD8;
-    height: 32px;
-}
-
-.ui-windowbar-right-button
-{
-    display: flex;
-    background-color: #1B5AD8;
-    height: 32px;
-}
-.ui-windowbar-left-button
-{
-    width: 60px;
-}
-
-.ui-windowbar-center
-{
     -webkit-app-region: drag;
+
+    display: flex;
+    flex-direction: row-reverse;
+    background-color: #1B5AD8;
+    height: 32px;
+}
+
+.ui-toolbar-spacer
+{
+    margin-left: auto;
+}
+
+.ui-windowbar-button
+{
+    -webkit-app-region: no-drag;
+    background-color: #1B5AD8;
+    height: 32px;
 }
 
 /*Main Window Status Bar*/

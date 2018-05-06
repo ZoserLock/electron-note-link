@@ -14,6 +14,11 @@ export default class Message
     public static readonly newNote:string           = "action:NewNote";
     public static readonly updateNote:string        = "action:UpdateNote";
 
+    public static readonly windowMinimize:string    = "action:window:Minimize";
+    public static readonly windowMaximize:string    = "action:window:Maximize";
+    public static readonly windowClose:string       = "action:window:Close";
+   
+
 
     
 } 

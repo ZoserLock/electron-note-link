@@ -50,7 +50,7 @@ export default class NoteViewController extends Controller
 
             if(note == selectedNote)
             {
-                ipcMain.emit(Message.updateNoteView);
+                this.sendMainMessage(Message.updateNoteView);
             }
         }
     }

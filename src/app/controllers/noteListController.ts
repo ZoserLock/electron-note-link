@@ -31,7 +31,6 @@ export default class NoteListController extends Controller
 
     public updateNoteList():void
     {
-        Debug.log("updateNoteList!>!!");
         let selectedNotebook = Director.instance.selectedNotebook;
 
         let notes:Note[] = [];
@@ -56,6 +55,7 @@ export default class NoteListController extends Controller
             {
                 DataManager.instance.saveNote(note);
                 selectedNotebook.addNote(note);
+                Director.instance.selectNote(note.id);
                 this.updateNoteList();
             }
         }
