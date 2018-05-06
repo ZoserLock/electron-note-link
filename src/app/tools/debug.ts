@@ -7,7 +7,15 @@ export default class Debug
             console.log(" -> "+text); 
         }
     }
-    
+
+    public static logView(text:string)
+    {
+        if(process.env.DEBUG)
+        {
+            console.log(" -> [View] "+text); 
+        }
+    }
+
     public static logVar(obj:any)
     {
         if(process.env.DEBUG)

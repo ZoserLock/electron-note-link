@@ -5,8 +5,7 @@ import {ipcRenderer} from "electron";
 // Local
 import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
-
-// UI
+import Message from "../../../core/message";
 
 interface NoteListItemData
 {
@@ -27,7 +26,7 @@ export default class NoteListItem extends React.Component<NoteListItemData, Note
             noteId:this.props.note.id
         }
 
-        ipcRenderer.send("action:SelectNote",data);
+        ipcRenderer.send(Message.selectNote,data);
     }
 
     public render() 

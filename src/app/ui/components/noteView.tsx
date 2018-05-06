@@ -68,7 +68,6 @@ class NoteView extends React.Component<any, NoteViewData>
 
     private onCodeChanged(newCode:any)
     {
-        Debug.log("Code Changed");
         this._newText = newCode;
     }
 
@@ -76,6 +75,7 @@ class NoteView extends React.Component<any, NoteViewData>
     {
         let note:Note = Note.createFromData(data.note);
         this._newText = note.text;
+
         this.setState({note:note});
     }
 

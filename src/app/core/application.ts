@@ -9,13 +9,23 @@ import GlobalShortcut   from "../core/globalShortcut"
 import DataManager      from "../core/dataManager";
 import Director         from "../core/director";
 
+// Controllers
+import LeftPanelController from "../controllers/leftPanelController";
+import NoteListController from "../controllers/noteListController";
+import NoteViewController from "../controllers/noteViewController";
+
 export default class Application
 {
     private static sInstance:Application;
 
-    private _mainWindow:Electron.BrowserWindow;
-    private _trayIcon:Electron.Tray;
+    private _mainWindow:BrowserWindow;
+    private _trayIcon:Tray;
     private _exiting:boolean;
+
+    // Controllers
+    private _leftPanelController:LeftPanelController;
+    private _noteListController:NoteListController;
+    private _noteViewController:NoteViewController;
 
     // Singleton functions
     static get instance(): Application 
@@ -40,6 +50,7 @@ export default class Application
     {
         Debug.log("Initializing Application");
 
+        // Initialise Singletons
         Configuration   .initialize();
         DataManager     .initialize();
         Director        .initialize();
@@ -49,6 +60,11 @@ export default class Application
         this.createTrayIcon();
         this.createMainWindow(); 
         
+         // Initialize Active Presenters
+        this._leftPanelController = new LeftPanelController(this._mainWindow);
+        this._noteListController  = new NoteListController(this._mainWindow);
+        this._noteViewController  = new NoteViewController(this._mainWindow);
+
         if(process.env.DEBUG)
         {
             this.initializeDebug();
