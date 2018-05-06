@@ -4,7 +4,6 @@ import {ipcRenderer} from "electron";
 import Note from "../../notes/note";
 
 // UI
-import UIManager from "../uiManager";
 import NoteListHeader from "./noteList/noteListHeader"; 
 import NoteListContent from "./noteList/noteListContent"; 
 
@@ -27,8 +26,7 @@ export default class NoteList extends React.Component<any, any>
     public componentDidMount() 
     {
         ipcRenderer.addListener("update:NoteList",this._updateRequestedEvent);
-
-        UIManager.instance.sendMessage("update:NoteList");
+        ipcRenderer.send("update:NoteList");
     }
 
     public componentWillUnmount()

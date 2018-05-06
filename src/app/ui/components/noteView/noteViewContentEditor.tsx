@@ -7,9 +7,6 @@ import * as CodeMirror from "react-codemirror2";
 import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
 
-// UI
-import UIManager from "../../uiManager"
-
 export default class NoteViewContentEditor extends React.Component<any, any> 
 {
     constructor(props: any)

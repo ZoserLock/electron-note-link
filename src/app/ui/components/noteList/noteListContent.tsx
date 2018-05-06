@@ -7,7 +7,6 @@ import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
 
 // UI
-import UIManager from "../../uiManager"
 import NoteListItem from "./noteListItem";
 
 export default class NoteListContent extends React.Component<any, any> 

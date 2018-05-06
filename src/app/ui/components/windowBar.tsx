@@ -2,7 +2,6 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
 // UI
-import UIManager from "../uiManager"
 import ToolbarItem from "./toolbarItem"; 
 
 export default class WindowBar extends React.Component<any, any> 
@@ -14,12 +13,12 @@ export default class WindowBar extends React.Component<any, any>
 
     private createNewNote():void
     {
-        UIManager.instance.sendMessage("action:NewNote");
+        ipcRenderer.send("action:NewNote");
     }
 
     private createNewNotebookStorage():void
     {
-        UIManager.instance.sendMessage("action:NewNotebookStorage");
+        ipcRenderer.send("action:NewNotebookStorage");
     }
 
     public render() 

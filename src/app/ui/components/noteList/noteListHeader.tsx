@@ -8,7 +8,6 @@ import NotebookStorage from "../../../notes/notebookStorage";
 import Notebook from "../../../notes/notebook";
 
 // UI
-import UIManager from "../../uiManager"
 
 export default class NoteListHeader extends React.Component<any, any> 
 {
@@ -19,7 +18,7 @@ export default class NoteListHeader extends React.Component<any, any>
 
     private onAddNoteClick()
     {
-        UIManager.instance.sendMessage("action:NewNote");
+        ipcRenderer.send("action:NewNote");
     }
 
     public render() 

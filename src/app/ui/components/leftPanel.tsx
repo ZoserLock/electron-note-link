@@ -7,10 +7,7 @@ import Debug from "../../tools/debug";
 import NotebookStorage  from "../../notes/notebookStorage";
 
 // UI
-import UIManager from "../uiManager";
 import StorageItem from "../components/leftPanel/storageItem";
-
-
 
 
 export default class LeftPanel extends React.Component<any, any> 
@@ -34,7 +31,7 @@ export default class LeftPanel extends React.Component<any, any>
     {
         ipcRenderer.addListener("update:LeftPanel",this._updateRequestedEvent);
 
-        UIManager.instance.sendMessage("update:LeftPanel");
+        ipcRenderer.send("update:LeftPanel");
     }
 
     public componentWillUnmount()

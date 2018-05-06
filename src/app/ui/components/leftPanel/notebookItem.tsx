@@ -6,9 +6,6 @@ import {ipcRenderer} from "electron";
 import Debug from "../../../tools/debug";
 import Notebook from "../../../notes/notebook";
 
-// UI
-import UIManager from "../../uiManager"
-
 interface NotebookItemData
 {
     notebook:Notebook;
@@ -42,7 +39,8 @@ export default class NotebookItem extends React.Component<NotebookItemData, Note
         {
             notebookId:this.props.notebook.id
         }
-        UIManager.instance.sendMessage("action:SelectNotebook",data);
+        
+        ipcRenderer.send("action:SelectNotebook",data);
     }
 
     public render() 

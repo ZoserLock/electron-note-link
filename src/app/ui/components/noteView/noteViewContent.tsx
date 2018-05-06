@@ -10,7 +10,6 @@ import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
 
 // UI
-import UIManager from "../../uiManager"
 
 interface NoteViewContentData
 {

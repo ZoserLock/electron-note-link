@@ -8,7 +8,6 @@ import NotebookStorage from "../../../notes/notebookStorage";
 import Notebook from "../../../notes/notebook";
 
 // UI
-import UIManager from "../../uiManager"
 import NotebookItem from "./notebookItem";
 
 interface StorageItemData
@@ -32,7 +31,7 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
             storage:this.props.storage.id
         }
 
-        UIManager.instance.sendMessage("action:NewNotebook",data);
+        ipcRenderer.send("action:NewNotebook",data);
     }
 
     public render() 

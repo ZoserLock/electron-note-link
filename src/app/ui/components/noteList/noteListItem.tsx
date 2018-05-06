@@ -7,7 +7,6 @@ import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
 
 // UI
-import UIManager from "../../uiManager"
 
 interface NoteListItemData
 {
@@ -28,7 +27,7 @@ export default class NoteListItem extends React.Component<NoteListItemData, Note
             noteId:this.props.note.id
         }
 
-        UIManager.instance.sendMessage("action:SelectNote",data);
+        ipcRenderer.send("action:SelectNote",data);
     }
 
     public render() 

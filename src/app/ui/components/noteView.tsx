@@ -8,7 +8,6 @@ import Note from "../../notes/note";
 import Debug from "../../tools/debug";
 
 // UI
-import UIManager from "../uiManager";
 import NoteViewHeader from "./noteView/noteViewHeader"; 
 import NoteViewContent from "./noteView/noteViewContent";
 import NoteViewContentEditor from "./noteView/noteViewContentEditor";
@@ -40,7 +39,7 @@ class NoteView extends React.Component<any, NoteViewData>
     {
         ipcRenderer.addListener("update:NoteView",this._updateRequestedEvent);
 
-        UIManager.instance.sendMessage("update:NoteView");
+        ipcRenderer.send("update:NoteView");
     }
 
     public componentWillUnmount()
@@ -53,7 +52,7 @@ class NoteView extends React.Component<any, NoteViewData>
         if(this.state.editorMode == true && nextState.editorMode == false)
         {
             Debug.log("Updating: "+this.state.note.title);
-            UIManager.instance.sendMessage("action:UpdateNote",{id:this.state.note.id,text:this._newText});
+            ipcRenderer.send("action:UpdateNote",{id:this.state.note.id,text:this._newText});
         }
     }
 

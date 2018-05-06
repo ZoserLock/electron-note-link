@@ -3,6 +3,7 @@ const webpack = require("webpack");
 
 const commonConfig = 
 {
+    mode: 'development',
     module: 
     {
         rules: 
