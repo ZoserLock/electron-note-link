@@ -76,6 +76,24 @@ export default class NotebookStorage
         this._notebooks.push(notebook);
     }
 
+    //////////////////
+    // Other Functions
+
+    public getNoteCount():number
+    {
+        let total:number=0;
+        for(var a = 0;a < this._notebooks.length; ++a)
+        {
+            total += this._notebooks[a].getNoteCount();
+        }
+        return total;
+    }
+
+    public getNotebookCount():number
+    {
+        return this._notebooks.length;
+    }
+
     public getFullPath():string
     {
         return Path.join(this._folderPath,this.sNotelinkStorageName);
@@ -93,4 +111,6 @@ export default class NotebookStorage
         return saveObject
  
     }
+
+
 }

@@ -24,9 +24,15 @@ export default class FileTools
 
     public static getJsonFilesInFolder(path:string, appendFolderPath:boolean = true):string[]
     {
-        if(!fs.lstatSync(path).isDirectory())
+        try 
         {
-            Debug.logError("Path is not a directory: "+path );
+            if(!fs.lstatSync(path).isDirectory())
+            {
+                return null;
+            }
+        }
+        catch(e)
+        {
             return null;
         }
 

@@ -85,6 +85,12 @@ export default class Notebook
         this._selected = false;
     }
 
+    public getNoteCount():number
+    {
+        return this._notes.length;
+    }
+
+
     // Save Stuff
     public getNotesFolderPath():string
     {

@@ -58,9 +58,6 @@ export default class DataManager
     private _notebooks: NotebookMap = {};
     private _notes: NoteMap = {};
 
-    // Performance Counter
-    private _noteLoadedCount = 0;
-
     // Get/Set
     
     get noteStorages(): Array<NotebookStorage>  
@@ -151,14 +148,41 @@ export default class DataManager
             return false;
         }
 
-        if(!this.validateApplicationData())
+        if(!this.validateApplicationData(dataRaw))
         {
             Debug.logError("Application Data is invalid");
             return false;
         }
 
-        this.updateApplicationData();
+        let converted = this.updateApplicationData(dataRaw);
 
+        let notesLoaded:number = 0;
+
+        for(var a = 0;a < dataRaw.storages.length; ++a)
+        {
+            let storagePath = dataRaw.storages[a];
+            let loadedStorage = this.loadStorage(storagePath);
+
+            if(loadedStorage != null)
+            {
+                this.addStorage(loadedStorage);
+                notesLoaded += loadedStorage.getNoteCount();
+            }
+        }
+
+        this.saveApplicationData();
+
+        Debug.log("Notes Loaded: "+notesLoaded);
+        return true;
+    }
+
+    private validateApplicationData(dataRaw:any):boolean
+    {
+        return true;
+    }
+
+    private updateApplicationData(dataRaw:any):boolean
+    {
         // Handle Save Version mismatch
         if(dataRaw.version != undefined)
         {
@@ -169,171 +193,7 @@ export default class DataManager
                 return false;
             }
         }
-
-        // Load all storages.
-
-
-
-
-
-        // Load storage
-        this.loadStorageData(dataRaw);
-        this.loadNotebooks();
-        this.loadNotes();
-
-        console.timeEnd("load App Data");
-        Debug.log("Notes Loaded: "+this._noteLoadedCount);
         return true;
-    }
-
-    private validateApplicationData():boolean
-    {
-        
-    }
-
-    private loadStorageData(dataRaw:any):void
-    {
-        let doDataCleanUp:boolean = false;
-
-        if(dataRaw.storages != undefined)
-        {
-            if(dataRaw.storages instanceof Array)
-            {
-                for(var a = 0;a < dataRaw.storages.length; ++a)
-                {
-                    let storagePath = dataRaw.storages[a];
-
-                    let storageDataRaw;
-
-                    try 
-                    {
-                        storageDataRaw = fs.readJsonSync(storagePath);
-                    }
-                    catch(e)
-                    {
-                        Debug.logError("Load Storage Failed: "+e);
-                        doDataCleanUp=true;
-                        continue;
-                    }
-
-                    let noteStorage:NotebookStorage = NotebookStorage.createFromSavedData(storageDataRaw, Path.dirname(storagePath));
-
-                    if(!this.addStorage(noteStorage, false))
-                    {
-                        continue;
-                    }
-                }
-
-                if(doDataCleanUp)
-                {
-                    this.saveApplicationData();
-                }
-            }
-        }
-    }
-
-    private loadNotebooks():void
-    {
-        for(let a = 0;a < this._storageList.length; ++a)
-        {
-            let storage:NotebookStorage = this._storageList[a];
-
-            let notebooksFolder:string = storage.getNotebooksFolderPath();
-            
-            let files:string[] = [];
-            try 
-            {
-                files = fs.readdirSync(notebooksFolder);
-            }
-            catch(e)
-            {
-                Debug.logError("Read Notebook Folder Failed for Notebook"+storage.getFullPath() +" Error:"+ e);
-                continue;
-            }
-
-            // Load Storage Notebooks
-            for(let b = 0;b < files.length; ++b)
-            {
-                let notebookPath:string = files[b];
-
-                if(Path.extname(notebookPath) !== ".json") 
-                {
-                    continue;
-                }
-
-                let notebookDataRaw:any;
-                
-                try 
-                {
-                    notebookDataRaw = fs.readJsonSync(Path.join(notebooksFolder,notebookPath));
-                }
-                catch(e)
-                {
-                    Debug.logError("Load Notebook Failed: "+e);
-                    continue;
-                }
-
-                let notebook:Notebook = Notebook.createFromSavedData(notebookDataRaw, notebooksFolder);
-
-                this.addNotebook(notebook);
-                storage.addNotebook(notebook);
-
-            }
-        }
-    }
-
-    private loadNotes():void
-    {
-        for(let a = 0;a < this._notebookList.length; ++a)
-        {
-            let notebook:Notebook = this._notebookList[a];
-
-            let noteFolder = notebook.getNotesFolderPath();
-
-            let files:string[] = [];
-
-            try 
-            {
-                files = fs.readdirSync(noteFolder);
-            }
-            catch(e)
-            {
-                // File does not exist. No notes. Continue!
-                continue;
-            }
-
-            // Load Notes
-            for(let b = 0;b < files.length; ++b)
-            {
-                let notePath:string = files[b];
-
-                if(Path.extname(notePath) !== ".json") 
-                {
-                    continue;
-                }
-                
-                let noteDataRaw:any;
-                
-                try 
-                {
-                    
-                    noteDataRaw = fs.readJsonSync(Path.join(noteFolder,notePath));
-                }
-                catch(e)
-                {
-                    Debug.logError("Load Notebook Failed: "+e);
-                    continue;
-                }
-
-                let note:Note = Note.createFromSavedData(noteDataRaw, noteFolder);
-                
-                this.addNote(note);
-                notebook.addNote(note);
-
-                this._noteLoadedCount++;
-            }
-            
-        }
     }
 
     //////////////////////////////
@@ -467,24 +327,20 @@ export default class DataManager
         // Load Notebooks
         let storageNotebookFiles:string[] = FileTools.getJsonFilesInFolder(notebookStorageFolder);
         
-        if(storageNotebookFiles == null)
+        if(storageNotebookFiles != null)
         {
-            Debug.logError("Read Notebook Folder Failed for Notebook"+noteStorage.getFullPath());
-            return null;
-        }
-
-        // Load Notebooks
-        for(let b = 0;b < storageNotebookFiles.length; ++b)
-        {
-            let notebook = this.loadNotebook(storageNotebookFiles[b]);
-
-            if(notebook != null)
+            for(let b = 0;b < storageNotebookFiles.length; ++b)
             {
-                noteStorage.addNotebook(notebook);
-            }
-            else
-            {
-                Debug.logError("Failed to create notebook from json in storage folder. Skipping...");
+                let notebook = this.loadNotebook(storageNotebookFiles[b]);
+
+                if(notebook != null)
+                {
+                    noteStorage.addNotebook(notebook);
+                }
+                else
+                {
+                    Debug.logError("Failed to create notebook from json in storage folder. Skipping...");
+                }
             }
         }
 
@@ -604,30 +460,27 @@ export default class DataManager
         }
 
         let notebook:Notebook = Notebook.createFromSavedData(notebookRaw, Path.dirname(path));
-        let noteboolNoteFolder:string = notebook.getNotesFolderPath();
+        let notebookNoteFolder:string = notebook.getNotesFolderPath();
 
         // This can removed later.
         // Load Notes
-        let noteFiles:string[] = FileTools.getJsonFilesInFolder(noteboolNoteFolder);
+        let noteFiles:string[] = FileTools.getJsonFilesInFolder(notebookNoteFolder);
         
-        if(noteFiles == null)
+        if(noteFiles != null)
         {
-            Debug.logError("Read Notebook Note Folder Failed: "+noteboolNoteFolder);
-            return null;
-        }
-  
-        // Load Notes
-        for(let b = 0;b < noteFiles.length; ++b)
-        {
-            let note = this.loadNote(noteFiles[b]);
+            // Load Notes
+            for(let b = 0;b < noteFiles.length; ++b)
+            {
+                let note = this.loadNote(noteFiles[b]);
 
-            if(note != null)
-            {
-                notebook.addNote(note);
-            }
-            else
-            {
-                Debug.logError("Failed to create notebook from json in storage folder. Skipping...");
+                if(note != null)
+                {
+                    notebook.addNote(note);
+                }
+                else
+                {
+                    Debug.logError("Failed to create notebook from json in storage folder. Skipping...");
+                }
             }
         }
 
