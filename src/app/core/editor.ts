@@ -12,20 +12,20 @@ import Notebook from "../notes/notebook";
 import Note from "../notes/note";
 import Message from "./message";
 
-export default class Director
+export default class Editor
 {
     // Singleton
-    private static sInstance:Director;
+    private static sInstance:Editor;
 
     // Get/Set
-    static get instance(): Director 
+    static get instance(): Editor 
     {
         return this.sInstance;
     }
 
     static initialize():void
     {
-        this.sInstance = new Director();
+        this.sInstance = new Editor();
     }
 
     // Member Variables

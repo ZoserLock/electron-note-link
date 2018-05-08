@@ -6,7 +6,7 @@ import * as Path from "path";
 import Debug from "../tools/debug";
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Director from "../core/director";
+import Editor from "../core/editor";
 
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
@@ -32,14 +32,14 @@ export default class NoteViewController extends Controller
 
     public updateNoteView():void
     {
-        let selectedNote = Director.instance.selectedNote;
+        let selectedNote = Editor.instance.selectedNote;
 
         this.sendUIMessage(Message.updateNoteView,{note:selectedNote});
     }
 
     public updateNote(id:string, text:string):void
     {
-        let selectedNote = Director.instance.selectedNote;
+        let selectedNote = Editor.instance.selectedNote;
 
         let note:Note = DataManager.instance.getNote(id);
 

@@ -7,7 +7,7 @@ import Configuration    from "../tools/configuration"
 import MainMenu         from "../core/mainMenu"
 import GlobalShortcut   from "../core/globalShortcut"
 import DataManager      from "../core/dataManager";
-import Director         from "../core/director";
+import Editor           from "../core/editor";
 
 // Controllers
 import LeftPanelController from "../controllers/leftPanelController";
@@ -54,7 +54,7 @@ export default class Application
         // Initialise Singletons
         Configuration   .initialize();
         DataManager     .initialize();
-        Director        .initialize();
+        Editor        .initialize();
         GlobalShortcut  .initialize();
         MainMenu        .initialize();
 

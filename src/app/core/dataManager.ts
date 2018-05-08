@@ -5,6 +5,7 @@ import * as fs from "fs-extra";
 
 
 import Debug from "../tools/debug";
+import FileTools from "../tools/fileTools";
 
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
@@ -142,16 +143,21 @@ export default class DataManager
     private loadApplicationData():boolean
     {
         console.time("load App Data");
-        let dataRaw;
-        try 
+        let dataRaw = FileTools.readJsonSync(this._savePath);
+
+        if(dataRaw == null)
         {
-            dataRaw = fs.readJsonSync(this._savePath);
-        }
-        catch(e)
-        {
-            Debug.logError("Load Storage List Failed: "+e);
+            Debug.logError("Failed To load Application Data");
             return false;
         }
+
+        if(!this.validateApplicationData())
+        {
+            Debug.logError("Application Data is invalid");
+            return false;
+        }
+
+        this.updateApplicationData();
 
         // Handle Save Version mismatch
         if(dataRaw.version != undefined)
@@ -164,6 +170,12 @@ export default class DataManager
             }
         }
 
+        // Load all storages.
+
+
+
+
+
         // Load storage
         this.loadStorageData(dataRaw);
         this.loadNotebooks();
@@ -174,8 +186,15 @@ export default class DataManager
         return true;
     }
 
+    private validateApplicationData():boolean
+    {
+        
+    }
+
     private loadStorageData(dataRaw:any):void
     {
+        let doDataCleanUp:boolean = false;
+
         if(dataRaw.storages != undefined)
         {
             if(dataRaw.storages instanceof Array)
@@ -193,6 +212,7 @@ export default class DataManager
                     catch(e)
                     {
                         Debug.logError("Load Storage Failed: "+e);
+                        doDataCleanUp=true;
                         continue;
                     }
 
@@ -202,6 +222,11 @@ export default class DataManager
                     {
                         continue;
                     }
+                }
+
+                if(doDataCleanUp)
+                {
+                    this.saveApplicationData();
                 }
             }
         }
@@ -310,25 +335,99 @@ export default class DataManager
             
         }
     }
-   
-    ////////////////////
-    // Storage Functions
+
+    //////////////////////////////
+    // Storage  Utility Functions
+    public isLocationStorage(path:string):boolean
+    {
+        let storagePath = Path.join(path,"notelink.json");
+        if (fs.existsSync(storagePath)) 
+        { 
+            try 
+            {
+                let storage = fs.readJsonSync(storagePath);
+                if(storage.version != undefined)
+                {
+                    if(storage.storages != undefined && storage.storages instanceof Array)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch(e)
+            {
+                Debug.logError("Read Storage Folder Failed for Notebook: Error:"+ e);
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    public canUseStorageLocation(path:string):boolean
+    {
+        let files:string[] = [];
+
+        if(!Path.isAbsolute(path)) 
+        {
+            Debug.logError("Invalid Path: "+path);
+            return false;
+        }
+
+        try 
+        {
+            files = fs.readdirSync(path);
+        }
+        catch(e)
+        {
+            Debug.logError("Read Storage Folder Failed for Notebook: Error:"+ e);
+            return false;
+        }
+
+        if(files.length > 0)
+        {
+            Debug.logError("The folder must be empty");
+            return false;
+        }
+
+        return true;
+    }
+    public hasStorageWithPath(path:string):boolean
+    {
+        for(let a = 0; a < this._storageList.length; ++a)
+        {
+            if(Path.normalize(this._storageList[a].folderPath) == Path.normalize(path))
+            {
+                Debug.logError("Storage Already exist in that path");
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    /////////////////////
+    // Storage  Functions
     public addStorage(storage:NotebookStorage, saveApplicationData:boolean = true):boolean
     {
         if(this._storages[storage.id] == undefined)
         {
-            for(let a = 0; a < this._storageList.length; ++a)
+            if(this.hasStorageWithPath(storage.folderPath))
             {
-                if(Path.normalize(this._storageList[a].folderPath) == Path.normalize(storage.folderPath))
-                {
-                    Debug.logError("Storage Already exist in that path");
-                    return false;
-                }
+                Debug.logError("Storage Already exist with that path");
+                return false;
             }
 
             this._storages[storage.id] = storage;
             this._storageList.push(storage);
         
+            if(storage.notebooks.length > 0)
+            {
+                for(let a = 0;a < storage.notebooks.length ;++a)
+                {
+                    this.addNotebook(storage.notebooks[a]);
+                }
+            }
+
             if(saveApplicationData)
             {
                 this.saveApplicationData();
@@ -342,13 +441,63 @@ export default class DataManager
         return true;
     }
 
+    public getStorage(id:string):NotebookStorage
+    {
+        if(this._storages[id] != undefined)
+        {
+            return this._storages[id];
+        }
+
+        return null;
+    }
+
+    private loadStorage(path:string):NotebookStorage
+    {
+        let storageDataRaw = FileTools.readJsonSync(path);
+  
+        if(storageDataRaw == null)
+        {
+            Debug.logError("Load Storage Json Failed");
+            return null;
+        }
+
+        let noteStorage:NotebookStorage = NotebookStorage.createFromSavedData(storageDataRaw, Path.dirname(path));
+        let notebookStorageFolder= noteStorage.getNotebooksFolderPath();
+
+        // Load Notebooks
+        let storageNotebookFiles:string[] = FileTools.getJsonFilesInFolder(notebookStorageFolder);
+        
+        if(storageNotebookFiles == null)
+        {
+            Debug.logError("Read Notebook Folder Failed for Notebook"+noteStorage.getFullPath());
+            return null;
+        }
+
+        // Load Notebooks
+        for(let b = 0;b < storageNotebookFiles.length; ++b)
+        {
+            let notebook = this.loadNotebook(storageNotebookFiles[b]);
+
+            if(notebook != null)
+            {
+                noteStorage.addNotebook(notebook);
+            }
+            else
+            {
+                Debug.logError("Failed to create notebook from json in storage folder. Skipping...");
+            }
+        }
+
+        return noteStorage;
+    }
+
     public saveStorage(storage:NotebookStorage, cascade:boolean = false):boolean
     {
         if(cascade)
         {
             for(let a = 0; a < storage.notebooks.length ;++a)
             {
-                this.deleteNotebook(storage.notebooks[a], true);
+                this.saveNotebook(storage.notebooks[a], cascade);
             }
         }
 
@@ -366,16 +515,6 @@ export default class DataManager
         this.saveApplicationData();
 
         return true;
-    }
-
-    public getStorage(id:string):NotebookStorage
-    {
-        if(this._storages[id] != undefined)
-        {
-            return this._storages[id];
-        }
-
-        return null;
     }
 
     public deleteStorage(storage:NotebookStorage, cascade:boolean):boolean
@@ -431,9 +570,68 @@ export default class DataManager
         {
             this._notebooks[notebook.id] = notebook;
             this._notebookList.push(notebook);
+
+            if(notebook.notes.length > 0)
+            {
+                for(let a = 0;a < notebook.notes.length ;++a)
+                {
+                    this.addNote(notebook.notes[a]);
+                }
+            }
+
             return true;
         }
         return false;
+    }
+
+    public getNotebook(id:string):Notebook
+    {
+        if(this._notebooks[id] != undefined)
+        {
+            return this._notebooks[id];
+        }
+        return null;
+    }
+    
+    public loadNotebook(path:string):Notebook
+    {
+        let notebookRaw = FileTools.readJsonSync(path);
+  
+        if(notebookRaw == null)
+        {
+            Debug.logError("Load Notebook Json Failed");
+            return null;
+        }
+
+        let notebook:Notebook = Notebook.createFromSavedData(notebookRaw, Path.dirname(path));
+        let noteboolNoteFolder:string = notebook.getNotesFolderPath();
+
+        // This can removed later.
+        // Load Notes
+        let noteFiles:string[] = FileTools.getJsonFilesInFolder(noteboolNoteFolder);
+        
+        if(noteFiles == null)
+        {
+            Debug.logError("Read Notebook Note Folder Failed: "+noteboolNoteFolder);
+            return null;
+        }
+  
+        // Load Notes
+        for(let b = 0;b < noteFiles.length; ++b)
+        {
+            let note = this.loadNote(noteFiles[b]);
+
+            if(note != null)
+            {
+                notebook.addNote(note);
+            }
+            else
+            {
+                Debug.logError("Failed to create notebook from json in storage folder. Skipping...");
+            }
+        }
+
+        return notebook;
     }
 
     public saveNotebook(notebook:Notebook, cascade:boolean = false):boolean
@@ -453,15 +651,7 @@ export default class DataManager
         return true;
     }
 
-    public getNotebook(id:string):Notebook
-    {
-        if(this._notebooks[id] != undefined)
-        {
-            return this._notebooks[id];
-        }
-        return null;
-    }
-
+  
     public deleteNotebook(notebook:Notebook, cascade:boolean = false):boolean
     {
         if(this._notebooks[notebook.id] != undefined)
@@ -493,6 +683,15 @@ export default class DataManager
         return false;
     }
 
+    public getNote(id:string):Note
+    {
+        if(this._notes[id] != undefined)
+        {
+            return this._notes[id];
+        }
+        return null;
+    }
+
     public saveNote(note:Note):boolean
     {
         try 
@@ -508,15 +707,15 @@ export default class DataManager
         }
     }
 
-    public getNote(id:string):Note
+    public loadNote(path:string):Note
     {
-        if(this._notes[id] != undefined)
-        {
-            return this._notes[id];
-        }
-        return null;
-    }
+        let noteDataRaw:any = FileTools.readJsonSync(path);
 
+        let note:Note = Note.createFromSavedData(noteDataRaw, Path.dirname(path));
+        
+        return note; 
+    }
+  
     public deleteNote(note:Note):boolean
     {
         if(this._notes[note.id] != undefined)

@@ -6,7 +6,7 @@ import * as Path from "path";
 // Core
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Director from "../core/director";
+import Editor from "../core/editor";
 
 // Notes
 import NotebookStorage from "../notes/notebookStorage";
@@ -31,7 +31,7 @@ export default class NoteListController extends Controller
 
     public updateNoteList():void
     {
-        let selectedNotebook = Director.instance.selectedNotebook;
+        let selectedNotebook = Editor.instance.selectedNotebook;
 
         let notes:Note[] = [];
 
@@ -45,7 +45,7 @@ export default class NoteListController extends Controller
 
     private actionNewNote():void
     {
-        let selectedNotebook = Director.instance.selectedNotebook;
+        let selectedNotebook = Editor.instance.selectedNotebook;
 
         if(selectedNotebook != null)
         {
@@ -55,13 +55,14 @@ export default class NoteListController extends Controller
             {
                 DataManager.instance.saveNote(note);
                 selectedNotebook.addNote(note);
-                Director.instance.selectNote(note.id);
+                Editor.instance.selectNote(note.id);
                 this.updateNoteList();
             }
         }
     }
+
     private actionSelectNote(data:any):void
     {
-        Director.instance.selectNote(data.noteId);
+        Editor.instance.selectNote(data.noteId);
     }
 }

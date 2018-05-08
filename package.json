@@ -29,6 +29,8 @@
   "dependencies": {
     "@types/markdown-it": "0.0.4",
     "@types/uuid": "^3.4.3",
+    "ajv": "^6.4.0",
+    "codemirror": "^5.37.0",
     "colors": "^1.2.4",
     "dropbox": "^4.0.3",
     "fs-extra": "^6.0.0",
