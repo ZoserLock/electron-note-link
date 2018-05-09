@@ -173,6 +173,7 @@ export default class DataManager
         this.saveApplicationData();
 
         Debug.log("Notes Loaded: "+notesLoaded);
+        console.timeEnd("load App Data");
         return true;
     }
 

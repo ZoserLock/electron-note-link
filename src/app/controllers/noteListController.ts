@@ -61,6 +61,28 @@ export default class NoteListController extends Controller
         }
     }
 
+    private actionNewNote_stress():void
+    {
+        for(let a = 0;a < 500; ++a)
+        {
+            let selectedNotebook = Editor.instance.selectedNotebook;
+
+            if(selectedNotebook != null)
+            {
+                let note:Note = Note.create(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
+                
+                if(DataManager.instance.addNote(note))
+                {
+                    DataManager.instance.saveNote(note);
+                    selectedNotebook.addNote(note);
+                    Editor.instance.selectNote(note.id);
+                }
+            }
+        }
+        
+        this.updateNoteList();
+    }
+
     private actionSelectNote(data:any):void
     {
         Editor.instance.selectNote(data.noteId);

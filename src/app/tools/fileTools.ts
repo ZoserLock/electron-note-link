@@ -22,6 +22,11 @@ export default class FileTools
         return jsonData;
     }
 
+    public static readJsonAsync(path:string,callback:any):void 
+    {
+        fs.readJson(path,callback);
+    }
+
     public static getJsonFilesInFolder(path:string, appendFolderPath:boolean = true):string[]
     {
         try 
