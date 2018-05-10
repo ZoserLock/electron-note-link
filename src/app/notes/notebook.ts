@@ -6,6 +6,7 @@ import Note from "./note";
 export default class Notebook
 {
     private _id:string;
+    private _orderIndex:number;
     private _folderPath:string;
     private _name:string;
     private _notes:Note[];
@@ -16,6 +17,11 @@ export default class Notebook
     get id(): string
     {
         return this._id;
+    }
+
+    get orderIndex(): Number
+    {
+        return this._orderIndex;
     }
 
     get folderPath(): string

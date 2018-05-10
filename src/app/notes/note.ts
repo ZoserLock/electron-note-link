@@ -1,6 +1,5 @@
 export default class Note
 {
-  
     private _id:string;
     private _folderPath:string;
     private _title:string;
@@ -53,8 +52,6 @@ export default class Note
         return this._dirty;
     }
 
-
-
     // Member functions
     constructor()
     {
@@ -87,7 +84,7 @@ export default class Note
         return note;
     }
 
-    public static createFromPath(path:string):Note
+    public static createUnloadedNote(path:string):Note
     {
         let note:Note = new Note();
         note._id = "";

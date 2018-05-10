@@ -22,7 +22,7 @@ export default class NoteListController extends Controller
     {
         super(window);
         ipcMain.on(Message.updateNoteList ,() => this.updateNoteList());
-        ipcMain.on(Message.newNote        ,() => this.actionNewNote());
+        ipcMain.on(Message.createNote     ,() => this.actionNewNote());
 
         ipcMain.on(Message.selectNote, (event:any,data:any) =>{this.actionSelectNote(data);});
 

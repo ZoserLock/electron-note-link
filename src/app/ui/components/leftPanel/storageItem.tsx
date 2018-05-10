@@ -6,6 +6,7 @@ import {ipcRenderer} from "electron";
 import Debug from "../../../tools/debug";
 import NotebookStorage from "../../../notes/notebookStorage";
 import Notebook from "../../../notes/notebook";
+import Message from "../../../core/message";
 
 // UI
 import NotebookItem from "./notebookItem";
@@ -31,7 +32,17 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
             storage:this.props.storage.id
         }
 
-        ipcRenderer.send("action:NewNotebook",data);
+        ipcRenderer.send(Message.createNotebook,data);
+    }
+
+    private onUnlinkButtonClick()
+    {
+        let data =
+        {
+            storage:this.props.storage.id
+        }
+
+        ipcRenderer.send(Message.removeStorage, data);
     }
 
     public render() 
@@ -60,6 +71,7 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
                 <div className="ui-sidebar-storage-item"> 
                     <span>{this.props.storage.name}</span> 
                     <button onClick={()=>this.onAddButtonClick()}>+</button>
+                    <button onClick={()=>this.onUnlinkButtonClick()}>-</button>
                 </div>
                 {notebooks}
             </div>

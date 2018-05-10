@@ -23,6 +23,9 @@ export default class LeftPanelController extends Controller
         ipcMain.on(Message.updateLeftPanel,()=>this.updateLeftPanel());
 
         ipcMain.on(Message.createStorage,()=>this.actionCreateNewNotebookStorage());
+
+        ipcMain.on(Message.removeStorage ,(event:any,data:any)=>this.actionRemoveStorage(data));
+
         ipcMain.on(Message.createNotebook,(event:any,data:any)=>this.actionNewNotebook(data));
         ipcMain.on(Message.selectNotebook,(event:any,data:any)=>this.actionSelectNotebook(data));
     }
@@ -43,6 +46,24 @@ export default class LeftPanelController extends Controller
         this.sendUIMessage(Message.updateLeftPanel,{storages:storages, selectedNotebookId:selectedNotebookId});
     }
 
+    private actionRemoveStorage(data:any):void
+    {
+        let storageId = data.storage;
+
+        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
+
+        if(storage != null)
+        {
+            DataManager.instance.removeStorage(storage);
+
+            this.updateLeftPanel();
+        }
+        else
+        {
+            Debug.logError("actionRemoveStorage: Storage does not exist.");
+        }
+    }
+
     private actionCreateNewNotebookStorage():void
     {
         let targetPath = dialog.showOpenDialog({title:"Create new Storage",properties:["openDirectory"]});
@@ -53,14 +74,9 @@ export default class LeftPanelController extends Controller
 
             if(DataManager.instance.isLocationStorage(storagePath))
             {
-                if(this.addExistingNotebookStorage(storagePath))
-                {
-
-                }
-                else
+                if(!this.addExistingNotebookStorage(storagePath))
                 {
                     Debug.logError("Can't add existing storage from that location");
-                    //Show errror
                 }
             }
             else
@@ -78,10 +94,29 @@ export default class LeftPanelController extends Controller
         }
     }
     
-    private addExistingNotebookStorage(path:string):void
+    private addExistingNotebookStorage(path:string):boolean
     {
+        Debug.logError("addExistingNotebookStorage: "+path);
 
-     //   DataManager.instance.addStorage(path);
+        if(  DataManager.instance.hasStorageWithPath(path)) // I can check the id too
+        {
+            Debug.logError("Already have that storage");
+            return false;
+        }
+
+        let storagePath = Path.join(path,"notelink.json");
+        let storage = DataManager.instance.loadStorage(storagePath);
+
+        if(storage != null)
+        {
+            if(DataManager.instance.addStorage(storage))
+            {
+                this.updateLeftPanel();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private createNewNotebookStorage(path:string):void
@@ -91,7 +126,7 @@ export default class LeftPanelController extends Controller
         DataManager.instance.addStorage(storage);
         DataManager.instance.saveStorage(storage);
 
-        ipcMain.emit(Message.updateNoteList);
+        this.updateLeftPanel();
     }
     
     private actionNewNotebook(data:any):void

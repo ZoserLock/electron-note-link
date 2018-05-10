@@ -28,6 +28,11 @@ interface NoteMap
     [id: string]: Note;
 }
 
+interface TagMap 
+{
+    [id: string]: Note;
+}
+
 export default class DataManager
 {
     // Singleton 
@@ -57,6 +62,7 @@ export default class DataManager
     private _storages: StorageMap ={};
     private _notebooks: NotebookMap = {};
     private _notes: NoteMap = {};
+    private _notePerTag: TagMap = {}
 
     // Get/Set
     
@@ -172,6 +178,14 @@ export default class DataManager
 
         this.saveApplicationData();
 
+       /* for(var a = 0;a < this._storageList.length; ++a)
+        {
+            for(var b = 0;b< this._storageList[a].notebooks.length; ++b)
+            {
+                this.saveNotebook(this._storageList[a].notebooks[b]);
+            }
+        }*/
+
         Debug.log("Notes Loaded: "+notesLoaded);
         console.timeEnd("load App Data");
         return true;
@@ -202,14 +216,15 @@ export default class DataManager
     public isLocationStorage(path:string):boolean
     {
         let storagePath = Path.join(path,"notelink.json");
+
         if (fs.existsSync(storagePath)) 
         { 
             try 
             {
                 let storage = fs.readJsonSync(storagePath);
-                if(storage.version != undefined)
+                if(storage.id != undefined)
                 {
-                    if(storage.storages != undefined && storage.storages instanceof Array)
+                    if(storage.name != undefined)
                     {
                         return true;
                     }
@@ -253,6 +268,7 @@ export default class DataManager
 
         return true;
     }
+
     public hasStorageWithPath(path:string):boolean
     {
         for(let a = 0; a < this._storageList.length; ++a)
@@ -266,6 +282,7 @@ export default class DataManager
         
         return false;
     }
+
     /////////////////////
     // Storage  Functions
     public addStorage(storage:NotebookStorage, saveApplicationData:boolean = true):boolean
@@ -312,7 +329,7 @@ export default class DataManager
         return null;
     }
 
-    private loadStorage(path:string):NotebookStorage
+    public loadStorage(path:string):NotebookStorage
     {
         let storageDataRaw = FileTools.readJsonSync(path);
   
@@ -374,11 +391,39 @@ export default class DataManager
         return true;
     }
 
+    public removeStorage(storage:NotebookStorage):boolean
+    {
+        if(this._storages[storage.id] != undefined)
+        {
+            let toRemoveStorage = this._storages[storage.id];
+
+            for(let a = 0; a < toRemoveStorage.notebooks.length; ++a)
+            {
+                this.removeNotebook(toRemoveStorage.notebooks[a]);
+            }
+
+            for(let a = 0;a < this._storageList.length ;++a)
+            {
+                if(this._storageList[a] == storage)
+                {
+                    this._storageList.splice(a,1);
+                    break;
+                }
+            }
+
+            delete this._storages[storage.id];
+
+           
+            this.saveApplicationData();
+        }
+        return false;
+    }
+
     public deleteStorage(storage:NotebookStorage, cascade:boolean):boolean
     {
         if(this._storages[storage.id] != undefined)
         {
-            // Delete Files
+            // Delete Files [TODO] Pass to filetools
             try 
             {
                 let path = storage.getFullPath();
@@ -506,10 +551,36 @@ export default class DataManager
     }
 
   
+    public removeNotebook(notebook:Notebook):boolean
+    {
+        if(this._notebooks[notebook.id] != undefined)
+        {
+            for(let a = 0;a < this._notebookList.length ;++a)
+            {
+                if(this._notebookList[a] == notebook)
+                {
+                    this._storageList.splice(a,1);
+                    break;
+                }
+            }
+
+            delete this._notebooks[notebook.id];
+            return true;
+        }
+        return false;
+    }
+
     public deleteNotebook(notebook:Notebook, cascade:boolean = false):boolean
     {
         if(this._notebooks[notebook.id] != undefined)
         {
+            let toRemoveNotebook = this._notebooks[notebook.id];
+
+            for(let a = 0;a < toRemoveNotebook.notes.length ;++a)
+            {
+                this.removeNote(toRemoveNotebook.notes[a]);
+            }
+
             for(let a = 0;a < this._notebookList.length ;++a)
             {
                 if(this._notebookList[a] == notebook)
@@ -531,6 +602,7 @@ export default class DataManager
     {
         if(this._notebooks[note.id] == undefined)
         {
+            //if note is unloaded add to a temporal list.
             this._notes[note.id] = note;
             return true;
         }
@@ -570,6 +642,16 @@ export default class DataManager
         return note; 
     }
   
+    public removeNote(note:Note):boolean
+    {
+        if(this._notes[note.id] != undefined)
+        {
+            delete this._notes[note.id];
+            return true;
+        }
+        return false;
+    }
+
     public deleteNote(note:Note):boolean
     {
         if(this._notes[note.id] != undefined)
