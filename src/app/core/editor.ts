@@ -72,6 +72,14 @@ export default class Editor
 
     ///////////
     //Actions
+    public unselectNotebook():void
+    {
+        if( this._selectedNotebook!=null)
+        {
+            this._selectedNotebook.SetAsUnselected();
+            this._selectedNotebook = null;
+        }
+    }
 
     public selectNotebook(notebookId:string):void
     {

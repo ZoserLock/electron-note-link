@@ -4,12 +4,16 @@ export default class Message
     public static readonly updateNoteList:string    = "update:NoteList";
     public static readonly updateNoteView:string    = "update:NoteView";
 
+    public static readonly searchUpdated:string     = "action:SearchUpdated";
+    public static readonly searchCancelled:string   = "action:SearchCancelled";
 
     public static readonly createStorage:string     = "action:NewNotebookStorage";
     public static readonly createNotebook:string    = "action:NewNotebook";
     public static readonly createNote:string        = "action:NewNote";
     
     public static readonly removeStorage:string     = "action:RemoveNotebookStorage";
+    public static readonly removeNotebook:string    = "action:RemoveNotebook";
+    public static readonly removeNote:string        = "action:RemoveNote";
 
 
     public static readonly selectNotebook:string    = "action:SelectNotebook";

@@ -23,6 +23,7 @@ export default class NoteListController extends Controller
         super(window);
         ipcMain.on(Message.updateNoteList ,() => this.updateNoteList());
         ipcMain.on(Message.createNote     ,() => this.actionNewNote());
+        ipcMain.on(Message.searchUpdated  ,(event:any,data:any) => this.actionSearchUpdated(data));
 
         ipcMain.on(Message.selectNote, (event:any,data:any) =>{this.actionSelectNote(data);});
 
@@ -41,6 +42,11 @@ export default class NoteListController extends Controller
         }
 
         this.sendUIMessage(Message.updateNoteList,{notes:notes});
+    }
+
+    private actionSearchUpdated(data:any):void
+    {
+        Debug.log("Search Updated");
     }
 
     private actionNewNote():void

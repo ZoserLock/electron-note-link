@@ -3,12 +3,14 @@ import {ipcRenderer} from "electron";
 
 // UI
 import ToolbarItem from "./toolbarItem"; 
+import SearchBar from "./toolbar/searchBar"; 
 
 export default class Toolbar extends React.Component<any, any> 
 {
     constructor(props: any)
     {
         super(props);
+        
     }
 
     private createNewNote():void
@@ -27,7 +29,7 @@ export default class Toolbar extends React.Component<any, any>
             <header className="ui-toolbar">
                 <ToolbarItem name="New Note" onClick={()=>this.createNewNote()}/>
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
-                <ToolbarItem/>
+                <SearchBar/>
             </header>
         );
     }

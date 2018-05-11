@@ -1,5 +1,10 @@
+import * as Path from "path";
+import Notebook from "./notebook";
+
 export default class Note
 {
+    private _notebook:Notebook;
+
     private _id:string;
     private _folderPath:string;
     private _title:string;
@@ -10,8 +15,10 @@ export default class Note
     private _dirty:boolean;
     private _loaded:boolean;
 
+    private _started:boolean;
+    private _trash:boolean;
+
     // Get/Set
-    
     get id(): string
     {
         return this._id;
@@ -21,6 +28,7 @@ export default class Note
     {
         return this._folderPath;
     }
+    
 
     get title(): string
     {
@@ -109,7 +117,21 @@ export default class Note
         this._text   = data.text;
         this._loaded = true;
     }
-    
+
+    public setParent(notebook:Notebook):void
+    {
+        this._notebook = notebook;
+    }
+
+    public removeFromParent()
+    {
+        if(this._notebook != null)
+        {
+            this._notebook.removeNote(this); 
+            this._notebook = null;
+        }
+    }
+
     public setDirty():void
     {
         this._dirty = true;
@@ -135,5 +157,10 @@ export default class Note
         let saveObject = {id:this._id, title:this._title, text:this._text};
 
         return saveObject
+    }
+
+    public  getFullPath():string
+    {
+        return Path.join(this.folderPath,this.id + ".json");
     }
 }

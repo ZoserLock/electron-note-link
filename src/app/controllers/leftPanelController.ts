@@ -22,9 +22,10 @@ export default class LeftPanelController extends Controller
         super(window);
         ipcMain.on(Message.updateLeftPanel,()=>this.updateLeftPanel());
 
-        ipcMain.on(Message.createStorage,()=>this.actionCreateNewNotebookStorage());
+        ipcMain.on(Message.createStorage,()=>this.actionCreateNewStorage());
 
         ipcMain.on(Message.removeStorage ,(event:any,data:any)=>this.actionRemoveStorage(data));
+        ipcMain.on(Message.removeNotebook ,(event:any,data:any)=>this.actionRemoveNotebook(data));
 
         ipcMain.on(Message.createNotebook,(event:any,data:any)=>this.actionNewNotebook(data));
         ipcMain.on(Message.selectNotebook,(event:any,data:any)=>this.actionSelectNotebook(data));
@@ -45,26 +46,10 @@ export default class LeftPanelController extends Controller
 
         this.sendUIMessage(Message.updateLeftPanel,{storages:storages, selectedNotebookId:selectedNotebookId});
     }
+    ///////////////////////////
+    // Storages
 
-    private actionRemoveStorage(data:any):void
-    {
-        let storageId = data.storage;
-
-        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
-
-        if(storage != null)
-        {
-            DataManager.instance.removeStorage(storage);
-
-            this.updateLeftPanel();
-        }
-        else
-        {
-            Debug.logError("actionRemoveStorage: Storage does not exist.");
-        }
-    }
-
-    private actionCreateNewNotebookStorage():void
+    private actionCreateNewStorage():void
     {
         let targetPath = dialog.showOpenDialog({title:"Create new Storage",properties:["openDirectory"]});
 
@@ -74,7 +59,7 @@ export default class LeftPanelController extends Controller
 
             if(DataManager.instance.isLocationStorage(storagePath))
             {
-                if(!this.addExistingNotebookStorage(storagePath))
+                if(!this.addExistingStorage(storagePath))
                 {
                     Debug.logError("Can't add existing storage from that location");
                 }
@@ -83,7 +68,7 @@ export default class LeftPanelController extends Controller
             {
                 if(DataManager.instance.canUseStorageLocation(storagePath))
                 {
-                    this.createNewNotebookStorage(storagePath);
+                    this.createNewStorage(storagePath);
                 }
                 else
                 {
@@ -93,8 +78,18 @@ export default class LeftPanelController extends Controller
             }
         }
     }
+
+    private createNewStorage(path:string):void
+    {
+        let storage = NotebookStorage.create(uuid(), path);
+
+        DataManager.instance.addStorage(storage);
+        DataManager.instance.saveStorage(storage);
+
+        this.updateLeftPanel();
+    }
     
-    private addExistingNotebookStorage(path:string):boolean
+    private addExistingStorage(path:string):boolean
     {
         Debug.logError("addExistingNotebookStorage: "+path);
 
@@ -119,16 +114,27 @@ export default class LeftPanelController extends Controller
         return false;
     }
 
-    private createNewNotebookStorage(path:string):void
+    private actionRemoveStorage(data:any):void
     {
-        let storage = NotebookStorage.create(uuid(), path);
+        let storageId = data.storage;
 
-        DataManager.instance.addStorage(storage);
-        DataManager.instance.saveStorage(storage);
+        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
 
-        this.updateLeftPanel();
+        if(storage != null)
+        {
+            DataManager.instance.removeStorage(storage);
+
+            this.updateLeftPanel();
+        }
+        else
+        {
+            Debug.logError("actionRemoveStorage: Storage does not exist.");
+        }
     }
-    
+
+    ///////////////////////////
+    // Notebook
+     
     private actionNewNotebook(data:any):void
     {
         let storageId = data.storage;
@@ -154,10 +160,49 @@ export default class LeftPanelController extends Controller
         }
     }
 
+    private actionRemoveNotebook(data:any):void
+    {
+        let notebookId = data.notebookId;
+
+        let notebook:Notebook = DataManager.instance.getNotebook(notebookId);
+
+        if(notebook != null)
+        {
+            if(Editor.instance.selectedNotebook == notebook)
+            {
+                Editor.instance.unselectNotebook();
+            }
+
+            DataManager.instance.deleteNotebook(notebook);
+
+            this.updateLeftPanel();
+        }
+        else
+        {
+            Debug.logError("actionRemoveStorage: Storage does not exist.");
+        }
+    }
  
     private actionSelectNotebook(data:any)
     {
         Editor.instance.selectNotebook(data.notebookId);
     };
     
+    private actionChangeNotebookName(data:any)
+    {
+        let notebookId = data.notebookId;
+        let newName    = data.name;
+
+        let notebook:Notebook = DataManager.instance.getNotebook(notebookId);
+
+        if(notebook != null)
+        {
+            DataManager.instance.saveNotebook(notebook);
+            this.updateLeftPanel();
+        }
+        else
+        {
+            Debug.logError("actionChangeNotebookName: Notebook does not exist.");
+        }
+    };
 }

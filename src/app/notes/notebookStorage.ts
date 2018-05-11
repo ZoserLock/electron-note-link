@@ -6,8 +6,8 @@ import Notebook from "./notebook"
 
 export default class NotebookStorage
 {
-    private sNotebooksFolderName:string = "notebooks";
-    private sNotelinkStorageName:string = "notelink.json";
+    private static sNotebooksFolderName:string = "notebooks";
+    private static sStorageFileName:string     = "notelink.json";
 
     private _id:string;
     private _name:string;
@@ -73,9 +73,27 @@ export default class NotebookStorage
 
     public addNotebook(notebook:Notebook):void
     {
+        notebook.setParent(this);
         this._notebooks.push(notebook);
     }
 
+    public removeNotebook(notebook:Notebook):void
+    {
+        for(let a = 0;a < this._notebooks.length ;++a)
+        {
+            if(this._notebooks[a] == notebook)
+            {
+                notebook.setParent(null);
+                this._notebooks.splice(a,1);
+                break;
+            }
+        }
+    }
+
+    public removeAllNoteBooks():void
+    {
+        this._notebooks = [];
+    }
     //////////////////
     // Other Functions
 
@@ -96,12 +114,12 @@ export default class NotebookStorage
 
     public getFullPath():string
     {
-        return Path.join(this._folderPath,this.sNotelinkStorageName);
+        return Path.join(this._folderPath,NotebookStorage.sStorageFileName);
     }
 
     public getNotebooksFolderPath():string
     {
-        return Path.join(this._folderPath,this.sNotebooksFolderName);
+        return Path.join(this._folderPath,NotebookStorage.sNotebooksFolderName);
     }
 
     public getSaveObject():any

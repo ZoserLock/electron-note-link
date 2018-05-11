@@ -17,6 +17,7 @@ export default class NoteList extends React.Component<any, any>
 
         this.state =
         {
+            type:"Notebook",
             notes:[]
         }
 

@@ -1,4 +1,3 @@
-import { ipcRenderer } from "electron";
 import * as React from "react";
 
 import Debug from "../../tools/debug"

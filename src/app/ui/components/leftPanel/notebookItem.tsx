@@ -5,6 +5,7 @@ import {ipcRenderer} from "electron";
 // Local
 import Debug from "../../../tools/debug";
 import Notebook from "../../../notes/notebook";
+import Message from "../../../core/message";
 
 interface NotebookItemData
 {
@@ -40,7 +41,17 @@ export default class NotebookItem extends React.Component<NotebookItemData, Note
             notebookId:this.props.notebook.id
         }
         
-        ipcRenderer.send("action:SelectNotebook",data);
+        ipcRenderer.send(Message.selectNotebook, data);
+    }
+
+    private onItemDelete()
+    {
+        let data =
+        {
+            notebookId:this.props.notebook.id
+        }
+        
+        ipcRenderer.send(Message.removeNotebook, data);
     }
 
     public render() 
@@ -48,8 +59,9 @@ export default class NotebookItem extends React.Component<NotebookItemData, Note
         let displayClass = (this.props.notebook.isSelected)? "selected text-unselect": "text-unselect";
         displayClass += " ui-sidebar-notebook-item";
         return (
-            <li className={displayClass} onClick={()=>this.onItemClick()}>
-                <span>{this.props.notebook.name}</span> 
+            <li className={displayClass} >
+                <span onClick={()=>this.onItemClick()}>{this.props.notebook.name}</span> 
+                <button onClick={()=>this.onItemDelete()}>-</button>
             </li>
         );
     }

@@ -27,6 +27,29 @@ export default class FileTools
         fs.readJson(path,callback);
     }
 
+
+    public static deleteJsonFileAtPath(path:string):boolean
+    {
+        try 
+        {
+            if(fs.lstatSync(path).isFile() && Path.extname(path)===".json")
+            {
+                fs.removeSync(path);
+                return true;
+            }
+            else
+            {
+                Debug.logError("Trying to delete the wrong object");
+            }
+        }
+        catch(e)
+        {
+            Debug.logError("Delete File Failed: "+e);
+        }
+        
+        return false;
+    }
+
     public static getJsonFilesInFolder(path:string, appendFolderPath:boolean = true):string[]
     {
         try 

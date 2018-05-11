@@ -82,6 +82,59 @@ export default class DataManager
         this.checkStorageIntegrety();
     }
 
+    // data Management
+    private RegisterStorage(storage:NotebookStorage):void
+    {
+        this._storages[storage.id] = storage;
+        this._storageList.push(storage);
+    }
+
+    private UnregisterStorage(storage:NotebookStorage):void
+    {
+        delete this._storages[storage.id];
+
+        for(let a = 0;a < this._storageList.length ;++a)
+        {
+            if(this._storageList[a] == storage)
+            {
+                this._storageList.splice(a,1);
+                break;
+            }
+        }
+    }
+
+    private RegisterNotebook(notebook:Notebook):void
+    {
+        this._notebooks[notebook.id] = notebook;
+        this._notebookList.push(notebook);
+    }
+    
+    private UnregisterNotebook(notebook:Notebook):void
+    {
+        for(let a = 0;a < this._notebookList.length ;++a)
+        {
+            if(this._notebookList[a] == notebook)
+            {
+                this._storageList.splice(a,1);
+                break;
+            }
+        }
+
+        delete this._notebooks[notebook.id];
+    }
+
+    private RegisterNote(note:Note):void
+    {
+        this._notes[note.id] = note;
+    }
+
+    private UnegisterNote(note:Note):void
+    {
+        delete this._notes[note.id];
+    }
+    
+    // data Management
+
     private checkStorageIntegrety():void
     {
         Debug.log("[DataManager] Checking storage integrety...");
@@ -295,9 +348,9 @@ export default class DataManager
                 return false;
             }
 
-            this._storages[storage.id] = storage;
-            this._storageList.push(storage);
-        
+            this.RegisterStorage(storage);
+
+ 
             if(storage.notebooks.length > 0)
             {
                 for(let a = 0;a < storage.notebooks.length ;++a)
@@ -395,70 +448,35 @@ export default class DataManager
     {
         if(this._storages[storage.id] != undefined)
         {
-            let toRemoveStorage = this._storages[storage.id];
-
-            for(let a = 0; a < toRemoveStorage.notebooks.length; ++a)
+            for(let a = 0; a < storage.notebooks.length; ++a)
             {
-                this.removeNotebook(toRemoveStorage.notebooks[a]);
+                this.removeNotebook(storage.notebooks[a]);
             }
 
-            for(let a = 0;a < this._storageList.length ;++a)
-            {
-                if(this._storageList[a] == storage)
-                {
-                    this._storageList.splice(a,1);
-                    break;
-                }
-            }
+            this.UnregisterStorage(storage);
 
-            delete this._storages[storage.id];
-
-           
             this.saveApplicationData();
         }
         return false;
     }
 
-    public deleteStorage(storage:NotebookStorage, cascade:boolean):boolean
+    public deleteStorage(storage:NotebookStorage):boolean
     {
         if(this._storages[storage.id] != undefined)
         {
-            // Delete Files [TODO] Pass to filetools
-            try 
+            let path = storage.getFullPath();
+            if(!FileTools.deleteJsonFileAtPath(path))
             {
-                let path = storage.getFullPath();
-                if(fs.lstatSync(path).isFile())
-                {
-                    fs.removeSync(path);
-                }
-            }
-            catch(e)
-            {
-                Debug.logError("Delete Storage Failed: "+e);
                 return false;
             }
 
-            // Clear lists
-            for(let a = 0;a < this._storageList.length ;++a)
+            this.UnregisterStorage(storage);
+
+            for(let a = 0;a < storage.notebooks.length ;++a)
             {
-                if(this._storageList[a] == storage)
-                {
-                    this._storageList.splice(a,1);
-                    break;
-                }
+                this.deleteNotebook(storage.notebooks[a]);
             }
-
-            delete this._storages[storage.id];
-
-            // Delete Cascade
-            if(cascade)
-            {
-                for(let a = 0;a < storage.notebooks.length ;++a)
-                {
-                    this.deleteNotebook(storage.notebooks[a], true);
-                }
-            }
-
+            
             return true;
         }
         return false;
@@ -470,8 +488,7 @@ export default class DataManager
     {
         if(this._notebooks[notebook.id] == undefined)
         {
-            this._notebooks[notebook.id] = notebook;
-            this._notebookList.push(notebook);
+            this.RegisterNotebook(notebook);
 
             if(notebook.notes.length > 0)
             {
@@ -551,46 +568,40 @@ export default class DataManager
     }
 
   
-    public removeNotebook(notebook:Notebook):boolean
+    private removeNotebook(notebook:Notebook):boolean
     {
         if(this._notebooks[notebook.id] != undefined)
         {
-            for(let a = 0;a < this._notebookList.length ;++a)
+            for(let a = 0; a < notebook.notes.length; ++a)
             {
-                if(this._notebookList[a] == notebook)
-                {
-                    this._storageList.splice(a,1);
-                    break;
-                }
+                this.removeNote(notebook.notes[a]);
             }
 
-            delete this._notebooks[notebook.id];
+            this.UnregisterNotebook(notebook);
             return true;
         }
         return false;
     }
 
-    public deleteNotebook(notebook:Notebook, cascade:boolean = false):boolean
+    public deleteNotebook(notebook:Notebook):boolean
     {
-        if(this._notebooks[notebook.id] != undefined)
+        if(this._notebooks[notebook.id] != undefined) // [TODO CHECK if is necesary to get the value from the dictionary]
         {
-            let toRemoveNotebook = this._notebooks[notebook.id];
-
-            for(let a = 0;a < toRemoveNotebook.notes.length ;++a)
+            let path = notebook.getFullPath();
+            
+            if(!FileTools.deleteJsonFileAtPath(path))
             {
-                this.removeNote(toRemoveNotebook.notes[a]);
+                return false;
             }
 
-            for(let a = 0;a < this._notebookList.length ;++a)
+            for(let a = 0;a < notebook.notes.length ;++a)
             {
-                if(this._notebookList[a] == notebook)
-                {
-                    this._storageList.splice(a,1);
-                    break;
-                }
+                this.deleteNote(notebook.notes[a]);
             }
 
-            delete this._notebooks[notebook.id];
+            notebook.removeFromParent();
+            this.UnregisterNotebook(notebook);
+            
             return true;
         }
         return false;
@@ -603,7 +614,7 @@ export default class DataManager
         if(this._notebooks[note.id] == undefined)
         {
             //if note is unloaded add to a temporal list.
-            this._notes[note.id] = note;
+            this.RegisterNote(note);
             return true;
         }
         return false;
@@ -623,7 +634,7 @@ export default class DataManager
         try 
         {
             fs.ensureDirSync(note.folderPath);
-            fs.writeJsonSync(Path.join(note.folderPath,note.id + ".json"), note.getSaveObject(),{spaces:4});
+            fs.writeJsonSync(note.getFullPath(), note.getSaveObject(),{spaces:4});
             return true;
         }
         catch(e)
@@ -641,12 +652,12 @@ export default class DataManager
         
         return note; 
     }
-  
-    public removeNote(note:Note):boolean
+
+    private removeNote(note:Note):boolean
     {
         if(this._notes[note.id] != undefined)
         {
-            delete this._notes[note.id];
+            this.UnegisterNote(note);
             return true;
         }
         return false;
@@ -656,7 +667,15 @@ export default class DataManager
     {
         if(this._notes[note.id] != undefined)
         {
-            delete this._notes[note.id];
+            let path = note.getFullPath();
+            
+            if(!FileTools.deleteJsonFileAtPath(path))
+            {
+                return false;
+            }
+
+            note.removeFromParent();
+            this.UnegisterNote(note);
             return true;
         }
         return false;
