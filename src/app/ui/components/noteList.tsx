@@ -37,12 +37,7 @@ export default class NoteList extends React.Component<any, any>
 
     public updateRequested(event:any, data:any):void
     {
-        let notes:Note[] = data.notes.map((noteData:any) =>
-        {
-            return Note.createFromData(noteData);
-        });
-
-        this.setState({notes:notes});
+        this.setState({notes:data.notes});
     }
 
 

@@ -7,12 +7,7 @@ import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
 import Message from "../../../core/message";
 
-interface NoteListItemData
-{
-    note:Note;
-}
-
-export default class NoteListItem extends React.Component<NoteListItemData, NoteListItemData> 
+export default class NoteListItem extends React.Component<any, any> 
 {
     constructor(props: any)
     {

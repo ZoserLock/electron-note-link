@@ -18,7 +18,7 @@ export default class NoteListContent extends React.Component<any, any>
 
     public render() 
     {
-        let notes = this.props.notes.map((note:Note) =>
+        let notes = this.props.notes.map((note:any) =>
         {
             return  <NoteListItem key = {note.id} note = {note}/>
         });

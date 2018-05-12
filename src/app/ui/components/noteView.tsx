@@ -73,10 +73,9 @@ class NoteView extends React.Component<any, NoteViewData>
 
     public updateRequested(event:any, data:any):void
     {
-        let note:Note = Note.createFromData(data.note);
-        this._newText = note.text;
+        this._newText = data.note.text;
 
-        this.setState({note:note});
+        this.setState({note:data.note});
     }
 
     public render() 

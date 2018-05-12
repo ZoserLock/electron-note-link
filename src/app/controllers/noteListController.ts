@@ -34,11 +34,14 @@ export default class NoteListController extends Controller
     {
         let selectedNotebook = Editor.instance.selectedNotebook;
 
-        let notes:Note[] = [];
+        let notes:any[] = [];
 
         if(selectedNotebook != null)
         {
-            notes = selectedNotebook.notes;
+            for(let note of selectedNotebook.notes)
+            {
+                notes.push(note.GetDataObject());
+            }
         }
 
         this.sendUIMessage(Message.updateNoteList,{notes:notes});

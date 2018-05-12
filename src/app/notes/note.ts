@@ -103,13 +103,6 @@ export default class Note
         return note;
     }
 
-    public static createFromData(data:any):Note
-    {
-        let note:Note = new Note();
-        Object.assign(note, data);
-        return note;
-    }
-
     public setData(data:any):void
     {
         this._id     = data.id;
@@ -150,6 +143,18 @@ export default class Note
     public SetAsUnselected():void
     {
         this._selected = false;
+    }
+
+    public GetDataObject():any
+    {
+        let dataObject = {
+            id:this._id, 
+            title:this._title, 
+            text:this._text,
+            isSelected:this._selected
+        };
+
+        return dataObject
     }
 
     public getSaveObject():any
