@@ -71,6 +71,11 @@ export default class DataManager
         return this._storageList;
     }
 
+    get notebooks(): Array<Notebook>  
+    {
+        return this._notebookList;
+    }
+
     // Member Functions
     private constructor()
     {

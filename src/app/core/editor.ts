@@ -76,8 +76,19 @@ export default class Editor
     {
         if( this._selectedNotebook!=null)
         {
+            let shouldUpdateNoteView:boolean = (this._selectedNote.parent == this._selectedNotebook);
+            
             this._selectedNotebook.SetAsUnselected();
             this._selectedNotebook = null;
+
+            ipcMain.emit(Message.updateLeftPanel);
+            ipcMain.emit(Message.updateNoteList);
+
+            if(shouldUpdateNoteView)
+            {
+                ipcMain.emit(Message.updateNoteView);
+            }
+       
         }
     }
 

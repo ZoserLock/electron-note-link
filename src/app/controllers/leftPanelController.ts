@@ -175,14 +175,27 @@ export default class LeftPanelController extends Controller
 
         if(notebook != null)
         {
-            if(Editor.instance.selectedNotebook == notebook)
-            {
-                Editor.instance.unselectNotebook();
-            }
-
+            let isSelectedNotebook = (Editor.instance.selectedNotebook == notebook);
+            let hasSelectedNote = (Editor.instance.selectedNote.parent == notebook);
+            
             DataManager.instance.deleteNotebook(notebook);
 
             this.updateLeftPanel();
+  
+            if(isSelectedNotebook)
+            {
+                if(DataManager.instance.notebooks.length > 0)
+                {
+                    let next:Notebook = DataManager.instance.notebooks[0];
+                    Editor.instance.selectNotebook(next.id);
+                }
+                else
+                {
+                    Editor.instance.unselectNotebook();
+                }
+            }
+
+
         }
         else
         {

@@ -29,7 +29,6 @@ export default class Note
         return this._folderPath;
     }
     
-
     get title(): string
     {
         return this._title;
@@ -58,6 +57,11 @@ export default class Note
     get isDirty(): boolean
     {
         return this._dirty;
+    }
+
+    get parent():Notebook
+    {
+        return this._notebook;
     }
 
     // Member functions

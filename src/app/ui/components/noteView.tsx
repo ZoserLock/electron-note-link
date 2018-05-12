@@ -47,7 +47,7 @@ class NoteView extends React.Component<any, NoteViewData>
         ipcRenderer.removeListener("update:NoteView",this._updateRequestedEvent);
     }
 
-    public componentWillUpdate(nextProps:any, nextState:NoteViewData)
+    public componentDidUpdate(nextProps:any, nextState:NoteViewData)
     {
         if(this.state.editorMode == true && nextState.editorMode == false)
         {
