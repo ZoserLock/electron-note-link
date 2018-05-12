@@ -129,14 +129,14 @@ export default class Note
         }
     }
 
-    public setDirty():void
+    public setDirty(dirty:boolean):void
     {
-        this._dirty = true;
+        this._dirty = dirty;
     }
 
-    public clearDirty():void
+    public setTrashed(trashed:boolean):void
     {
-        this._dirty = false;
+        this._trash = trashed;
     }
 
     public SetAsSelected():void

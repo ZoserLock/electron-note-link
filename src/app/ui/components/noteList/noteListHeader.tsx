@@ -25,7 +25,7 @@ export default class NoteListHeader extends React.Component<any, any>
     {
         return (
             <div className="ui-note-list-header"> 
-                Note List
+                {this.props.mode}
                 <button onClick={()=>this.onAddNoteClick()}>+</button>
             </div>
 

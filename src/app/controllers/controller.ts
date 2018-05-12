@@ -17,9 +17,4 @@ export default class Controller
             this._window.webContents.send(channel,data);
         }
     }
-
-    protected sendMainMessage(channel:string, data?:any):void
-    {
-        ipcMain.emit(channel,null,data);
-    }
 }

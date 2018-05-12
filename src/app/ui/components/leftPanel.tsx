@@ -2,17 +2,17 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
-// Local
+// Main
 import Debug from "../../tools/debug";
-import NotebookStorage  from "../../notes/notebookStorage";
+import { NoteListMode } from "../../core/editor";
 
 // UI
 import StorageItem from "../components/leftPanel/storageItem";
-
+import SpecialLeftItem from "../components/leftPanel/specialLeftItem";
+import Message from "../../core/message";
 
 export default class LeftPanel extends React.Component<any, any> 
 {
-
     private _updateRequestedEvent: (event: any, data: any) => void;
 
     constructor(props: any)
@@ -21,7 +21,8 @@ export default class LeftPanel extends React.Component<any, any>
 
         this.state =
         {
-            storages:null
+            storages:null,
+            mode:NoteListMode.Notebook
         }  
 
         this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
@@ -29,14 +30,14 @@ export default class LeftPanel extends React.Component<any, any>
  
     public componentDidMount() 
     {
-        ipcRenderer.addListener("update:LeftPanel",this._updateRequestedEvent);
+        ipcRenderer.addListener(Message.updateLeftPanel,this._updateRequestedEvent);
 
-        ipcRenderer.send("update:LeftPanel");
+        ipcRenderer.send(Message.updateLeftPanel);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:LeftPanel",this._updateRequestedEvent);
+        ipcRenderer.removeListener(Message.updateLeftPanel,this._updateRequestedEvent);
     }
 
     public updateRequested(event:any, data:any):void
@@ -46,18 +47,41 @@ export default class LeftPanel extends React.Component<any, any>
             return  <StorageItem key = {storage.id} storage = {storage}/>
         });
 
-        this.setState({storages:storages});
+        this.setState({storages:storages, mode:data.mode});
+    }
+
+    private onAllNotesClick(): void 
+    {
+        Debug.log("onAllNotesClick");
+        let data =
+        {
+            mode:NoteListMode.All
+        }
+
+        ipcRenderer.send(Message.setNoteListMode,data);
+    }
+
+    private onStartedClick(): void 
+    {
+        Debug.log("onStartedClick");
+    }
+
+    private onTrashClick(): void 
+    {
+        Debug.log("onTrashClick");
     }
 
     public render() 
     {
 
+        Debug.log("Selected: "+this.state.mode);
+
         return (
             <div className="ui-sidebar">
                 <ul className="wtree">
-                    <li>All Notes</li>
-                    <li>Favorites</li>
-                    <li>Trash</li>
+                <SpecialLeftItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {this.state.mode == NoteListMode.All}/>
+                <SpecialLeftItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {this.state.mode == NoteListMode.Started}/>
+                <SpecialLeftItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {this.state.mode == NoteListMode.Trash}/>
                 </ul>
                 {this.state.storages}
             </div>

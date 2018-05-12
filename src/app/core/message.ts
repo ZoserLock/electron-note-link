@@ -18,6 +18,7 @@ export default class Message
 
     public static readonly selectNotebook:string    = "action:SelectNotebook";
     public static readonly selectNote:string        = "action:SelectNote";
+    public static readonly setNoteListMode:string   = "action:SetNoteListMode";
 
 
     public static readonly updateNote:string        = "action:UpdateNote";

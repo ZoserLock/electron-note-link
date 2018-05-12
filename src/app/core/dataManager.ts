@@ -58,6 +58,9 @@ export default class DataManager
     private _storageList: Array<NotebookStorage> = new Array<NotebookStorage>();
     private _notebookList: Array<Notebook> = new Array<Notebook>();
 
+    // add all notes.
+    
+
     // Data maps
     private _storages: StorageMap ={};
     private _notebooks: NotebookMap = {};

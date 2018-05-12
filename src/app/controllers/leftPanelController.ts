@@ -6,7 +6,7 @@ import * as Path from "path";
 import Debug from "../tools/debug";
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Editor from "../core/editor";
+import Editor, { NoteListMode } from "../core/editor";
 
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
@@ -17,6 +17,9 @@ import Application from "../core/application";
 
 export default class LeftPanelController extends Controller
 {
+
+    private _updates:number=0;
+
     constructor(window:Electron.BrowserWindow)
     {
         super(window);
@@ -29,11 +32,16 @@ export default class LeftPanelController extends Controller
 
         ipcMain.on(Message.createNotebook,(event:any,data:any)=>this.actionNewNotebook(data));
         ipcMain.on(Message.selectNotebook,(event:any,data:any)=>this.actionSelectNotebook(data));
+        ipcMain.on(Message.setNoteListMode, (event:any,data:any) =>{this.actionSetNoteListMode(data);});
+
     }
 
     // Updates
     public updateLeftPanel():void
     {
+        this._updates++;
+        Debug.log("updateLeftPanel "+this._updates);
+
         let storages:any[] = [];
 
         for(let storage of DataManager.instance.noteStorages)
@@ -50,7 +58,7 @@ export default class LeftPanelController extends Controller
             selectedNotebookId = selectedNotebook.id;
         }
 
-        this.sendUIMessage(Message.updateLeftPanel,{storages:storages, selectedNotebookId:selectedNotebookId});
+        this.sendUIMessage(Message.updateLeftPanel,{mode:Editor.instance.noteListMode, storages:storages, selectedNotebookId:selectedNotebookId});
     }
 
     ///////////////////////////
@@ -194,15 +202,18 @@ export default class LeftPanelController extends Controller
                     Editor.instance.unselectNotebook();
                 }
             }
-
-
         }
         else
         {
             Debug.logError("actionRemoveStorage: Storage does not exist.");
         }
     }
- 
+
+    private actionSetNoteListMode(data:any):void
+    {
+        Editor.instance.setNoteListMode(data.mode);
+    }
+    
     private actionSelectNotebook(data:any)
     {
         Editor.instance.selectNotebook(data.notebookId);

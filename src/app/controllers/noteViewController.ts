@@ -50,7 +50,7 @@ export default class NoteViewController extends Controller
 
             if(note == selectedNote)
             {
-                this.sendMainMessage(Message.updateNoteView);
+                Editor.instance.updateNoteView();
             }
         }
     }

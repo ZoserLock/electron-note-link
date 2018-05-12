@@ -6,7 +6,7 @@ import * as Path from "path";
 // Core
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Editor from "../core/editor";
+import Editor, { NoteListMode } from "../core/editor";
 
 // Notes
 import NotebookStorage from "../notes/notebookStorage";
@@ -28,29 +28,66 @@ export default class NoteListController extends Controller
         ipcMain.on(Message.selectNote, (event:any,data:any) =>{this.actionSelectNote(data);});
 
 
+
     }
 
     public updateNoteList():void
     {
-        let selectedNotebook = Editor.instance.selectedNotebook;
+        let editorMode = Editor.instance.noteListMode;
 
-        let notes:any[] = [];
-
-        if(selectedNotebook != null)
+        if(editorMode == NoteListMode.Notebook)
         {
-            for(let note of selectedNotebook.notes)
+            let selectedNotebook = Editor.instance.selectedNotebook;
+
+            let notes:any[] = [];
+    
+            if(selectedNotebook != null)
             {
-                notes.push(note.GetDataObject());
+                for(let note of selectedNotebook.notes)
+                {
+                    notes.push(note.GetDataObject());
+                }
             }
+
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:notes});
+        }
+        else if(editorMode == NoteListMode.All)
+        {
+            let allNotebooks = DataManager.instance.notebooks;
+
+            let notes:Note[] = [];
+
+            for(let notebook of allNotebooks)
+            {
+                notes.push.apply(notes, notebook.notes);
+            }
+
+            let noteData:any[] = [];
+
+            for(let note of notes)
+            {
+                noteData.push(note.GetDataObject());
+            }
+
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:noteData});
+        }
+        else if(editorMode == NoteListMode.Started)
+        {
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:[]});
+        }  
+        else if(editorMode == NoteListMode.Trash)
+        {
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:[]});
         }
 
-        this.sendUIMessage(Message.updateNoteList,{notes:notes});
     }
 
     private actionSearchUpdated(data:any):void
     {
         Debug.log("Search Updated");
     }
+
+ 
 
     private actionNewNote():void
     {
@@ -68,28 +105,6 @@ export default class NoteListController extends Controller
                 this.updateNoteList();
             }
         }
-    }
-
-    private actionNewNote_stress():void
-    {
-        for(let a = 0;a < 500; ++a)
-        {
-            let selectedNotebook = Editor.instance.selectedNotebook;
-
-            if(selectedNotebook != null)
-            {
-                let note:Note = Note.create(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
-                
-                if(DataManager.instance.addNote(note))
-                {
-                    DataManager.instance.saveNote(note);
-                    selectedNotebook.addNote(note);
-                    Editor.instance.selectNote(note.id);
-                }
-            }
-        }
-        
-        this.updateNoteList();
     }
 
     private actionSelectNote(data:any):void

@@ -1,5 +1,6 @@
 
 import {ipcMain} from "electron"; 
+import * as process from "process";
 import * as uuid from "uuid/v4";
 import * as Path from "path";
 
@@ -11,6 +12,23 @@ import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
 import Note from "../notes/note";
 import Message from "./message";
+
+export enum NoteListMode 
+{
+    Notebook = 1,
+    Search,
+    Trash,
+    Started,
+    All,
+}
+
+export enum EditorPendingUpdate 
+{
+    None     = 0x0,
+    LeftPanel = 0x1,
+    NoteList = 0x2,
+    NoteView = 0x4,
+}
 
 export default class Editor
 {
@@ -28,11 +46,25 @@ export default class Editor
         this.sInstance = new Editor();
     }
 
-    // Member Variables
+    // Editor Status
+    private _noteListMode:NoteListMode;
+
     private _selectedNotebook:Notebook;
+
     private _selectedNote:Note;
 
+
+    // Update Status
+    private _willUpdateNextTick:boolean   = false;
+    private _pendingUpdate:number = EditorPendingUpdate.None;
+
+    ///////////
     //Get/Set
+    get noteListMode(): number 
+    {
+        return this._noteListMode;
+    }
+
     get selectedNotebook(): Notebook 
     {
         return this._selectedNotebook;
@@ -51,6 +83,8 @@ export default class Editor
 
     private intializeContextVariables():void
     {
+        this._noteListMode = NoteListMode.Notebook; 
+
         let storages = DataManager.instance.noteStorages;
         if(storages.length > 0)
         {
@@ -71,6 +105,55 @@ export default class Editor
     }
 
     ///////////
+    //UpdateActions
+    public updateLeftPanel():void
+    {
+        this._pendingUpdate |= EditorPendingUpdate.LeftPanel;
+        this.tryUpdateNextTick();
+    }
+
+    public updateNoteList():void
+    {
+        this._pendingUpdate |= EditorPendingUpdate.NoteList;
+        this.tryUpdateNextTick();
+    }
+
+    public updateNoteView():void
+    {
+        this._pendingUpdate |= EditorPendingUpdate.NoteView;
+        this.tryUpdateNextTick();
+    }
+
+    private tryUpdateNextTick():void
+    {
+        if(!this._willUpdateNextTick)
+        {
+            process.nextTick(()=>this.onNextTick());
+            this._willUpdateNextTick=true;
+        }
+    }
+    private onNextTick():void
+    {
+        Debug.log("Editor Updated");
+        if((this._pendingUpdate & EditorPendingUpdate.LeftPanel)!=0)
+        {
+            ipcMain.emit(Message.updateLeftPanel);
+        }
+
+        if((this._pendingUpdate & EditorPendingUpdate.NoteList)!=0)
+        {
+            ipcMain.emit(Message.updateNoteList);
+        }
+
+        if((this._pendingUpdate & EditorPendingUpdate.NoteView)!=0)
+        {
+            ipcMain.emit(Message.updateNoteView);
+        }
+
+        this._willUpdateNextTick = false;
+        this._pendingUpdate = EditorPendingUpdate.None;
+    }
+    ///////////
     //Actions
     public unselectNotebook():void
     {
@@ -81,14 +164,13 @@ export default class Editor
             this._selectedNotebook.SetAsUnselected();
             this._selectedNotebook = null;
 
-            ipcMain.emit(Message.updateLeftPanel);
-            ipcMain.emit(Message.updateNoteList);
+            this.updateLeftPanel();
+            this.updateNoteList();
 
             if(shouldUpdateNoteView)
             {
-                ipcMain.emit(Message.updateNoteView);
+                this.updateNoteView();
             }
-       
         }
     }
 
@@ -104,6 +186,7 @@ export default class Editor
 
         if(notebook != null)
         {
+            
             this._selectedNotebook = notebook;
             this._selectedNotebook.SetAsSelected();
 
@@ -113,8 +196,22 @@ export default class Editor
                 this.selectNote(note.id);
             }
 
-            ipcMain.emit(Message.updateLeftPanel);
-            ipcMain.emit(Message.updateNoteList);
+            this.updateLeftPanel();
+            this.updateNoteList();
+        }
+
+        this.setNoteListMode(NoteListMode.Notebook);
+    }
+
+    public setNoteListMode(mode:number):void
+    {
+        if(mode != this._noteListMode)
+        {
+            Debug.log("setNoteListMode: "+mode);
+            this._noteListMode = mode;
+            
+            this.updateLeftPanel();
+            this.updateNoteList();
         }
     }
 
@@ -135,9 +232,8 @@ export default class Editor
             this._selectedNote = note;
             this._selectedNote.SetAsSelected();
 
-            ipcMain.emit(Message.updateNoteList);
-            ipcMain.emit(Message.updateNoteView);
+            this.updateNoteView();
+            this.updateNoteList();
         }
     }
-    
 }

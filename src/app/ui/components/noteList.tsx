@@ -37,7 +37,7 @@ export default class NoteList extends React.Component<any, any>
 
     public updateRequested(event:any, data:any):void
     {
-        this.setState({notes:data.notes});
+        this.setState({notes:data.notes,mode:data.mode});
     }
 
 
@@ -45,7 +45,7 @@ export default class NoteList extends React.Component<any, any>
     {
         return (
             <div className="ui-note-list">
-                <NoteListHeader/>
+                <NoteListHeader mode   = {this.state.mode}/>
                 <NoteListContent notes = {this.state.notes}/>
             </div>
         );
