@@ -34,7 +34,13 @@ export default class LeftPanelController extends Controller
     // Updates
     public updateLeftPanel():void
     {
-        let storages:Array<NotebookStorage> = DataManager.instance.noteStorages;
+        let storages:any[] = [];
+
+        for(let storage of DataManager.instance.noteStorages)
+        {
+            storages.push(storage.GetDataObject());
+        }
+        
         let selectedNotebook = Editor.instance.selectedNotebook;
 
         let selectedNotebookId:String = "";
@@ -46,6 +52,7 @@ export default class LeftPanelController extends Controller
 
         this.sendUIMessage(Message.updateLeftPanel,{storages:storages, selectedNotebookId:selectedNotebookId});
     }
+
     ///////////////////////////
     // Storages
 

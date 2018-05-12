@@ -41,9 +41,8 @@ export default class LeftPanel extends React.Component<any, any>
 
     public updateRequested(event:any, data:any):void
     {
-        let storages = data.storages.map((storageData:any) =>
+        let storages = data.storages.map((storage:any) =>
         {
-            let storage = NotebookStorage.createFromData(storageData);
             return  <StorageItem key = {storage.id} storage = {storage}/>
         });
 

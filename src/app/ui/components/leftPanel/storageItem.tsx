@@ -47,9 +47,8 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
 
     public render() 
     {
-        let notebookContent = this.props.storage.notebooks.map((notebookData:any) =>
+        let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
-            let notebook = Notebook.createFromData(notebookData);
             return  <NotebookItem key = {notebook.id} notebook={notebook}/>
         });
 

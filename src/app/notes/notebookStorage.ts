@@ -64,12 +64,22 @@ export default class NotebookStorage
         return storage;
     }
 
-    public static createFromData(data:any):NotebookStorage
+    public GetDataObject():any
     {
-        let storage:NotebookStorage = new NotebookStorage();
-        Object.assign(storage, data);
-        return storage;
+        let notebooks:any[] = this._notebooks.map((notebook:Notebook) =>
+        {
+            return notebook.GetDataObject();
+        });
+
+        let dataObject = {
+            id:this._id, 
+            name:this._name,
+            notebooks:notebooks
+        };
+
+        return dataObject
     }
+
 
     public addNotebook(notebook:Notebook):void
     {

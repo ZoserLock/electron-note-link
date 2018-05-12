@@ -72,11 +72,15 @@ export default class Notebook
         return notebook;
     }
 
-    public static createFromData(data:any):Notebook
+    public GetDataObject():any
     {
-        let notebook:Notebook = new Notebook();
-        Object.assign(notebook, data);
-        return notebook;
+        let dataObject = {
+            id:this._id, 
+            name:this._name,
+            isSelected:this._selected
+        };
+
+        return dataObject
     }
 
 
