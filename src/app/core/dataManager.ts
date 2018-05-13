@@ -1,5 +1,5 @@
 
-import { app} from "electron";
+import { app, ipcMain,BrowserWindow} from "electron";
 import * as Path from "path";
 import * as fs from "fs-extra";
 
@@ -10,6 +10,7 @@ import FileTools from "../tools/fileTools";
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
 import Note from "../notes/note";
+import Message from "./message";
 
 
 
@@ -56,7 +57,8 @@ export default class DataManager
     private _savePath:string;
 
     private _storageList: Array<NotebookStorage> = new Array<NotebookStorage>();
-    private _notebookList: Array<Notebook> = new Array<Notebook>();
+    private _notebookList: Array<Notebook>       = new Array<Notebook>();
+    private _noteList: Array<Note>               = new Array<Note>();
 
     // add all notes.
     
@@ -66,6 +68,9 @@ export default class DataManager
     private _notebooks: NotebookMap = {};
     private _notes: NoteMap = {};
     private _notePerTag: TagMap = {}
+
+    // Cache
+    private _cacheWindow:BrowserWindow;
 
     // Get/Set
     
@@ -79,6 +84,11 @@ export default class DataManager
         return this._notebookList;
     }
 
+    get notes(): Array<Note>  
+    {
+        return this._noteList;
+    }
+
     // Member Functions
     private constructor()
     {
@@ -86,18 +96,16 @@ export default class DataManager
         this._savePath = Path.join(app.getPath("userData"),this.sSaveFileName);
         
         Debug.log("[DataManager] Save File Location: "+this._savePath);
-
-        this.checkStorageIntegrety();
     }
 
     // data Management
-    private RegisterStorage(storage:NotebookStorage):void
+    private registerStorage(storage:NotebookStorage):void
     {
         this._storages[storage.id] = storage;
         this._storageList.push(storage);
     }
 
-    private UnregisterStorage(storage:NotebookStorage):void
+    private unregisterStorage(storage:NotebookStorage):void
     {
         delete this._storages[storage.id];
 
@@ -111,19 +119,19 @@ export default class DataManager
         }
     }
 
-    private RegisterNotebook(notebook:Notebook):void
+    private registerNotebook(notebook:Notebook):void
     {
         this._notebooks[notebook.id] = notebook;
         this._notebookList.push(notebook);
     }
     
-    private UnregisterNotebook(notebook:Notebook):void
+    private unregisterNotebook(notebook:Notebook):void
     {
         for(let a = 0;a < this._notebookList.length ;++a)
         {
             if(this._notebookList[a] == notebook)
             {
-                this._storageList.splice(a,1);
+                this._notebookList.splice(a,1);
                 break;
             }
         }
@@ -131,19 +139,29 @@ export default class DataManager
         delete this._notebooks[notebook.id];
     }
 
-    private RegisterNote(note:Note):void
+    private registerNote(note:Note):void
     {
         this._notes[note.id] = note;
+        this._noteList.push(note);
     }
 
-    private UnegisterNote(note:Note):void
+    private unegisterNote(note:Note):void
     {
+        for(let a = 0;a < this._noteList.length ;++a)
+        {
+            if(this._noteList[a] == note)
+            {
+                this._noteList.splice(a,1);
+                break;
+            }
+        }
+
         delete this._notes[note.id];
     }
     
     // data Management
 
-    private checkStorageIntegrety():void
+    public checkStorageIntegrety():void
     {
         Debug.log("[DataManager] Checking storage integrety...");
 
@@ -238,6 +256,8 @@ export default class DataManager
         }
 
         this.saveApplicationData();
+
+        this.generateCache();
 
        /* for(var a = 0;a < this._storageList.length; ++a)
         {
@@ -356,7 +376,7 @@ export default class DataManager
                 return false;
             }
 
-            this.RegisterStorage(storage);
+            this.registerStorage(storage);
 
  
             if(storage.notebooks.length > 0)
@@ -461,7 +481,7 @@ export default class DataManager
                 this.removeNotebook(storage.notebooks[a]);
             }
 
-            this.UnregisterStorage(storage);
+            this.unregisterStorage(storage);
 
             this.saveApplicationData();
         }
@@ -478,7 +498,7 @@ export default class DataManager
                 return false;
             }
 
-            this.UnregisterStorage(storage);
+            this.unregisterStorage(storage);
 
             for(let a = 0;a < storage.notebooks.length ;++a)
             {
@@ -496,7 +516,7 @@ export default class DataManager
     {
         if(this._notebooks[notebook.id] == undefined)
         {
-            this.RegisterNotebook(notebook);
+            this.registerNotebook(notebook);
 
             if(notebook.notes.length > 0)
             {
@@ -585,7 +605,7 @@ export default class DataManager
                 this.removeNote(notebook.notes[a]);
             }
 
-            this.UnregisterNotebook(notebook);
+            this.unregisterNotebook(notebook);
             return true;
         }
         return false;
@@ -608,7 +628,7 @@ export default class DataManager
             }
 
             notebook.removeFromParent();
-            this.UnregisterNotebook(notebook);
+            this.unregisterNotebook(notebook);
             
             return true;
         }
@@ -622,7 +642,7 @@ export default class DataManager
         if(this._notebooks[note.id] == undefined)
         {
             //if note is unloaded add to a temporal list.
-            this.RegisterNote(note);
+            this.registerNote(note);
             return true;
         }
         return false;
@@ -665,7 +685,7 @@ export default class DataManager
     {
         if(this._notes[note.id] != undefined)
         {
-            this.UnegisterNote(note);
+            this.unegisterNote(note);
             return true;
         }
         return false;
@@ -683,9 +703,51 @@ export default class DataManager
             }
 
             note.removeFromParent();
-            this.UnegisterNote(note);
+            this.unegisterNote(note);
             return true;
         }
         return false;
     }
+
+    /////////////////////////
+    // Update Cache
+
+    public setCacheWindow(window:BrowserWindow):void
+    {
+        this._cacheWindow = window;
+    }
+
+    public generateCache()
+    {
+        let storages = this._storageList.map((storage:NotebookStorage) =>
+        {
+            return  storage.GetDataObject();
+        });
+        
+        let notebooks = this._notebookList.map((notebook:Notebook) =>
+        {
+            return  notebook.GetDataObject();
+        });
+
+        let notes = this._notebookList.map((notebook:Notebook) =>
+        {
+            return  notebook.GetDataObject();
+        });
+
+        let data:any =
+        {
+            storages:storages,
+            notebooks:notebooks,
+            notes:notes
+        }
+
+        Debug.log("Generating Cache");
+        this._cacheWindow.webContents.send(Message.cacheGenerate,data); 
+    }
+
+    public updateStorageCache(storage:NotebookStorage)
+    {
+    //    let:data:any=storage.GetDataObject();
+    }
+
 }

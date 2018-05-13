@@ -54,19 +54,27 @@ export default class Application
         // Initialise Singletons
         Configuration   .initialize();
         DataManager     .initialize();
-        Editor        .initialize();
+        Editor          .initialize();
         GlobalShortcut  .initialize();
         MainMenu        .initialize();
 
+        ipcMain.on(Message.windowMinimize,()=>this.windowMinimize());
+        ipcMain.on(Message.windowMaximize,()=>this.windowMaximize());
+        ipcMain.on(Message.windowClose   ,()=>this.windowClose());
+        ipcMain.on(Message.windowLoaded  ,()=>this.onWindowCreated());
+
         this.createTrayIcon();
         this.createMainWindow(); 
-        
-        ipcMain.on(Message.windowMinimize,()=>this.WindowMinimize());
-        ipcMain.on(Message.windowMaximize,()=>this.WindowMaximize());
-        ipcMain.on(Message.windowClose   ,()=>this.WindowClose());
+    }
 
+    private onWindowCreated()
+    {
+        this._mainWindow.show();
+        // Initialize Data and cache
+        DataManager.instance.setCacheWindow(this._mainWindow);
+        DataManager.instance.checkStorageIntegrety();
 
-         // Initialize Active Presenters
+        // Initialize Active Presenters
         this._leftPanelController = new LeftPanelController(this._mainWindow);
         this._noteListController  = new NoteListController(this._mainWindow);
         this._noteViewController  = new NoteViewController(this._mainWindow);
@@ -75,7 +83,8 @@ export default class Application
         {
             this.initializeDebug();
         }
-        
+
+        Editor.instance.updateAll();
     }
 
     // Function called only in debug enviroment
@@ -121,6 +130,7 @@ export default class Application
             minWidth: 800,
             minHeight: 600,
             frame:false,
+            show:false,
         });
 
         this._mainWindow.loadURL("file://" + __dirname + "/html/index.html");
@@ -139,8 +149,6 @@ export default class Application
         {
             this._mainWindow = null;
         });
-
-
     }
 
     public exit():void
@@ -159,7 +167,7 @@ export default class Application
     }
 
     // Window command
-    public WindowMinimize():void
+    public windowMinimize():void
     {
         if(this._mainWindow != null)
         {
@@ -167,7 +175,7 @@ export default class Application
         }
     }
 
-    public WindowMaximize():void
+    public windowMaximize():void
     {
         if(this._mainWindow != null)
         {
@@ -182,7 +190,7 @@ export default class Application
         }
     }
 
-    public WindowClose():void
+    public windowClose():void
     {
         if(this._mainWindow != null)
         {

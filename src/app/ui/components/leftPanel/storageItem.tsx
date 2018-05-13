@@ -11,12 +11,7 @@ import Message from "../../../core/message";
 // UI
 import NotebookItem from "./notebookItem";
 
-interface StorageItemData
-{
-    storage:NotebookStorage;
-}
-
-export default class StorageItem extends React.Component<StorageItemData, StorageItemData> 
+export default class StorageItem extends React.Component<any, any> 
 {
     constructor(props: any)
     {
@@ -49,7 +44,7 @@ export default class StorageItem extends React.Component<StorageItemData, Storag
     {
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
-            return  <NotebookItem key = {notebook.id} notebook={notebook}/>
+            return  <NotebookItem key = {notebook.id} notebook={notebook} mode = {this.props.mode} />
         });
 
         let notebooks;

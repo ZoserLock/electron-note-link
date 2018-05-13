@@ -1,5 +1,7 @@
 export default class Message
 {
+
+    
     public static readonly updateLeftPanel:string   = "update:LeftPanel";
     public static readonly updateNoteList:string    = "update:NoteList";
     public static readonly updateNoteView:string    = "update:NoteView";
@@ -24,10 +26,15 @@ export default class Message
     public static readonly updateNote:string        = "action:UpdateNote";
 
 
+    // Cache Related 
+    public static readonly cacheUpdate:string       = "action:cache:Update";
+    public static readonly cacheGenerate:string     = "action:cache:Generate";
+
     // Windows Related
     public static readonly windowMinimize:string    = "action:window:Minimize";
     public static readonly windowMaximize:string    = "action:window:Maximize";
     public static readonly windowClose:string       = "action:window:Close";
+    public static readonly windowLoaded:string      = "action:window:loaded";
    
 
 

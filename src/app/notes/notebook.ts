@@ -74,10 +74,15 @@ export default class Notebook
 
     public GetDataObject():any
     {
+        let notes:any[] = this._notes.map((note:Note) =>
+        {
+            return note.id;
+        });
+
         let dataObject = {
             id:this._id, 
             name:this._name,
-            isSelected:this._selected
+            notes:notes
         };
 
         return dataObject

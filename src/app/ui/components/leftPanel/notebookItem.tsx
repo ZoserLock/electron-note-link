@@ -6,20 +6,24 @@ import {ipcRenderer} from "electron";
 import Debug from "../../../tools/debug";
 import Notebook from "../../../notes/notebook";
 import Message from "../../../core/message";
+import Editor from "../../../core/editor";
+
+import { NoteListMode } from "../../../../enums";
+
 
 interface NotebookItemData
 {
     notebook:Notebook;
 }
 
-export default class NotebookItem extends React.Component<NotebookItemData, NotebookItemData> 
+export default class NotebookItem extends React.Component<any, any> 
 {
     constructor(props: any)
     {
         super(props);
     }
 
-    public shouldComponentUpdate(nextProps:NotebookItemData, nextState:NotebookItemData):boolean
+    public shouldComponentUpdate(nextProps:any, nextState:any):boolean
     {
         if(nextProps.notebook.name != this.props.notebook.name)
         {
@@ -27,6 +31,11 @@ export default class NotebookItem extends React.Component<NotebookItemData, Note
         }
 
         if(nextProps.notebook.isSelected != this.props.notebook.isSelected)
+        {
+            return true;
+        }
+
+        if(nextProps.mode != this.props.mode)
         {
             return true;
         }
@@ -56,7 +65,10 @@ export default class NotebookItem extends React.Component<NotebookItemData, Note
 
     public render() 
     {
-        let displayClass = (this.props.notebook.isSelected)? "selected text-unselect": "text-unselect";
+        Debug.log("this.props.mode: " + this.props.mode);
+
+        let displayClass = (this.props.notebook.isSelected && this.props.mode == NoteListMode.Notebook)? "selected text-unselect": "text-unselect";
+
         displayClass += " ui-sidebar-notebook-item";
         return (
             <li className={displayClass} >

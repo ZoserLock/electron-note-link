@@ -6,7 +6,7 @@ import * as Path from "path";
 import Debug from "../tools/debug";
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Editor, { NoteListMode } from "../core/editor";
+import Editor from "../core/editor";
 
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
@@ -14,6 +14,8 @@ import Note from "../notes/note";
 
 import Controller from "./controller";
 import Application from "../core/application";
+
+import {NoteListMode} from "../../enums"
 
 export default class LeftPanelController extends Controller
 {

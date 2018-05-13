@@ -6,7 +6,7 @@ import * as Path from "path";
 // Core
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Editor, { NoteListMode } from "../core/editor";
+import Editor from "../core/editor";
 
 // Notes
 import NotebookStorage from "../notes/notebookStorage";
@@ -15,6 +15,8 @@ import Note from "../notes/note";
 
 import Controller from "./controller";
 import Debug from "../tools/debug";
+
+import {NoteListMode} from "../../enums"
 
 export default class NoteListController extends Controller
 {
@@ -37,6 +39,8 @@ export default class NoteListController extends Controller
 
         if(editorMode == NoteListMode.Notebook)
         {
+            //Send Notebook Notes
+
             let selectedNotebook = Editor.instance.selectedNotebook;
 
             let notes:any[] = [];
@@ -53,6 +57,7 @@ export default class NoteListController extends Controller
         }
         else if(editorMode == NoteListMode.All)
         {
+            // Send All Notes
             let allNotebooks = DataManager.instance.notebooks;
 
             let notes:Note[] = [];
@@ -69,7 +74,13 @@ export default class NoteListController extends Controller
                 noteData.push(note.GetDataObject());
             }
 
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:noteData});
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode,update:false, notes:[]});
+
+            for(let a:number = 0;a<noteData.length;a+=100)
+            {
+                let array = noteData.slice(a, a+100);
+                this.sendUIMessage(Message.updateNoteList,{mode: editorMode,update:true, notes:array});
+            }
         }
         else if(editorMode == NoteListMode.Started)
         {
@@ -86,8 +97,6 @@ export default class NoteListController extends Controller
     {
         Debug.log("Search Updated");
     }
-
- 
 
     private actionNewNote():void
     {

@@ -7,28 +7,12 @@ import * as Path from "path";
 import Debug from "../tools/debug";
 import Application from "./application";
 import DataManager from "./dataManager";
-
 import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
 import Note from "../notes/note";
 import Message from "./message";
 
-export enum NoteListMode 
-{
-    Notebook = 1,
-    Search,
-    Trash,
-    Started,
-    All,
-}
-
-export enum EditorPendingUpdate 
-{
-    None     = 0x0,
-    LeftPanel = 0x1,
-    NoteList = 0x2,
-    NoteView = 0x4,
-}
+import {NoteListMode,EditorPendingUpdate} from "../../enums"
 
 export default class Editor
 {
@@ -106,6 +90,13 @@ export default class Editor
 
     ///////////
     //UpdateActions
+    public updateAll():void
+    {
+        this.updateLeftPanel();
+        this.updateNoteList();
+        this.updateNoteView();
+    }
+
     public updateLeftPanel():void
     {
         this._pendingUpdate |= EditorPendingUpdate.LeftPanel;
@@ -132,6 +123,7 @@ export default class Editor
             this._willUpdateNextTick=true;
         }
     }
+    
     private onNextTick():void
     {
         Debug.log("Editor Updated");

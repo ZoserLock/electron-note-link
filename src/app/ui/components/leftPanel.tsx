@@ -4,12 +4,15 @@ import {ipcRenderer} from "electron";
 
 // Main
 import Debug from "../../tools/debug";
-import { NoteListMode } from "../../core/editor";
 
 // UI
 import StorageItem from "../components/leftPanel/storageItem";
 import SpecialLeftItem from "../components/leftPanel/specialLeftItem";
 import Message from "../../core/message";
+
+import { NoteListMode } from "../../../enums";
+import UICache from "../uiCache";
+
 
 export default class LeftPanel extends React.Component<any, any> 
 {
@@ -21,18 +24,15 @@ export default class LeftPanel extends React.Component<any, any>
 
         this.state =
         {
-            storages:null,
-            mode:NoteListMode.Notebook
+            storages:null
         }  
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested();
     }
  
     public componentDidMount() 
     {
         ipcRenderer.addListener(Message.updateLeftPanel,this._updateRequestedEvent);
-
-        ipcRenderer.send(Message.updateLeftPanel);
     }
 
     public componentWillUnmount()
@@ -40,14 +40,14 @@ export default class LeftPanel extends React.Component<any, any>
         ipcRenderer.removeListener(Message.updateLeftPanel,this._updateRequestedEvent);
     }
 
-    public updateRequested(event:any, data:any):void
+    public updateRequested():void
     {
-        let storages = data.storages.map((storage:any) =>
+        let storages =  UICache.instance.noteStorages.map((storage:any) =>
         {
             return  <StorageItem key = {storage.id} storage = {storage}/>
         });
 
-        this.setState({storages:storages, mode:data.mode});
+        this.setState({storages:storages});
     }
 
     private onAllNotesClick(): void 
@@ -63,12 +63,22 @@ export default class LeftPanel extends React.Component<any, any>
 
     private onStartedClick(): void 
     {
-        Debug.log("onStartedClick");
+        let data =
+        {
+            mode:NoteListMode.Started
+        }
+
+        ipcRenderer.send(Message.setNoteListMode,data);
     }
 
     private onTrashClick(): void 
     {
-        Debug.log("onTrashClick");
+        let data =
+        {
+            mode:NoteListMode.Trash
+        }
+
+        ipcRenderer.send(Message.setNoteListMode,data);
     }
 
     public render() 

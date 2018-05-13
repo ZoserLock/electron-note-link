@@ -37,7 +37,18 @@ export default class NoteList extends React.Component<any, any>
 
     public updateRequested(event:any, data:any):void
     {
-        this.setState({notes:data.notes,mode:data.mode});
+        if(data.update == undefined || !data.update)
+        {
+            this.setState({notes:data.notes,mode:data.mode});
+        }
+        else
+        {
+            let newNotes:any[] = this.state.notes;
+
+            newNotes.push.apply(newNotes, data.notes);
+       
+            this.setState({notes:newNotes,mode:data.mode});
+        }
     }
 
 

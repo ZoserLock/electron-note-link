@@ -154,8 +154,7 @@ export default class Note
         let dataObject = {
             id:this._id, 
             title:this._title, 
-            text:this._text,
-            isSelected:this._selected
+            text:this._text
         };
 
         return dataObject
