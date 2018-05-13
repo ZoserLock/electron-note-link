@@ -1,5 +1,5 @@
 
-import {ipcMain} from "electron"; 
+import {ipcMain,BrowserWindow} from "electron"; 
 import * as process from "process";
 import * as uuid from "uuid/v4";
 import * as Path from "path";
@@ -42,6 +42,8 @@ export default class Editor
     private _willUpdateNextTick:boolean   = false;
     private _pendingUpdate:number = EditorPendingUpdate.None;
 
+    // Cache related
+    private _cacheWindow:BrowserWindow;
     ///////////
     //Get/Set
     get noteListMode(): number 
@@ -88,6 +90,11 @@ export default class Editor
         }
     }
 
+    public setCacheWindow(window:BrowserWindow):void
+    {
+        this._cacheWindow = window;
+    }
+
     ///////////
     //UpdateActions
     public updateAll():void
@@ -115,6 +122,12 @@ export default class Editor
         this.tryUpdateNextTick();
     }
 
+    public updateEditorCache():void
+    {
+        this._pendingUpdate |= EditorPendingUpdate.EditorCache;
+        this.tryUpdateNextTick();
+    }
+
     private tryUpdateNextTick():void
     {
         if(!this._willUpdateNextTick)
@@ -127,6 +140,12 @@ export default class Editor
     private onNextTick():void
     {
         Debug.log("Editor Updated");
+        
+        if((this._pendingUpdate & EditorPendingUpdate.EditorCache)!=0)
+        {
+            this.updateCache();
+        }
+
         if((this._pendingUpdate & EditorPendingUpdate.LeftPanel)!=0)
         {
             ipcMain.emit(Message.updateLeftPanel);
@@ -227,5 +246,19 @@ export default class Editor
             this.updateNoteView();
             this.updateNoteList();
         }
+
+        this.updateEditorCache();
+    }
+
+    public updateCache()
+    {
+        let data:any =
+        {
+            selectedNote:(this._selectedNote==null)?"":this._selectedNote.id,
+            selectedNotebook:(this._selectedNotebook==null)?"":this._selectedNotebook.id,
+            noteListMode:this._noteListMode
+        }
+
+        this._cacheWindow.webContents.send(Message.cacheUpdateEditorStatus,data);
     }
 }

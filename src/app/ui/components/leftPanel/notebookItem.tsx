@@ -30,7 +30,7 @@ export default class NotebookItem extends React.Component<any, any>
             return true;
         }
 
-        if(nextProps.notebook.isSelected != this.props.notebook.isSelected)
+        if(nextProps.isSelected != this.props.isSelected)
         {
             return true;
         }
@@ -67,7 +67,7 @@ export default class NotebookItem extends React.Component<any, any>
     {
         Debug.log("this.props.mode: " + this.props.mode);
 
-        let displayClass = (this.props.notebook.isSelected && this.props.mode == NoteListMode.Notebook)? "selected text-unselect": "text-unselect";
+        let displayClass = (this.props.isSelected && this.props.mode == NoteListMode.Notebook)? "selected text-unselect": "text-unselect";
 
         displayClass += " ui-sidebar-notebook-item";
         return (

@@ -149,6 +149,11 @@ export default class Note
         this._selected = false;
     }
 
+    public getFullPath():string
+    {
+        return Path.join(this.folderPath,this.id + ".json");
+    }
+    
     public GetDataObject():any
     {
         let dataObject = {
@@ -167,8 +172,4 @@ export default class Note
         return saveObject
     }
 
-    public  getFullPath():string
-    {
-        return Path.join(this.folderPath,this.id + ".json");
-    }
 }

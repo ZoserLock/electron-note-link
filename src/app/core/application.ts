@@ -70,7 +70,9 @@ export default class Application
     private onWindowCreated()
     {
         this._mainWindow.show();
+        
         // Initialize Data and cache
+        Editor.instance.setCacheWindow(this._mainWindow);
         DataManager.instance.setCacheWindow(this._mainWindow);
         DataManager.instance.checkStorageIntegrety();
 

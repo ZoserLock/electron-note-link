@@ -18,8 +18,9 @@ export enum NoteListMode
 
 export enum EditorPendingUpdate 
 {
-    None     = 0x0,
-    LeftPanel = 0x1,
-    NoteList = 0x2,
-    NoteView = 0x4,
+    None        = 0x0,
+    LeftPanel   = 0x1,
+    NoteList    = 0x2,
+    NoteView    = 0x4,
+    EditorCache = 0x8,
 }

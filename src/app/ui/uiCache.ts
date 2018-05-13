@@ -2,7 +2,7 @@
 import {ipcRenderer} from "electron"; 
 import Message from "../core/message";
 
-import {CacheAction} from "../../enums"
+import {CacheAction,NoteListMode} from "../../enums"
 import Debug from "../tools/debug";
 
 interface Dictionary 
@@ -36,6 +36,11 @@ export default class UICache
     private _notebooks: Dictionary = {};
     private _notes: Dictionary = {};
 
+    // Editor Status
+    private _selectedNote: string;
+    private _selectedNotebook: string;
+    private _noteListMode:number;
+
     get noteStorages(): any[]
     {
         return this._storageList;
@@ -51,11 +56,32 @@ export default class UICache
         return this._noteList;
     }
 
+
+    get selectedNote(): string
+    {
+        return this._selectedNote;
+    }
+    
+    get selectedNotebook(): string
+    {
+        return this._selectedNotebook;
+    }
+
+    get noteListMode(): number
+    {
+        return this._noteListMode;
+    }
+
     private constructor()
     {
         Debug.log("UICache Created")
         ipcRenderer.on(Message.cacheUpdate  ,(event:any,data:any) => this.updateCache(data));
         ipcRenderer.on(Message.cacheGenerate  ,(event:any,data:any) => this.generateCache(data));
+        ipcRenderer.on(Message.cacheUpdateEditorStatus  ,(event:any,data:any) => this.updateEditorStatus(data));
+
+        this._noteListMode = NoteListMode.Notebook;
+        this._selectedNote = "";
+        this._selectedNotebook = "";
     }
 
     // UI actions
@@ -270,6 +296,16 @@ export default class UICache
             note.title  = noteData.title;
             note.text   = noteData.text;
         }
+    }
+
+    public updateEditorStatus(data:any):void
+    {
+        let note:any     = this.getNote(data.selectedNote);
+        let notebook:any = this.getNote(data.selectedNotebook);
+
+        this._selectedNote     = (note!=null)?note.id:"";
+        this._selectedNotebook = (notebook!=null)?notebook.id:"";
+        this._noteListMode = data.noteListMode;
     }
 
     public updateCache(data:any):void

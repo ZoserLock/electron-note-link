@@ -27,8 +27,9 @@ export default class Message
 
 
     // Cache Related 
-    public static readonly cacheUpdate:string       = "action:cache:Update";
-    public static readonly cacheGenerate:string     = "action:cache:Generate";
+    public static readonly cacheUpdate:string               = "action:cache:Update";
+    public static readonly cacheGenerate:string             = "action:cache:Generate";
+    public static readonly cacheUpdateEditorStatus:string   = "action:cache:UpdateEditorStatus";
 
     // Windows Related
     public static readonly windowMinimize:string    = "action:window:Minimize";
