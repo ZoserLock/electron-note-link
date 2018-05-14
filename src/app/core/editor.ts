@@ -102,6 +102,7 @@ export default class Editor
         this.updateLeftPanel();
         this.updateNoteList();
         this.updateNoteView();
+        this.updateEditorCache();
     }
 
     public updateLeftPanel():void
@@ -164,6 +165,7 @@ export default class Editor
         this._willUpdateNextTick = false;
         this._pendingUpdate = EditorPendingUpdate.None;
     }
+
     ///////////
     //Actions
     public unselectNotebook():void
@@ -182,6 +184,8 @@ export default class Editor
             {
                 this.updateNoteView();
             }
+
+            this.updateEditorCache();
         }
     }
 
@@ -212,6 +216,7 @@ export default class Editor
         }
 
         this.setNoteListMode(NoteListMode.Notebook);
+        this.updateEditorCache();
     }
 
     public setNoteListMode(mode:number):void
@@ -220,7 +225,8 @@ export default class Editor
         {
             Debug.log("setNoteListMode: "+mode);
             this._noteListMode = mode;
-            
+
+            this.updateEditorCache();
             this.updateLeftPanel();
             this.updateNoteList();
         }

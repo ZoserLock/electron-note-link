@@ -6,6 +6,9 @@ import Note from "../../notes/note";
 // UI
 import NoteListHeader from "./noteList/noteListHeader"; 
 import NoteListContent from "./noteList/noteListContent"; 
+import { NoteListMode } from "../../../enums";
+import UICache from "../uiCache";
+import Debug from "../../tools/debug";
 
 export default class NoteList extends React.Component<any, any> 
 {
@@ -17,17 +20,15 @@ export default class NoteList extends React.Component<any, any>
 
         this.state =
         {
-            type:"Notebook",
             notes:[]
         }
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested();
 
     }
     public componentDidMount() 
     {
         ipcRenderer.addListener("update:NoteList",this._updateRequestedEvent);
-        ipcRenderer.send("update:NoteList");
     }
 
     public componentWillUnmount()
@@ -35,22 +36,27 @@ export default class NoteList extends React.Component<any, any>
         ipcRenderer.removeListener("update:NoteList",this._updateRequestedEvent);
     }
 
-    public updateRequested(event:any, data:any):void
+    public updateRequested():void
     {
-        if(data.update == undefined || !data.update)
-        {
-            this.setState({notes:data.notes,mode:data.mode});
-        }
-        else
-        {
-            let newNotes:any[] = this.state.notes;
+        let mode:number = UICache.instance.noteListMode;
+        let notes:any[] = [];
 
-            newNotes.push.apply(newNotes, data.notes);
-       
-            this.setState({notes:newNotes,mode:data.mode});
+        if(mode == NoteListMode.All)
+        {
+            notes = UICache.instance.notes;
         }
+        if(mode == NoteListMode.Notebook)
+        {
+            let notebook:any = UICache.instance.getSelectedNotebook();
+
+            if(notebook != null)
+            {
+                notes = notebook.notes;
+            }
+            Debug.log("Note count;: "+notes.length);
+        }
+        this.setState({notes:notes,mode:mode});
     }
-
 
     public render() 
     {

@@ -4,6 +4,7 @@ import Message from "../core/message";
 
 import {CacheAction,NoteListMode} from "../../enums"
 import Debug from "../tools/debug";
+import { debug } from "util";
 
 interface Dictionary 
 {
@@ -175,6 +176,12 @@ export default class UICache
         return null;
     }
 
+    public getSelectedNotebook():any
+    {
+        let notebook:any = this.getNotebook(this._selectedNotebook);
+
+        return notebook;
+    }
     // Cache related:
 
     public generateCache(data:any):void
@@ -219,7 +226,7 @@ export default class UICache
             notebook.notes = [];
             for(let noteId of notebook.noteIds)
             {
-                let note:any = this.getNotebook(noteId);
+                let note:any = this.getNote(noteId);
                 if(note!=null)
                 {
                     notebook.notes.push(note);
@@ -301,11 +308,13 @@ export default class UICache
     public updateEditorStatus(data:any):void
     {
         let note:any     = this.getNote(data.selectedNote);
-        let notebook:any = this.getNote(data.selectedNotebook);
+        let notebook:any = this.getNotebook(data.selectedNotebook);
 
         this._selectedNote     = (note!=null)?note.id:"";
         this._selectedNotebook = (notebook!=null)?notebook.id:"";
         this._noteListMode = data.noteListMode;
+
+
     }
 
     public updateCache(data:any):void

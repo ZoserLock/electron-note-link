@@ -111,7 +111,7 @@ body
 
 .ui-note-list-content
 {
-    overflow-y: auto;
+    flex: 1;
 }
 
 /*********************************/

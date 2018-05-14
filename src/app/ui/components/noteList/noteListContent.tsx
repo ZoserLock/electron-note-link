@@ -8,34 +8,49 @@ import Note from "../../../notes/note";
 
 // UI
 import NoteListItem from "./noteListItem";
+import { List, AutoSizer } from 'react-virtualized'
 
 export default class NoteListContent extends React.Component<any, any> 
 {
+    private _rowRenderer:any;
+   
     constructor(props: any)
     {
         super(props);
+
+         this._rowRenderer = ({index, isScrolling, key, style}:any)=>this.rowRenderer({index, isScrolling, key, style});
+
     }
 
     public render() 
     {
-        let notes = this.props.notes.map((note:any) =>
-        {
-            return  <NoteListItem key = {note.id} note = {note}/>
-        });
-
-        if(notes.length > 0)
-        {
-            return (
-                <div className="ui-note-list-content"> 
-                    <ul>
-                    {notes}
-                    </ul>
-                </div>
-            );    
-        }
-
         return (
             <div className="ui-note-list-content"> 
+                <AutoSizer>
+                {({ height, width }) => (
+                    <List 
+                        width={width}
+                        height={height}
+                        rowCount ={this.props.notes.length}
+                        rowHeight={30} 
+                        rowRenderer={this._rowRenderer}  />
+                    )}
+                </AutoSizer>
+            </div>
+        );    
+  
+    }
+
+    private rowRenderer({index, isScrolling, key, style}:any)
+    {
+        let note = this.props.notes[index];
+
+        return (
+            <div
+            key={key}
+            style={style}
+          >
+          sdasdasdsda
             </div>
         );
     }

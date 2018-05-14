@@ -729,9 +729,9 @@ export default class DataManager
             return  notebook.GetDataObject();
         });
 
-        let notes = this._notebookList.map((notebook:Notebook) =>
+        let notes = this._noteList.map((note:Note) =>
         {
-            return  notebook.GetDataObject();
+            return  note.GetDataObject();
         });
 
         let data:any =

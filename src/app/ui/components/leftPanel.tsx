@@ -52,7 +52,6 @@ export default class LeftPanel extends React.Component<any, any>
 
     private onAllNotesClick(): void 
     {
-        Debug.log("onAllNotesClick");
         let data =
         {
             mode:NoteListMode.All
@@ -83,15 +82,14 @@ export default class LeftPanel extends React.Component<any, any>
 
     public render() 
     {
-
-        Debug.log("Selected: "+this.state.mode);
+        let mode:number = UICache.instance.noteListMode;
 
         return (
             <div className="ui-sidebar">
                 <ul className="wtree">
-                <SpecialLeftItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {this.state.mode == NoteListMode.All}/>
-                <SpecialLeftItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {this.state.mode == NoteListMode.Started}/>
-                <SpecialLeftItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {this.state.mode == NoteListMode.Trash}/>
+                <SpecialLeftItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {mode == NoteListMode.All}/>
+                <SpecialLeftItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {mode == NoteListMode.Started}/>
+                <SpecialLeftItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {mode == NoteListMode.Trash}/>
                 </ul>
                 {this.state.storages}
             </div>

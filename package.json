@@ -16,6 +16,7 @@
     "@types/react": "^16.3.14",
     "@types/react-dom": "^16.0.5",
     "@types/react-onclickoutside": "^6.0.3",
+    "@types/react-virtualized": "^9.18.3",
     "@types/uuid": "^3.4.3",
     "async": "^2.6.0",
     "chai": "^4.1.2",
@@ -42,6 +43,7 @@
     "react-codemirror2": "^5.0.1",
     "react-dom": "^16.3.2",
     "react-onclickoutside": "^6.7.1",
+    "react-virtualized": "^9.18.5",
     "uuid": "^3.2.1"
   }
 }

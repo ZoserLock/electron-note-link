@@ -39,48 +39,11 @@ export default class NoteListController extends Controller
 
         if(editorMode == NoteListMode.Notebook)
         {
-            //Send Notebook Notes
-
-            let selectedNotebook = Editor.instance.selectedNotebook;
-
-            let notes:any[] = [];
-    
-            if(selectedNotebook != null)
-            {
-                for(let note of selectedNotebook.notes)
-                {
-                    notes.push(note.GetDataObject());
-                }
-            }
-
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:notes});
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode});
         }
         else if(editorMode == NoteListMode.All)
         {
-            // Send All Notes
-            let allNotebooks = DataManager.instance.notebooks;
-
-            let notes:Note[] = [];
-
-            for(let notebook of allNotebooks)
-            {
-                notes.push.apply(notes, notebook.notes);
-            }
-
-            let noteData:any[] = [];
-
-            for(let note of notes)
-            {
-                noteData.push(note.GetDataObject());
-            }
-
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode,update:false, notes:[]});
-
-            for(let a:number = 0;a<noteData.length;a+=100)
-            {
-                let array = noteData.slice(a, a+100);
-                this.sendUIMessage(Message.updateNoteList,{mode: editorMode,update:true, notes:array});
-            }
+            this.sendUIMessage(Message.updateNoteList,{mode: editorMode});
         }
         else if(editorMode == NoteListMode.Started)
         {

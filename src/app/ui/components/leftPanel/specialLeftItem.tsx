@@ -19,8 +19,6 @@ export default class SpecialLeftItem extends React.Component<any, any>
         let displayClass = (this.props.isSelected)? "selected text-unselect": "text-unselect";
         displayClass += " ui-sidebar-notebook-item";
 
-        Debug.log("Is Selected: "+this.props.name +" : "+this.props.isSelected);
-
         return (
             <li className={displayClass} >
                 <span onClick={()=>this.props.onClick()}>{this.props.name +" "+ this.props.isSelected}</span> 
