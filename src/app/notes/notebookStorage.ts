@@ -68,7 +68,7 @@ export default class NotebookStorage
     {
         let notebooks:any[] = this._notebooks.map((notebook:Notebook) =>
         {
-            return notebook.id;
+            return notebook.GetDataObject();
         });
 
         let dataObject = {
@@ -79,7 +79,6 @@ export default class NotebookStorage
 
         return dataObject
     }
-
 
     public addNotebook(notebook:Notebook):void
     {

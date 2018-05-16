@@ -65,16 +65,20 @@ export default class Application
 
         this.createTrayIcon();
         this.createMainWindow(); 
+
+        Debug.log("Init");
+        this._mainWindow.webContents.toggleDevTools();
     }
 
     private onWindowCreated()
     {
         this._mainWindow.show();
+
+        Debug.log("onWindowCreated");
         
         // Initialize Data and cache
-        Editor.instance.setCacheWindow(this._mainWindow);
-        DataManager.instance.setCacheWindow(this._mainWindow);
         DataManager.instance.checkStorageIntegrety();
+        Editor.instance.initializeEditorStatus();
 
         // Initialize Active Presenters
         this._leftPanelController = new LeftPanelController(this._mainWindow);

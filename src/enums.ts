@@ -1,10 +1,14 @@
 
 export enum CacheAction 
 {
-    None            = 1,
-    UpdateStorage   = 2,
-    UpdateNotebook  = 3,
-    UpdateNote      = 4,
+    None            = 0,
+    AddStorage,
+    UpdateStorage,
+    RemoveStorage,
+    UpdateNotebook,  
+    RemoveNotebook, 
+    UpdateNote,     
+    RemoveNote,      
 }
 
 export enum NoteListMode 
@@ -22,5 +26,4 @@ export enum EditorPendingUpdate
     LeftPanel   = 0x1,
     NoteList    = 0x2,
     NoteView    = 0x4,
-    EditorCache = 0x8,
 }

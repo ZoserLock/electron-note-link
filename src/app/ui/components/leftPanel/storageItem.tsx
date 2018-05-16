@@ -10,7 +10,7 @@ import Message from "../../../core/message";
 
 // UI
 import NotebookItem from "./notebookItem";
-import UICache from "../../uiCache";
+import { NoteListMode } from "../../../../enums";
 
 export default class StorageItem extends React.Component<any, any> 
 {
@@ -43,12 +43,12 @@ export default class StorageItem extends React.Component<any, any>
 
     public render() 
     {
-        let selectedNoteobook:string = UICache.instance.selectedNotebook;
-        let mode:number = UICache.instance.noteListMode;
-
+        
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
-            return  <NotebookItem key = {notebook.id} notebook={notebook} mode = {mode} isSelected={selectedNoteobook==notebook.id} />
+            let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.mode == NoteListMode.Notebook;
+
+            return  <NotebookItem key = {notebook.id} notebook={notebook} isSelected={selected} />
         });
 
         let notebooks;

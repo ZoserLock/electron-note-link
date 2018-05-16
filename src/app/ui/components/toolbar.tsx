@@ -23,12 +23,18 @@ export default class Toolbar extends React.Component<any, any>
         ipcRenderer.send("action:NewNotebookStorage");
     }
 
+    private doTest():void
+    {
+        ipcRenderer.send("action:DoTest");
+    }
+
     public render() 
     {
         return (
             <header className="ui-toolbar">
                 <ToolbarItem name="New Note" onClick={()=>this.createNewNote()}/>
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
+                <ToolbarItem name="Test" onClick={()=>this.doTest()}/>
                 <SearchBar/>
             </header>
         );

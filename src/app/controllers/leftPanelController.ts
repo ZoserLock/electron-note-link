@@ -36,6 +36,8 @@ export default class LeftPanelController extends Controller
         ipcMain.on(Message.selectNotebook,(event:any,data:any)=>this.actionSelectNotebook(data));
         ipcMain.on(Message.setNoteListMode, (event:any,data:any) =>{this.actionSetNoteListMode(data);});
 
+        ipcMain.on("action:DoTest", (event:any,data:any) =>{this.actionDoTest(data);});
+
     }
 
     // Updates
@@ -44,23 +46,22 @@ export default class LeftPanelController extends Controller
         this._updates++;
         Debug.log("updateLeftPanel "+this._updates);
 
-        let storages:any[] = [];
+        let storages:NotebookStorage[] = DataManager.instance.noteStorages;
 
-        for(let storage of DataManager.instance.noteStorages)
+        let storagesData:any[] = storages.map((storage:NotebookStorage) =>
         {
-            storages.push(storage.GetDataObject());
-        }
-        
-        let selectedNotebook = Editor.instance.selectedNotebook;
+            return storage.GetDataObject();
+        });
 
-        let selectedNotebookId:String = "";
- 
-        if(selectedNotebook != null)
+        let editorData:any = Editor.instance.getEditorStatusData();
+
+        let sendData =
         {
-            selectedNotebookId = selectedNotebook.id;
+            storages: storagesData,
+            editorStatus: editorData
         }
 
-        this.sendUIMessage(Message.updateLeftPanel,{mode:Editor.instance.noteListMode, storages:storages, selectedNotebookId:selectedNotebookId});
+        this.sendUIMessage(Message.updateLeftPanel,sendData);
     }
 
     ///////////////////////////
@@ -209,6 +210,39 @@ export default class LeftPanelController extends Controller
         {
             Debug.logError("actionRemoveStorage: Storage does not exist.");
         }
+    }
+
+    private actionDoTest(data:any):void
+    {
+        Debug.log("Doing Test");
+
+        let notes:Note[] =  DataManager.instance.notes;
+
+        let sendNotes:any[] = [];
+
+        for(let note of notes)
+        {
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+            sendNotes.push(note.GetDataObject());
+        }
+
+        Debug.log("Sending: ");
+
+        let sendData:any = 
+        {
+            notes:sendNotes
+        }
+
+        
+        this.sendUIMessage("Test",sendData);
     }
 
     private actionSetNoteListMode(data:any):void

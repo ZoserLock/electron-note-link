@@ -7,7 +7,6 @@ import Note from "../../notes/note";
 import NoteListHeader from "./noteList/noteListHeader"; 
 import NoteListContent from "./noteList/noteListContent"; 
 import { NoteListMode } from "../../../enums";
-import UICache from "../uiCache";
 import Debug from "../../tools/debug";
 
 export default class NoteList extends React.Component<any, any> 
@@ -38,7 +37,7 @@ export default class NoteList extends React.Component<any, any>
 
     public updateRequested():void
     {
-        let mode:number = UICache.instance.noteListMode;
+      /*  let mode:number = UICache.instance.noteListMode;
         let notes:any[] = [];
 
         if(mode == NoteListMode.All)
@@ -55,7 +54,7 @@ export default class NoteList extends React.Component<any, any>
             }
             Debug.log("Note count;: "+notes.length);
         }
-        this.setState({notes:notes,mode:mode});
+        this.setState({notes:notes,mode:mode});*/
     }
 
     public render() 

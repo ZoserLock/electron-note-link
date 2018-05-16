@@ -1,5 +1,5 @@
 
-import {ipcMain,BrowserWindow} from "electron"; 
+import {ipcMain} from "electron"; 
 import * as process from "process";
 import * as uuid from "uuid/v4";
 import * as Path from "path";
@@ -42,8 +42,6 @@ export default class Editor
     private _willUpdateNextTick:boolean   = false;
     private _pendingUpdate:number = EditorPendingUpdate.None;
 
-    // Cache related
-    private _cacheWindow:BrowserWindow;
     ///////////
     //Get/Set
     get noteListMode(): number 
@@ -64,10 +62,10 @@ export default class Editor
     // Member Functions
     private constructor()
     {
-        this.intializeContextVariables();
+        
     }
 
-    private intializeContextVariables():void
+    public initializeEditorStatus():void
     {
         this._noteListMode = NoteListMode.Notebook; 
 
@@ -90,11 +88,6 @@ export default class Editor
         }
     }
 
-    public setCacheWindow(window:BrowserWindow):void
-    {
-        this._cacheWindow = window;
-    }
-
     ///////////
     //UpdateActions
     public updateAll():void
@@ -102,7 +95,6 @@ export default class Editor
         this.updateLeftPanel();
         this.updateNoteList();
         this.updateNoteView();
-        this.updateEditorCache();
     }
 
     public updateLeftPanel():void
@@ -123,12 +115,6 @@ export default class Editor
         this.tryUpdateNextTick();
     }
 
-    public updateEditorCache():void
-    {
-        this._pendingUpdate |= EditorPendingUpdate.EditorCache;
-        this.tryUpdateNextTick();
-    }
-
     private tryUpdateNextTick():void
     {
         if(!this._willUpdateNextTick)
@@ -142,11 +128,6 @@ export default class Editor
     {
         Debug.log("Editor Updated");
         
-        if((this._pendingUpdate & EditorPendingUpdate.EditorCache)!=0)
-        {
-            this.updateCache();
-        }
-
         if((this._pendingUpdate & EditorPendingUpdate.LeftPanel)!=0)
         {
             ipcMain.emit(Message.updateLeftPanel);
@@ -184,8 +165,6 @@ export default class Editor
             {
                 this.updateNoteView();
             }
-
-            this.updateEditorCache();
         }
     }
 
@@ -216,7 +195,6 @@ export default class Editor
         }
 
         this.setNoteListMode(NoteListMode.Notebook);
-        this.updateEditorCache();
     }
 
     public setNoteListMode(mode:number):void
@@ -226,7 +204,6 @@ export default class Editor
             Debug.log("setNoteListMode: "+mode);
             this._noteListMode = mode;
 
-            this.updateEditorCache();
             this.updateLeftPanel();
             this.updateNoteList();
         }
@@ -252,19 +229,16 @@ export default class Editor
             this.updateNoteView();
             this.updateNoteList();
         }
-
-        this.updateEditorCache();
     }
 
-    public updateCache()
+    public getEditorStatusData():any
     {
         let data:any =
         {
-            selectedNote:(this._selectedNote==null)?"":this._selectedNote.id,
-            selectedNotebook:(this._selectedNotebook==null)?"":this._selectedNotebook.id,
-            noteListMode:this._noteListMode
+            selectedNote:(this._selectedNote!=null)?this._selectedNote.id:"",
+            selectedNotebook:(this._selectedNotebook!=null)?this._selectedNotebook.id:"",
+            mode:this._noteListMode
         }
-
-        this._cacheWindow.webContents.send(Message.cacheUpdateEditorStatus,data);
+        return data;
     }
 }

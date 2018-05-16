@@ -11,8 +11,6 @@ import SpecialLeftItem from "../components/leftPanel/specialLeftItem";
 import Message from "../../core/message";
 
 import { NoteListMode } from "../../../enums";
-import UICache from "../uiCache";
-
 
 export default class LeftPanel extends React.Component<any, any> 
 {
@@ -24,10 +22,16 @@ export default class LeftPanel extends React.Component<any, any>
 
         this.state =
         {
-            storages:null
+            storages:[],
+            editorStatus:
+            {
+                mode:NoteListMode.Notebook,
+                selectedNotebook:"",
+                selectedNote:""
+            }
         }  
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested();
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
     }
  
     public componentDidMount() 
@@ -40,14 +44,14 @@ export default class LeftPanel extends React.Component<any, any>
         ipcRenderer.removeListener(Message.updateLeftPanel,this._updateRequestedEvent);
     }
 
-    public updateRequested():void
+    public updateRequested(data:any):void
     {
-        let storages =  UICache.instance.noteStorages.map((storage:any) =>
+        let storages = data.storages.map((storage:any) =>
         {
-            return  <StorageItem key = {storage.id} storage = {storage}/>
+            return  <StorageItem key = {storage.id} storage = {storage} editorStatus = {data.editorStatus}/>
         });
 
-        this.setState({storages:storages});
+        this.setState({storages:storages,editorStatus:data.editorStatus});
     }
 
     private onAllNotesClick(): void 
@@ -82,7 +86,8 @@ export default class LeftPanel extends React.Component<any, any>
 
     public render() 
     {
-        let mode:number = UICache.instance.noteListMode;
+
+        let mode:number = this.state.editorStatus.mode;
 
         return (
             <div className="ui-sidebar">

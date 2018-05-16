@@ -11,6 +11,7 @@ import NotebookStorage from "../notes/notebookStorage";
 import Notebook from "../notes/notebook";
 import Note from "../notes/note";
 import Message from "./message";
+import { CacheAction } from "../../enums";
 
 
 
@@ -257,8 +258,6 @@ export default class DataManager
 
         this.saveApplicationData();
 
-        this.generateCache();
-
        /* for(var a = 0;a < this._storageList.length; ++a)
         {
             for(var b = 0;b< this._storageList[a].notebooks.length; ++b)
@@ -366,7 +365,7 @@ export default class DataManager
 
     /////////////////////
     // Storage  Functions
-    public addStorage(storage:NotebookStorage, saveApplicationData:boolean = true):boolean
+    public addStorage(storage:NotebookStorage):boolean
     {
         if(this._storages[storage.id] == undefined)
         {
@@ -387,10 +386,7 @@ export default class DataManager
                 }
             }
 
-            if(saveApplicationData)
-            {
-                this.saveApplicationData();
-            }
+            this.saveApplicationData();
         }
         else
         {
@@ -511,7 +507,7 @@ export default class DataManager
     }
 
     ///////////////////////
-    // Notebook Functions
+
     public addNotebook(notebook:Notebook):boolean
     {
         if(this._notebooks[notebook.id] == undefined)
@@ -708,46 +704,4 @@ export default class DataManager
         }
         return false;
     }
-
-    /////////////////////////
-    // Update Cache
-
-    public setCacheWindow(window:BrowserWindow):void
-    {
-        this._cacheWindow = window;
-    }
-
-    public generateCache()
-    {
-        let storages = this._storageList.map((storage:NotebookStorage) =>
-        {
-            return  storage.GetDataObject();
-        });
-        
-        let notebooks = this._notebookList.map((notebook:Notebook) =>
-        {
-            return  notebook.GetDataObject();
-        });
-
-        let notes = this._noteList.map((note:Note) =>
-        {
-            return  note.GetDataObject();
-        });
-
-        let data:any =
-        {
-            storages:storages,
-            notebooks:notebooks,
-            notes:notes
-        }
-
-        Debug.log("Generating Cache");
-        this._cacheWindow.webContents.send(Message.cacheGenerate,data); 
-    }
-
-    public updateStorageCache(storage:NotebookStorage)
-    {
-    //    let:data:any=storage.GetDataObject();
-    }
-
 }

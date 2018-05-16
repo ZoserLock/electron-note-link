@@ -35,25 +35,7 @@ export default class NoteListController extends Controller
 
     public updateNoteList():void
     {
-        let editorMode = Editor.instance.noteListMode;
-
-        if(editorMode == NoteListMode.Notebook)
-        {
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode});
-        }
-        else if(editorMode == NoteListMode.All)
-        {
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode});
-        }
-        else if(editorMode == NoteListMode.Started)
-        {
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:[]});
-        }  
-        else if(editorMode == NoteListMode.Trash)
-        {
-            this.sendUIMessage(Message.updateNoteList,{mode: editorMode, notes:[]});
-        }
-
+        this.sendUIMessage(Message.updateNoteList);
     }
 
     private actionSearchUpdated(data:any):void
