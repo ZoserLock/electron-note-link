@@ -19,10 +19,12 @@ export default class NoteList extends React.Component<any, any>
 
         this.state =
         {
-            notes:[]
+            notes:[],
+            mode: NoteListMode.Notebook,
+            selectedNote:""
         }
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested();
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
 
     }
     public componentDidMount() 
@@ -35,26 +37,9 @@ export default class NoteList extends React.Component<any, any>
         ipcRenderer.removeListener("update:NoteList",this._updateRequestedEvent);
     }
 
-    public updateRequested():void
+    public updateRequested(data:any):void
     {
-      /*  let mode:number = UICache.instance.noteListMode;
-        let notes:any[] = [];
-
-        if(mode == NoteListMode.All)
-        {
-            notes = UICache.instance.notes;
-        }
-        if(mode == NoteListMode.Notebook)
-        {
-            let notebook:any = UICache.instance.getSelectedNotebook();
-
-            if(notebook != null)
-            {
-                notes = notebook.notes;
-            }
-            Debug.log("Note count;: "+notes.length);
-        }
-        this.setState({notes:notes,mode:mode});*/
+        this.setState({notes:data.notes,mode:data.mode,selectedNote:data.selectedNote});
     }
 
     public render() 
@@ -62,7 +47,7 @@ export default class NoteList extends React.Component<any, any>
         return (
             <div className="ui-note-list">
                 <NoteListHeader mode   = {this.state.mode}/>
-                <NoteListContent notes = {this.state.notes}/>
+                <NoteListContent notes = {this.state.notes} selectedNote={this.state.selectedNote}/>
             </div>
         );
     }

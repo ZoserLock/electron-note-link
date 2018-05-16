@@ -58,6 +58,11 @@ export default class Note
     {
         return this._dirty;
     }
+    
+    get isTrashed(): boolean
+    {
+        return this._trash;
+    }
 
     get parent():Notebook
     {

@@ -18,7 +18,7 @@ export default class NoteListContent extends React.Component<any, any>
     {
         super(props);
 
-         this._rowRenderer = ({index, isScrolling, key, style}:any)=>this.rowRenderer({index, isScrolling, key, style});
+        this._rowRenderer = ({index, isScrolling, key, style}:any)=>this.rowRenderer({index, isScrolling, key, style});
 
     }
 
@@ -29,11 +29,14 @@ export default class NoteListContent extends React.Component<any, any>
                 <AutoSizer>
                 {({ height, width }) => (
                     <List 
+                       
                         width={width}
                         height={height}
                         rowCount ={this.props.notes.length}
                         rowHeight={30} 
-                        rowRenderer={this._rowRenderer}  />
+                        rowRenderer={this._rowRenderer}  
+                        selectedNote= {this.props.selectedNote}
+                        />
                     )}
                 </AutoSizer>
             </div>
@@ -46,11 +49,8 @@ export default class NoteListContent extends React.Component<any, any>
         let note = this.props.notes[index];
 
         return (
-            <div
-            key={key}
-            style={style}
-          >
-          sdasdasdsda
+            <div key = {key} style = {style}>
+                <NoteListItem note = {note} isSelected={this.props.selectedNote == note.id}/>
             </div>
         );
     }

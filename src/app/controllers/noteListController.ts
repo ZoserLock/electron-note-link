@@ -35,7 +35,45 @@ export default class NoteListController extends Controller
 
     public updateNoteList():void
     {
-        this.sendUIMessage(Message.updateNoteList);
+        let mode:number = Editor.instance.noteListMode;
+
+        let selectedNote:string = "";
+
+        if(Editor.instance.selectedNote != null)
+        {
+            selectedNote = Editor.instance.selectedNote.id;
+        }
+      
+        let notes:Note[] = [];
+
+        // HERE WE CAN IMPLEMENT A GENERIC FILTER.
+
+        if(mode == NoteListMode.All)
+        {
+            notes = DataManager.instance.notes.filter((note:Note)=>
+            {
+                return (!note.isTrashed);
+            });
+        }
+        if(mode == NoteListMode.Notebook)
+        {
+            notes = Editor.instance.selectedNotebook.notes;
+        }
+
+        let noteData:any[] = notes.map((note:Note)=>
+        {
+            return note.GetDataObject();
+        });
+
+        let data =
+        {
+            notes:noteData,
+            mode:mode,
+            selectedNote:selectedNote
+        }
+
+        Debug.log("Selected Note: "+data.selectedNote);
+        this.sendUIMessage(Message.updateNoteList, data);
     }
 
     private actionSearchUpdated(data:any):void

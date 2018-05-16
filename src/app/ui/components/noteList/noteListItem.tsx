@@ -27,10 +27,12 @@ export default class NoteListItem extends React.Component<any, any>
     public render() 
     {
         let displayClass = "ui-note-list-item";
+
+        let seletected:boolean = this.props.isSelected;
         
         return (
             <li className={displayClass} onClick={()=>this.onItemClick()}>
-                <span>{this.props.note.title}</span> 
+                <span>{this.props.note.title+" "+seletected}</span> 
             </li>
         );
     }
