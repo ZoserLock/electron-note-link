@@ -37,6 +37,8 @@ export default class Editor
 
     private _selectedNote:Note;
 
+    // Search Data
+    private _searchPhrase = "";
 
     // Update Status
     private _willUpdateNextTick:boolean   = false;
@@ -57,6 +59,11 @@ export default class Editor
     get selectedNote(): Note 
     {
         return this._selectedNote;
+    }
+
+    get searchPhrase(): string 
+    {
+        return this._searchPhrase;
     }
 
     // Member Functions
@@ -88,6 +95,26 @@ export default class Editor
         }
     }
 
+    // Search
+
+    public beginSearch(search:string):void
+    {
+        this._searchPhrase = search;
+
+        this.setNoteListMode(NoteListMode.Search);
+    }
+
+    public updateSearch(search:string):void
+    {
+        this._searchPhrase = search;
+        this.updateNoteList();
+    }
+
+    public cancelSearch(search:string):void
+    {
+        this._searchPhrase = "";
+        this.setNoteListMode(NoteListMode.Notebook);
+    }
     ///////////
     //UpdateActions
     public updateAll():void
@@ -206,6 +233,18 @@ export default class Editor
 
             this.updateLeftPanel();
             this.updateNoteList();
+        }
+    }
+
+    public unselectNote():void
+    {
+        if( this._selectedNote!=null)
+        {
+            this._selectedNote.SetAsUnselected();
+            this._selectedNote = null;
+
+            this.updateNoteList();
+            this.updateNoteView();
         }
     }
 

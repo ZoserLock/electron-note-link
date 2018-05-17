@@ -24,6 +24,16 @@ export default class NoteListItem extends React.Component<any, any>
         ipcRenderer.send(Message.selectNote,data);
     }
 
+    private onItemDelete()
+    {
+        let data =
+        {
+            noteId:this.props.note.id
+        }
+
+        ipcRenderer.send(Message.removeNote,data);
+    }
+
     public render() 
     {
         let displayClass = "ui-note-list-item";
@@ -32,6 +42,9 @@ export default class NoteListItem extends React.Component<any, any>
         
         return (
             <li className={displayClass} onClick={()=>this.onItemClick()}>
+              <button onClick={()=>this.onItemDelete()}>
+                
+              </button>
                 <span>{this.props.note.title+" "+seletected}</span> 
             </li>
         );

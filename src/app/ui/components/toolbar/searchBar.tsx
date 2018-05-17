@@ -13,7 +13,7 @@ export default class SearchBar extends React.Component<any, any>
         super(props);
         this.state =
         {
-            value:"asds"
+            value:""
         }  
     }
     

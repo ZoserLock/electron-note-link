@@ -71,7 +71,7 @@ export default class StorageItem extends React.Component<any, any>
                     <button onClick={()=>this.onAddButtonClick()}>+</button>
                     <button onClick={()=>this.onUnlinkButtonClick()}>-</button>
                 </div>
-                {notebooks}
+                {notebooks}    
             </div>
 
         );

@@ -58,12 +58,17 @@ export default class Note
     {
         return this._dirty;
     }
-    
+
     get isTrashed(): boolean
     {
         return this._trash;
     }
 
+    get isStarted(): boolean
+    {
+        return this._started;
+    }
+    
     get parent():Notebook
     {
         return this._notebook;
@@ -97,6 +102,8 @@ export default class Note
         note._title = data.title;
         note._text = data.text;
         note._folderPath = path;
+        note._trash   = data.trashed;
+        note._started = data.started;
         note._loaded=true;
         return note;
     }
@@ -114,10 +121,12 @@ export default class Note
 
     public setData(data:any):void
     {
-        this._id     = data.id;
-        this._title  = data.title;
-        this._text   = data.text;
-        this._loaded = true;
+        this._id      = data.id;
+        this._title   = data.title;
+        this._text    = data.text;
+        this._trash   = data.trashed;
+        this._started = data.started;
+        this._loaded  = true;
     }
 
     public setParent(notebook:Notebook):void
@@ -164,7 +173,9 @@ export default class Note
         let dataObject = {
             id:this._id, 
             title:this._title, 
-            text:this._text
+            text:this._text,
+            trashed:this._trash,
+            started:this._started
         };
 
         return dataObject
@@ -172,7 +183,13 @@ export default class Note
 
     public getSaveObject():any
     {
-        let saveObject = {id:this._id, title:this._title, text:this._text};
+        let saveObject = {
+            id:this._id, 
+            title:this._title,
+            text:this._text,
+            trashed:this._trash,
+            started:this._started
+        };
 
         return saveObject
     }

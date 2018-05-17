@@ -4,13 +4,13 @@ import {ipcRenderer} from "electron";
 import applyOnClickOutside from 'react-onclickoutside'
 
 // Local
-import Note from "../../notes/note";
-import Debug from "../../tools/debug";
+import Note from "../../../notes/note";
+import Debug from "../../../tools/debug";
 
 // UI
-import NoteViewHeader from "./noteView/noteViewHeader"; 
-import NoteViewContent from "./noteView/noteViewContent";
-import NoteViewContentEditor from "./noteView/noteViewContentEditor";
+import NoteViewHeader from "./noteViewHeader"; 
+import NoteViewContent from "./noteViewContent";
+import NoteViewContentEditor from "./noteViewContentEditor";
 
 interface NoteViewData
 {

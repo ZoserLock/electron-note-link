@@ -3,14 +3,14 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
 // Main
-import Debug from "../../tools/debug";
+import Debug from "../../../tools/debug";
 
 // UI
-import StorageItem from "../components/leftPanel/storageItem";
-import SpecialLeftItem from "../components/leftPanel/specialLeftItem";
-import Message from "../../core/message";
+import StorageItem from "./storageItem";
+import SpecialLeftItem from "./specialLeftItem";
+import Message from "../../../core/message";
 
-import { NoteListMode } from "../../../enums";
+import { NoteListMode } from "../../../../enums";
 
 export default class LeftPanel extends React.Component<any, any> 
 {
@@ -84,6 +84,16 @@ export default class LeftPanel extends React.Component<any, any>
         ipcRenderer.send(Message.setNoteListMode,data);
     }
 
+    private onSearchClick(): void 
+    {
+        let data =
+        {
+            mode:NoteListMode.Search
+        }
+
+        ipcRenderer.send(Message.setNoteListMode,data);
+    }
+
     public render() 
     {
 
@@ -95,6 +105,7 @@ export default class LeftPanel extends React.Component<any, any>
                 <SpecialLeftItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {mode == NoteListMode.All}/>
                 <SpecialLeftItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {mode == NoteListMode.Started}/>
                 <SpecialLeftItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {mode == NoteListMode.Trash}/>
+                <SpecialLeftItem onClick={()=>this.onSearchClick()} name="Search" isSelected = {mode == NoteListMode.Search}/>
                 </ul>
                 {this.state.storages}
             </div>

@@ -2,7 +2,7 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
 // UI
-import ToolbarItem from "./toolbarItem"; 
+import ToolbarItem from "./toolbar/toolbarItem"; 
 import Message from "../../core/message";
 
 export default class WindowBar extends React.Component<any, any> 

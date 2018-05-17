@@ -2,11 +2,11 @@ import * as React from "react";
 
 import Debug from "../../tools/debug"
 
-import LeftPanel from "./leftPanel";
-import NoteList from "./noteList";
-import NoteView from "./noteView";
+import LeftPanel from "./leftPanel/leftPanel";
+import NoteList from "./noteList/noteList";
+import NoteView from "./noteView/noteView";
 import StatusBar from "./statusBar";
-import Toolbar from "./toolbar";
+import Toolbar from "./toolbar/toolbar";
 import WindowBar from "./windowBar";
 
 export default class ApplicationWindow extends React.Component<any, any> 

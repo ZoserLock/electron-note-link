@@ -15,6 +15,8 @@ import Note from "../notes/note";
 
 import Controller from "./controller";
 import Debug from "../tools/debug";
+import * as Fuse from "fuse.js";
+
 
 import {NoteListMode} from "../../enums"
 
@@ -28,8 +30,7 @@ export default class NoteListController extends Controller
         ipcMain.on(Message.searchUpdated  ,(event:any,data:any) => this.actionSearchUpdated(data));
 
         ipcMain.on(Message.selectNote, (event:any,data:any) =>{this.actionSelectNote(data);});
-
-
+        ipcMain.on(Message.removeNote, (event:any,data:any) =>{this.actionRemoveNote(data);});
 
     }
 
@@ -46,30 +47,87 @@ export default class NoteListController extends Controller
       
         let notes:Note[] = [];
 
-        // HERE WE CAN IMPLEMENT A GENERIC FILTER.
+        let searchData:string="";
 
-        if(mode == NoteListMode.All)
+        // HERE WE CAN IMPLEMENT A GENERIC FILTER.
+        // Like current filter.filter(notes)
+        let noteData:any[]=[];
+
+        if(mode == NoteListMode.Search)
+        {
+            var options = 
+            {
+                keys: ['title'],
+                threshold: 0.4,
+                minMatchCharLength: 3,
+            }
+
+            //Cache this list.
+            notes = DataManager.instance.notes.filter((note:Note)=>
+            {
+                return (!note.isTrashed);
+            });
+
+            noteData = notes.map((note:Note)=>
+            {
+                return note.GetDataObject();
+            });
+
+            var fuse = new Fuse(noteData, options);
+
+            noteData = fuse.search(Editor.instance.searchPhrase);
+        }
+        else if(mode == NoteListMode.All)
         {
             notes = DataManager.instance.notes.filter((note:Note)=>
             {
                 return (!note.isTrashed);
             });
+            noteData = notes.map((note:Note)=>
+            {
+                return note.GetDataObject();
+            });
         }
-        if(mode == NoteListMode.Notebook)
+        else if(mode == NoteListMode.Trash)
         {
-            notes = Editor.instance.selectedNotebook.notes;
+            notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
+            {
+                return note.isTrashed;
+            });
+            noteData = notes.map((note:Note)=>
+            {
+                return note.GetDataObject();
+            });
         }
-
-        let noteData:any[] = notes.map((note:Note)=>
+        else if(mode == NoteListMode.Notebook)
         {
-            return note.GetDataObject();
-        });
+            notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
+            {
+                return (!note.isTrashed);
+            });
+            noteData = notes.map((note:Note)=>
+            {
+                return note.GetDataObject();
+            });
+        }
+        else if(mode == NoteListMode.Started)
+        {
+            notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
+            {
+                return note.isStarted;
+            });
+            noteData = notes.map((note:Note)=>
+            {
+                return note.GetDataObject();
+            });
+        }
 
         let data =
         {
             notes:noteData,
             mode:mode,
-            selectedNote:selectedNote
+            selectedNote:selectedNote,
+            search:searchData
         }
 
         Debug.log("Selected Note: "+data.selectedNote);
@@ -78,7 +136,26 @@ export default class NoteListController extends Controller
 
     private actionSearchUpdated(data:any):void
     {
-        Debug.log("Search Updated");
+        let mode:number = Editor.instance.noteListMode;
+
+        if(mode == NoteListMode.Search)
+        {
+            if(data == "")
+            {
+                Editor.instance.cancelSearch(data);
+            }
+            else
+            {
+                Editor.instance.updateSearch(data);
+            }
+        }
+        else
+        {
+            if(data != "")
+            {
+                Editor.instance.beginSearch(data);
+            }
+        }
     }
 
     private actionNewNote():void
@@ -96,6 +173,32 @@ export default class NoteListController extends Controller
                 Editor.instance.selectNote(note.id);
                 this.updateNoteList();
             }
+        }
+    }
+
+    private actionRemoveNote(data:any):void
+    {
+        let note:Note = DataManager.instance.getNote(data.noteId);
+
+        if(note!=null)
+        {
+            if(Editor.instance.selectedNote == note)
+            {
+                Editor.instance.unselectNotebook();
+            }
+
+            if(note.isTrashed)
+            {
+                DataManager.instance.deleteNote(note);
+            }
+            else
+            {
+                note.setTrashed(true);
+                DataManager.instance.saveNote(note);
+            }
+            
+            Editor.instance.updateNoteList();
+            Editor.instance.updateNoteView();
         }
     }
 

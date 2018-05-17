@@ -22,6 +22,7 @@ export default class NoteListContent extends React.Component<any, any>
 
     }
 
+
     public render() 
     {
         return (

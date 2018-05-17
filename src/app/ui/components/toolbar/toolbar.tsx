@@ -3,7 +3,7 @@ import {ipcRenderer} from "electron";
 
 // UI
 import ToolbarItem from "./toolbarItem"; 
-import SearchBar from "./toolbar/searchBar"; 
+import SearchBar from "./searchBar"; 
 
 export default class Toolbar extends React.Component<any, any> 
 {
