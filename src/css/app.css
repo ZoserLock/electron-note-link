@@ -203,6 +203,13 @@ body
     user-select: none;
 }
 
+.text-area-fill
+{
+    width:100%;
+    height:100%; 
+    box-sizing: border-box; 
+}
+
 /*Code Mirror*/
 .CodeMirror 
 {

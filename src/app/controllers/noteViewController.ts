@@ -23,10 +23,7 @@ export default class NoteViewController extends Controller
 
         ipcMain.on(Message.updateNoteView ,()=>this.updateNoteView());
 
-        ipcMain.on(Message.updateNote,(event:any,data:any) =>
-        {
-            this.updateNote(data.id,data.text);
-        });
+        ipcMain.on(Message.updateNote,(event:any,data:any) =>{this.updateNote(data);});
 
     }
 
@@ -37,18 +34,34 @@ export default class NoteViewController extends Controller
     //    this.sendUIMessage(Message.updateNoteView,{note:selectedNote.GetDataObject()});
     }
 
-    public updateNote(id:string, text:string):void
+    public updateNote(data:any):void
     {
-        let selectedNote = Editor.instance.selectedNote;
+        if(!data["id"])
+        {
+            return;
+        }
 
-        let note:Note = DataManager.instance.getNote(id);
+       
+
+        let note:Note = DataManager.instance.getNote(data.id);
 
         if(note != null)
         {
-            note.text = text;
+            if(data["text"])
+            {
+                note.text = data.text;
+            }
+
+            if(data["title"])
+            {
+                note.title = data.title;
+            }
+
             DataManager.instance.saveNote(note);
 
-            if(note == selectedNote)
+            Editor.instance.updateNoteList();
+
+            if(note == Editor.instance.selectedNote)
             {
                 Editor.instance.updateNoteView();
             }

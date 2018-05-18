@@ -66,30 +66,21 @@ export default class LeftPanel extends React.Component<any, any>
 
     private onStartedClick(): void 
     {
-        let data =
-        {
-            mode:NoteListMode.Started
-        }
+        let data = {mode:NoteListMode.Started}
 
         ipcRenderer.send(Message.setNoteListMode,data);
     }
 
     private onTrashClick(): void 
     {
-        let data =
-        {
-            mode:NoteListMode.Trash
-        }
+        let data = {mode:NoteListMode.Trash}
 
         ipcRenderer.send(Message.setNoteListMode,data);
     }
 
     private onSearchClick(): void 
     {
-        let data =
-        {
-            mode:NoteListMode.Search
-        }
+        let data = {mode:NoteListMode.Search};
 
         ipcRenderer.send(Message.setNoteListMode,data);
     }
@@ -105,7 +96,6 @@ export default class LeftPanel extends React.Component<any, any>
                 <SpecialLeftItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {mode == NoteListMode.All}/>
                 <SpecialLeftItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {mode == NoteListMode.Started}/>
                 <SpecialLeftItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {mode == NoteListMode.Trash}/>
-                <SpecialLeftItem onClick={()=>this.onSearchClick()} name="Search" isSelected = {mode == NoteListMode.Search}/>
                 </ul>
                 {this.state.storages}
             </div>

@@ -132,6 +132,7 @@ export default class Editor
 
     public updateNoteList():void
     {
+        Debug.log("updateNoteList!!");
         this._pendingUpdate |= EditorPendingUpdate.NoteList;
         this.tryUpdateNextTick();
     }
@@ -250,8 +251,13 @@ export default class Editor
 
     public selectNote(noteId:string):void
     {
-        console.log("Note Selected: "+noteId);
-           
+       
+        if(this._selectedNote != null && this._selectedNote.id == noteId)
+        {
+            console.log("Note already selected");
+            return;
+        }
+
         if( this._selectedNote != null)
         {
             this._selectedNote.SetAsUnselected();
@@ -262,6 +268,8 @@ export default class Editor
 
         if(note != null)
         {
+            console.log("Note Selected: "+noteId);
+           
             this._selectedNote = note;
             this._selectedNote.SetAsSelected();
 

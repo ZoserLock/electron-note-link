@@ -19,6 +19,7 @@ import * as Fuse from "fuse.js";
 
 
 import {NoteListMode} from "../../enums"
+import { BlockOverflowProperty } from "csstype";
 
 export default class NoteListController extends Controller
 {
@@ -121,13 +122,16 @@ export default class NoteListController extends Controller
                 return note.GetDataObject();
             });
         }
+        
+        let forceUpdate:boolean = true;
 
         let data =
         {
             notes:noteData,
             mode:mode,
             selectedNote:selectedNote,
-            search:searchData
+            search:searchData,
+            forceUpdate:(forceUpdate)?Math.random():0
         }
 
         Debug.log("Selected Note: "+data.selectedNote);

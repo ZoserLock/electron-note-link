@@ -37,6 +37,7 @@ export default class NoteListContent extends React.Component<any, any>
                         rowHeight={30} 
                         rowRenderer={this._rowRenderer}  
                         selectedNote= {this.props.selectedNote}
+                        forceUpdate= {this.props.forceUpdate}
                         />
                     )}
                 </AutoSizer>

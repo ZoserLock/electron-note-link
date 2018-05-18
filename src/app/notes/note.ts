@@ -34,6 +34,11 @@ export default class Note
         return this._title;
     }
 
+    set title(value:string)
+    {
+        this._title = value;
+    }
+
     get text(): string
     {
         return this._text;

@@ -48,7 +48,8 @@ export default class NoteList extends React.Component<any, any>
 
     public updateRequested(data:any):void
     {
-        this.setState({notes:data.notes,mode:data.mode,selectedNote:data.selectedNote});
+        // Change force update with ref ref={(ref) => this.list = ref}
+        this.setState({notes:data.notes,mode:data.mode,selectedNote:data.selectedNote, forceUpdate:data.forceUpdate});
     }
 
     public render() 
@@ -56,7 +57,7 @@ export default class NoteList extends React.Component<any, any>
         return (
             <div className="ui-note-list">
                 <NoteListHeader mode   = {this.state.mode}/>
-                <NoteListContent notes = {this.state.notes} selectedNote={this.state.selectedNote} search={this.state.search}/>
+                <NoteListContent notes = {this.state.notes} selectedNote={this.state.selectedNote} search={this.state.search} forceUpdate = {this.state.forceUpdate}/>
             </div>
         );
     }
