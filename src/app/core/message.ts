@@ -6,6 +6,7 @@ export default class Message
     public static readonly updateNoteList:string    = "update:NoteList";
     public static readonly updateNoteView:string    = "update:NoteView";
 
+    public static readonly beginQuickSearch:string  = "action:BeginQuickSearch";
     public static readonly searchUpdated:string     = "action:SearchUpdated";
     public static readonly searchCancelled:string   = "action:SearchCancelled";
 

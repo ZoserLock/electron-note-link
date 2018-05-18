@@ -11,6 +11,7 @@ import Debug from "../../../tools/debug";
 import NoteViewHeader from "./noteViewHeader"; 
 import NoteViewContent from "./noteViewContent";
 import NoteViewContentEditor from "./noteViewContentEditor";
+import Message from "../../../core/message";
 
 interface NoteViewData
 {
@@ -37,22 +38,19 @@ class NoteView extends React.Component<any, NoteViewData>
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener("update:NoteView",this._updateRequestedEvent);
-
-        ipcRenderer.send("update:NoteView");
+        ipcRenderer.addListener(Message.updateNoteView,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:NoteView",this._updateRequestedEvent);
+        ipcRenderer.removeListener(Message.updateNoteView,this._updateRequestedEvent);
     }
 
     public componentDidUpdate(nextProps:any, nextState:NoteViewData)
     {
         if(this.state.editorMode == true && nextState.editorMode == false)
         {
-            Debug.log("Updating: "+this.state.note.title);
-            ipcRenderer.send("action:UpdateNote",{id:this.state.note.id,text:this._newText});
+         //   ipcRenderer.send(Message.updateNote,{id:this.state.note.id,text:this._newText});
         }
     }
 

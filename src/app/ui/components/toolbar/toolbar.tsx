@@ -4,18 +4,33 @@ import {ipcRenderer} from "electron";
 // UI
 import ToolbarItem from "./toolbarItem"; 
 import SearchBar from "./searchBar"; 
+import Message from "../../../core/message";
 
 export default class Toolbar extends React.Component<any, any> 
 {
+    private _beginQuickSearch: (event: any, data: any) => void;
+    private _searchBar:SearchBar;
+
     constructor(props: any)
     {
         super(props);
         
+        this._beginQuickSearch = (event:any,data:any)=>this.beginQuickSearch(data);
     }
 
-    private createNewNote():void
+    public componentDidMount() 
     {
-        ipcRenderer.send("action:NewNote");
+        ipcRenderer.addListener(Message.beginQuickSearch,this._beginQuickSearch);
+    }
+
+    public componentWillUnmount()
+    {
+        ipcRenderer.removeListener("update:NoteList",this._beginQuickSearch);
+    }
+
+    public beginQuickSearch(data:any):void
+    {
+        this._searchBar.focus();
     }
 
     private createNewNotebookStorage():void
@@ -23,19 +38,12 @@ export default class Toolbar extends React.Component<any, any>
         ipcRenderer.send("action:NewNotebookStorage");
     }
 
-    private doTest():void
-    {
-        ipcRenderer.send("action:DoTest");
-    }
-
     public render() 
     {
         return (
             <header className="ui-toolbar">
-                <ToolbarItem name="New Note" onClick={()=>this.createNewNote()}/>
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
-                <ToolbarItem name="Test" onClick={()=>this.doTest()}/>
-                <SearchBar/>
+                <SearchBar ref={(ref) => this._searchBar = ref}/>
             </header>
         );
     }

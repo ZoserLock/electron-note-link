@@ -95,6 +95,11 @@ export default class Editor
         }
     }
 
+    public beginQuickSearch():void
+    {
+        ipcMain.emit(Message.beginQuickSearch);
+    }
+
     // Search
 
     public beginSearch(search:string):void

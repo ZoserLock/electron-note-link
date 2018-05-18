@@ -196,6 +196,14 @@ export default class Application
         }
     }
 
+    public windowShow():void
+    {
+        if(this._mainWindow != null)
+        {
+            this._mainWindow.show();
+        }
+    }
+
     public windowClose():void
     {
         if(this._mainWindow != null)

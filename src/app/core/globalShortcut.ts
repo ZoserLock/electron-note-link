@@ -4,6 +4,7 @@ import {globalShortcut } from "electron";
 // Local Modules
 import Application      from "../core/application";
 import Configuration    from "../tools/configuration";
+import Editor           from "./editor"
 
 export default class GlobalShortcuts
 {
@@ -11,7 +12,9 @@ export default class GlobalShortcuts
     {
         globalShortcut.register("CommandOrControl+R", () =>
         {
-            // Check window visibility
+            Application.instance.windowShow()
+
+            Editor.instance.beginQuickSearch();
         });
     }
 }

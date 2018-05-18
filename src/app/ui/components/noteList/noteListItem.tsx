@@ -37,6 +37,9 @@ class NoteListItem extends React.Component<any, any>
         ipcRenderer.send(Message.removeNote,data);
     }
 
+    ////////////////////////
+    // Edit related functions
+
     private edit()
     {
         this.setState({editing: true})
@@ -60,23 +63,17 @@ class NoteListItem extends React.Component<any, any>
         ipcRenderer.send(Message.updateNote,data);
     }
 
-    public onEditFocus(event:any):void
-    {
-        event.target.select();
-    }
-
     private handleClickOutside(event:any)
     {
         if(this.state.editing)   
         {
-            Debug.log("handleClickOutside: ");
             this.editFinished();
         }
     }
 
     public editKeyPress(event:any):void 
     {
-        if (event.key === 'Enter') 
+        if (event.key === "Enter") 
         {
             this.editFinished();
         }
@@ -97,7 +94,7 @@ class NoteListItem extends React.Component<any, any>
                         autoFocus
                         defaultValue={this.props.note.title}  
                         onChange={(event:any)=>this.editTextChanged(event)}
-                        onFocus={(event:any)=>this.onEditFocus(event)}
+                        onFocus={(event:any)=>event.target.select()}
                         onKeyPress={(event:any)=>this.editKeyPress(event)}
                     />
                 </li>

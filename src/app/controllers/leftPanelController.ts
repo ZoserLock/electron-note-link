@@ -35,9 +35,6 @@ export default class LeftPanelController extends Controller
         ipcMain.on(Message.createNotebook,(event:any,data:any)=>this.actionNewNotebook(data));
         ipcMain.on(Message.selectNotebook,(event:any,data:any)=>this.actionSelectNotebook(data));
         ipcMain.on(Message.setNoteListMode, (event:any,data:any) =>{this.actionSetNoteListMode(data);});
-
-        ipcMain.on("action:DoTest", (event:any,data:any) =>{this.actionDoTest(data);});
-
     }
 
     // Updates
@@ -210,39 +207,6 @@ export default class LeftPanelController extends Controller
         {
             Debug.logError("actionRemoveStorage: Storage does not exist.");
         }
-    }
-
-    private actionDoTest(data:any):void
-    {
-        Debug.log("Doing Test");
-
-        let notes:Note[] =  DataManager.instance.notes;
-
-        let sendNotes:any[] = [];
-
-        for(let note of notes)
-        {
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-            sendNotes.push(note.GetDataObject());
-        }
-
-        Debug.log("Sending: ");
-
-        let sendData:any = 
-        {
-            notes:sendNotes
-        }
-
-        
-        this.sendUIMessage("Test",sendData);
     }
 
     private actionSetNoteListMode(data:any):void

@@ -26,13 +26,13 @@ export default class NoteListController extends Controller
     constructor(window:Electron.BrowserWindow)
     {
         super(window);
-        ipcMain.on(Message.updateNoteList ,() => this.updateNoteList());
-        ipcMain.on(Message.createNote     ,() => this.actionNewNote());
-        ipcMain.on(Message.searchUpdated  ,(event:any,data:any) => this.actionSearchUpdated(data));
-
+        ipcMain.on(Message.updateNoteList, (event:any,data:any) => this.updateNoteList());
+        ipcMain.on(Message.createNote, (event:any,data:any) => this.actionNewNote());
         ipcMain.on(Message.selectNote, (event:any,data:any) =>{this.actionSelectNote(data);});
         ipcMain.on(Message.removeNote, (event:any,data:any) =>{this.actionRemoveNote(data);});
 
+        ipcMain.on(Message.searchUpdated, (event:any,data:any) => this.actionSearchUpdated(data));
+        ipcMain.on(Message.beginQuickSearch , (event:any,data:any) => this.beginQuickSearch(data));
     }
 
     public updateNoteList():void
@@ -136,6 +136,11 @@ export default class NoteListController extends Controller
 
         Debug.log("Selected Note: "+data.selectedNote);
         this.sendUIMessage(Message.updateNoteList, data);
+    }
+
+    private beginQuickSearch(data:any):void
+    {
+        this.sendUIMessage(Message.beginQuickSearch);
     }
 
     private actionSearchUpdated(data:any):void
