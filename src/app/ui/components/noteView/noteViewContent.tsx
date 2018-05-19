@@ -26,7 +26,6 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
 
     public render() 
     {
-        Debug.log("NoteViewContent Render");
         if(this.props.text != null)
         {
             var md = new Markdown();            

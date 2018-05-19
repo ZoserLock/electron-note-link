@@ -5,6 +5,13 @@ body
 
 ::-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #AAA; } ::-webkit-scrollbar-button:hover{ background-color: #AAA; } ::-webkit-scrollbar-thumb{ background-color: #CCC; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; } ::-webkit-scrollbar-track{ background-color: #efefef; } ::-webkit-scrollbar-track:hover{ background-color: #7d7d7d; border-radius: 0px; } ::-webkit-scrollbar{ width: 7px; }
 
+
+@font-face {
+    font-family: 'DroidSansMono';
+    src: url("../fonts/droid_sans_mono.ttf"); 
+}
+
+
 .ui-window
 {
     display: flex;
@@ -145,7 +152,8 @@ body
 .ui-note-view-content-editor
 {
     margin: 0 20px 0 20px;
-    background-color: #BFD1D6;
+    height: 100%;
+    position: relative
 }
 /*Main Window Tool Bar*/
 .ui-toolbar
@@ -213,6 +221,7 @@ body
 /*Code Mirror*/
 .CodeMirror 
 {
-    border: 1px solid #eee;
-    height: auto;
+    position: absolute;
+    font-family: "DroidSansMono";
+    font-size: 14px;
 }

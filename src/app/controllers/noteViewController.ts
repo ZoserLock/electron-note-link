@@ -29,9 +29,14 @@ export default class NoteViewController extends Controller
 
     public updateNoteView():void
     {
+        Debug.log("updateNoteView()");
+
         let selectedNote = Editor.instance.selectedNote;
 
-    //    this.sendUIMessage(Message.updateNoteView,{note:selectedNote.GetDataObject()});
+        if(selectedNote != null)
+        {
+            this.sendUIMessage(Message.updateNoteView,{note:selectedNote.GetDataObject()});
+        }
     }
 
     public updateNote(data:any):void
@@ -40,8 +45,6 @@ export default class NoteViewController extends Controller
         {
             return;
         }
-
-       
 
         let note:Note = DataManager.instance.getNote(data.id);
 

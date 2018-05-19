@@ -6,6 +6,7 @@ import {ipcRenderer} from "electron";
 import Debug from "../../../tools/debug";
 import NotebookStorage from "../../../notes/notebookStorage";
 import Notebook from "../../../notes/notebook";
+import Message from "../../../core/message";
 
 // UI
 
@@ -18,7 +19,7 @@ export default class NoteListHeader extends React.Component<any, any>
 
     private onAddNoteClick()
     {
-        ipcRenderer.send("action:NewNote");
+        ipcRenderer.send(Message.createNote);
     }
 
     public render() 

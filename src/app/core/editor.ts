@@ -137,7 +137,6 @@ export default class Editor
 
     public updateNoteList():void
     {
-        Debug.log("updateNoteList!!");
         this._pendingUpdate |= EditorPendingUpdate.NoteList;
         this.tryUpdateNextTick();
     }
@@ -159,8 +158,6 @@ export default class Editor
     
     private onNextTick():void
     {
-        Debug.log("Editor Updated");
-        
         if((this._pendingUpdate & EditorPendingUpdate.LeftPanel)!=0)
         {
             ipcMain.emit(Message.updateLeftPanel);
@@ -259,7 +256,6 @@ export default class Editor
        
         if(this._selectedNote != null && this._selectedNote.id == noteId)
         {
-            console.log("Note already selected");
             return;
         }
 
@@ -273,8 +269,6 @@ export default class Editor
 
         if(note != null)
         {
-            console.log("Note Selected: "+noteId);
-           
             this._selectedNote = note;
             this._selectedNote.SetAsSelected();
 

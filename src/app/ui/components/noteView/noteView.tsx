@@ -46,17 +46,14 @@ class NoteView extends React.Component<any, NoteViewData>
         ipcRenderer.removeListener(Message.updateNoteView,this._updateRequestedEvent);
     }
 
-    public componentDidUpdate(nextProps:any, nextState:NoteViewData)
-    {
-        if(this.state.editorMode == true && nextState.editorMode == false)
-        {
-         //   ipcRenderer.send(Message.updateNote,{id:this.state.note.id,text:this._newText});
-        }
-    }
-
     private handleClickOutside(event:any)
     {
-        this.setState({editorMode:false});
+        if(this.state.editorMode)
+        {
+            this.setState({editorMode:false});
+            ipcRenderer.send(Message.updateNote,{id:this.state.note.id,text:this._newText});
+            event.stopImmediatePropagation();
+        }
     }
 
     private onContentClick()
@@ -64,13 +61,15 @@ class NoteView extends React.Component<any, NoteViewData>
         this.setState({editorMode:true});
     }
 
-    private onCodeChanged(newCode:any)
+    private onCodeChanged(editor:any, data:any, value:any)
     {
-        this._newText = newCode;
+        this._newText = value;
     }
 
     public updateRequested(event:any, data:any):void
     {
+        Debug.log("updateRequested Note View");
+
         this._newText = data.note.text;
 
         this.setState({note:data.note});
@@ -78,13 +77,13 @@ class NoteView extends React.Component<any, NoteViewData>
 
     public render() 
     {
-        let currentPanel;
+        let currentPanel:any;
 
         if(this.state.note != null)
         {
             if(this.state.editorMode)
             {
-                currentPanel = <NoteViewContentEditor code={this.state.note.text} onCodeChanged = {(code:any)=>this.onCodeChanged(code)}/>
+                currentPanel = <NoteViewContentEditor code={this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)}/>
             }
             else
             {

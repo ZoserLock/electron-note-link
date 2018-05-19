@@ -46,6 +46,7 @@ gulp.task("copy-assets",["clean"],function(cb)
     gulp.src(_inputDir + "/lib/**/*").pipe(gulp.dest(_outputDir + "/lib"));
     gulp.src(_inputDir + "/html/**/*").pipe(gulp.dest(_outputDir + "/html"));
     gulp.src(_inputDir + "/img/**/*").pipe(gulp.dest(_outputDir + "/img"));
+    gulp.src(_inputDir + "/fonts/**/*").pipe(gulp.dest(_outputDir + "/fonts"));
 
     cb();
 });

@@ -14,7 +14,7 @@ import Notebook from "../notes/notebook";
 import Note from "../notes/note";
 
 import Controller from "./controller";
-import Debug from "../tools/debug";
+import Debug from "../tools/debug"; 
 import * as Fuse from "fuse.js";
 
 
@@ -37,6 +37,8 @@ export default class NoteListController extends Controller
 
     public updateNoteList():void
     {
+        Debug.log("updateNoteList()");
+
         let mode:number = Editor.instance.noteListMode;
 
         let selectedNote:string = "";
@@ -52,7 +54,7 @@ export default class NoteListController extends Controller
 
         // HERE WE CAN IMPLEMENT A GENERIC FILTER.
         // Like current filter.filter(notes)
-        let noteData:any[]=[];
+        let noteData:any[] = [];
 
         if(mode == NoteListMode.Search)
         {
@@ -134,7 +136,6 @@ export default class NoteListController extends Controller
             forceUpdate:(forceUpdate)?Math.random():0
         }
 
-        Debug.log("Selected Note: "+data.selectedNote);
         this.sendUIMessage(Message.updateNoteList, data);
     }
 

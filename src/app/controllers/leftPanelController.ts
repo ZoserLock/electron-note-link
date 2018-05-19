@@ -40,8 +40,9 @@ export default class LeftPanelController extends Controller
     // Updates
     public updateLeftPanel():void
     {
+        Debug.log("updateLeftPanel() "+this._updates);
+
         this._updates++;
-        Debug.log("updateLeftPanel "+this._updates);
 
         let storages:NotebookStorage[] = DataManager.instance.noteStorages;
 
