@@ -8,10 +8,11 @@ import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
 import Message from "../../../core/message";
 
-class NoteListItem extends React.Component<any, any> 
-{
-    private _textInput:any;
+import EditableText from "../generic/editableText";
 
+
+export default class NoteListItem extends React.Component<any, any> 
+{
     constructor(props: any)
     {
         super(props);
@@ -37,78 +38,28 @@ class NoteListItem extends React.Component<any, any>
         ipcRenderer.send(Message.removeNote,data);
     }
 
-    ////////////////////////
-    // Edit related functions
-
-    private edit()
+    public editFinished(text:string):void
     {
-        this.setState({editing: true})
-    }
-
-    private editTextChanged(event:any)
-    {
-        this.setState({editingText: event.target.value})
-    }
-
-    public editFinished():void
-    {
-        this.setState({ editing: false });
-
         let data = 
         {
             id:this.props.note.id,
-            title:this.state.editingText
+            title:text
         }
 
         ipcRenderer.send(Message.updateNote,data);
     }
 
-    private handleClickOutside(event:any)
-    {
-        if(this.state.editing)   
-        {
-            this.editFinished();
-        }
-    }
-
-    public editKeyPress(event:any):void 
-    {
-        if (event.key === "Enter") 
-        {
-            this.editFinished();
-        }
-    }
-
     public render() 
     {
-        let displayClass = "ui-note-list-item";
+        return(
+            <li className="ui-note-list-item">
+                <EditableText 
+                    value = {this.props.note.title} 
+                    onClick={()=>this.onItemClick()} 
+                    onEditFinished={(text:string)=>this.editFinished(text)}
 
-        let seletected:boolean = this.props.isSelected;
-        
-        if(this.state.editing)   
-        {
-            return (
-                <li className={displayClass}>
-                    <input 
-                        className="text-area-fill" 
-                        autoFocus
-                        defaultValue={this.props.note.title}  
-                        onChange={(event:any)=>this.editTextChanged(event)}
-                        onFocus={(event:any)=>event.target.select()}
-                        onKeyPress={(event:any)=>this.editKeyPress(event)}
-                    />
-                </li>
-            );
-        }   
-        else
-        {
-            return (
-                <li className={displayClass} onClick={()=>this.onItemClick()}>
-                    <span onDoubleClick={()=>this.edit()}>{this.props.note.title+" "+seletected}</span> 
-                </li>
-            );
-        }                          
+                />
+            </li>
+        )
     }
 }
-
-export default applyOnClickOutside(NoteListItem);
