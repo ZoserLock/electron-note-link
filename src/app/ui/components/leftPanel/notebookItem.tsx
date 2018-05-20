@@ -40,6 +40,7 @@ export default class NotebookItem extends React.Component<any, any>
 
     private onItemClick()
     {
+    
         let data =
         {
             notebookId:this.props.notebook.id
@@ -65,7 +66,9 @@ export default class NotebookItem extends React.Component<any, any>
         displayClass += " ui-sidebar-notebook-item";
         return (
             <li className={displayClass} >
-                <span onClick={()=>this.onItemClick()}>{this.props.notebook.name}</span> 
+                <span onClick={()=>this.onItemClick()}>
+                    {this.props.notebook.name}
+                </span> 
                 <button onClick={()=>this.onItemDelete()}>-</button>
             </li>
         );

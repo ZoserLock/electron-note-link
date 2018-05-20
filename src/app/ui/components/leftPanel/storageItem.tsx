@@ -2,6 +2,8 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+
 // Local
 import Debug from "../../../tools/debug";
 import NotebookStorage from "../../../notes/notebookStorage";
@@ -41,6 +43,11 @@ export default class StorageItem extends React.Component<any, any>
         ipcRenderer.send(Message.removeStorage, data);
     }
 
+    private handleNotebookContextMenu(e:any, data:any, target:any)
+    {
+    }
+
+
     public render() 
     {
         
@@ -48,7 +55,11 @@ export default class StorageItem extends React.Component<any, any>
         {
             let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.mode == NoteListMode.Notebook;
 
-            return  <NotebookItem key = {notebook.id} notebook={notebook} isSelected={selected} />
+            return  (
+            <ContextMenuTrigger id={"NOTEBOOK_CONTEXT_MENU"} key = {notebook.id}>
+                <NotebookItem  notebook={notebook} isSelected={selected} />
+            </ContextMenuTrigger>
+            )
         });
 
         let notebooks;
@@ -72,6 +83,10 @@ export default class StorageItem extends React.Component<any, any>
                     <button onClick={()=>this.onUnlinkButtonClick()}>-</button>
                 </div>
                 {notebooks}    
+                <ContextMenu id={"NOTEBOOK_CONTEXT_MENU"}>
+                    <MenuItem onClick={(e:any, data:any, target:any)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Added' }}>Add 1 count</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:any)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Removed' }}>Remove 1 count</MenuItem>
+                </ContextMenu>
             </div>
 
         );
