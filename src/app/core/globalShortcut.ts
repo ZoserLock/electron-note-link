@@ -16,5 +16,10 @@ export default class GlobalShortcuts
 
             Editor.instance.beginQuickSearch();
         });
+
+        globalShortcut.register("CommandOrControl+Q", () =>
+        {
+            Application.instance.toggleDevTools();
+        });
     }
 }

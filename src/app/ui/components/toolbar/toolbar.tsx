@@ -25,7 +25,7 @@ export default class Toolbar extends React.Component<any, any>
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:NoteList",this._beginQuickSearch);
+        ipcRenderer.removeListener(Message.beginQuickSearch,this._beginQuickSearch);
     }
 
     public beginQuickSearch(data:any):void
@@ -35,7 +35,12 @@ export default class Toolbar extends React.Component<any, any>
 
     private createNewNotebookStorage():void
     {
-        ipcRenderer.send("action:NewNotebookStorage");
+        ipcRenderer.send(Message.createStorage);
+    }
+
+    private testPopup():void
+    {
+        ipcRenderer.send("action:TestPopup");
     }
 
     public render() 
@@ -43,6 +48,7 @@ export default class Toolbar extends React.Component<any, any>
         return (
             <header className="ui-toolbar">
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
+                <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
                 <SearchBar ref={(ref) => this._searchBar = ref}/>
             </header>
         );

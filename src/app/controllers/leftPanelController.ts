@@ -16,6 +16,7 @@ import Controller from "./controller";
 import Application from "../core/application";
 
 import {NoteListMode} from "../../enums"
+import PopupManager from "../core/popupManager";
 
 export default class LeftPanelController extends Controller
 {
@@ -184,25 +185,29 @@ export default class LeftPanelController extends Controller
 
         if(notebook != null)
         {
-            let isSelectedNotebook = (Editor.instance.selectedNotebook == notebook);
-            let hasSelectedNote = (Editor.instance.selectedNote.parent == notebook);
-            
-            DataManager.instance.deleteNotebook(notebook);
-
-            this.updateLeftPanel();
-  
-            if(isSelectedNotebook)
+            PopupManager.instance.showConfirmationPanel("Delete Notebook?","Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
             {
-                if(DataManager.instance.notebooks.length > 0)
+                let isSelectedNotebook = (Editor.instance.selectedNotebook == notebook);
+                let hasSelectedNote = (Editor.instance.selectedNote.parent == notebook);
+                
+                DataManager.instance.deleteNotebook(notebook);
+
+                this.updateLeftPanel();
+    
+                if(isSelectedNotebook)
                 {
-                    let next:Notebook = DataManager.instance.notebooks[0];
-                    Editor.instance.selectNotebook(next.id);
+                    if(DataManager.instance.notebooks.length > 0)
+                    {
+                        let next:Notebook = DataManager.instance.notebooks[0];
+                        Editor.instance.selectNotebook(next.id);
+                    }
+                    else
+                    {
+                        Editor.instance.unselectNotebook();
+                    }
                 }
-                else
-                {
-                    Editor.instance.unselectNotebook();
-                }
-            }
+            },null);
+
         }
         else
         {

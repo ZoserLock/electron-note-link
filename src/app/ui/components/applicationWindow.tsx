@@ -8,6 +8,7 @@ import NoteView from "./noteView/noteView";
 import StatusBar from "./statusBar";
 import Toolbar from "./toolbar/toolbar";
 import WindowBar from "./windowBar";
+import PopupLayer from "./popupLayer"
 
 export default class ApplicationWindow extends React.Component<any, any> 
 {
@@ -34,6 +35,7 @@ export default class ApplicationWindow extends React.Component<any, any>
                     <NoteView/>
                 </div>
                 <StatusBar/>
+                <PopupLayer />
             </div>
         );
     }

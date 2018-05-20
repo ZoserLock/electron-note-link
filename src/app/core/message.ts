@@ -27,10 +27,10 @@ export default class Message
     public static readonly updateNote:string        = "action:UpdateNote";
 
 
-    // Cache Related 
-    public static readonly cacheUpdate:string               = "action:cache:Update";
-    public static readonly cacheGenerate:string             = "action:cache:Generate";
-    public static readonly cacheUpdateEditorStatus:string   = "action:cache:UpdateEditorStatus";
+    // Popup Related
+    public static readonly showPopup:string       = "action:popup:ShowPopup";
+    public static readonly hidePopup:string       = "action:popup:HidePopup";
+    public static readonly popupResult:string     = "action:popup:Result";
 
     // Windows Related
     public static readonly windowMinimize:string    = "action:window:Minimize";

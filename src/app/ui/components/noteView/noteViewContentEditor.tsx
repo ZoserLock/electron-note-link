@@ -10,7 +10,6 @@ require("codemirror/keyMap/sublime");
 
 // Local
 import Debug from "../../../tools/debug";
-import Note from "../../../notes/note";
 
 export default class NoteViewContentEditor extends React.Component<any, any> 
 {
@@ -23,13 +22,6 @@ export default class NoteViewContentEditor extends React.Component<any, any>
         {
             code:this.props.code
         }
-    }
-
-    private updateCode(newCode:string)
-    {
-        this.setState({
-            code: newCode,
-        });
     }
 
     private editorDidMount(editor:any)
@@ -59,6 +51,7 @@ export default class NoteViewContentEditor extends React.Component<any, any>
                     value={this.state.code} 
                     options={options}
                     onChange={this.props.onCodeChanged}
+                    onScroll={(editor, data) => {Debug.logVar(data)}}
                 />
             </div>
         );

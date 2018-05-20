@@ -14,6 +14,7 @@ import Note from "../notes/note";
 
 import Controller from "./controller";
 import Application from "../core/application";
+import PopupManager from "../core/popupManager";
 
 export default class NoteViewController extends Controller
 {
@@ -24,7 +25,13 @@ export default class NoteViewController extends Controller
         ipcMain.on(Message.updateNoteView ,()=>this.updateNoteView());
 
         ipcMain.on(Message.updateNote,(event:any,data:any) =>{this.updateNote(data);});
+        ipcMain.on("action:TestPopup",(event:any,data:any) =>{this.testPopup();});
 
+    }
+
+    public testPopup():void
+    {
+        PopupManager.instance.showConfirmationPanel("titulon","Texto que manda","OKA","EXIT",()=>{Debug.log("ON OK!");},()=>{Debug.log("ON CANCEL");});
     }
 
     public updateNoteView():void

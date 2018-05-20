@@ -218,6 +218,28 @@ body
     box-sizing: border-box; 
 }
 
+/*Popups*/
+.ui-popup-layer
+{
+    display: hidden;
+    position: fixed;
+    background-color:rgba(0,0,0,0.5);
+    height:100%;
+    width:100%;
+    overflow:hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ui-popup-modal 
+{
+    background-color:red;
+    width: 400px;
+    height: 250px;
+}
+
 /*Code Mirror*/
 .CodeMirror 
 {

@@ -8,6 +8,7 @@ import MainMenu         from "../core/mainMenu"
 import GlobalShortcut   from "../core/globalShortcut"
 import DataManager      from "../core/dataManager";
 import Editor           from "../core/editor";
+import PopupManager     from "../core/popupManager";
 
 // Controllers
 import LeftPanelController from "../controllers/leftPanelController";
@@ -57,6 +58,7 @@ export default class Application
         Editor          .initialize();
         GlobalShortcut  .initialize();
         MainMenu        .initialize();
+        PopupManager    .initialize();
 
         ipcMain.on(Message.windowMinimize,()=>this.windowMinimize());
         ipcMain.on(Message.windowMaximize,()=>this.windowMaximize());
@@ -65,9 +67,6 @@ export default class Application
 
         this.createTrayIcon();
         this.createMainWindow(); 
-
-        Debug.log("Init");
-        this._mainWindow.webContents.toggleDevTools();
     }
 
     private onWindowCreated()
@@ -79,6 +78,8 @@ export default class Application
         // Initialize Data and cache
         DataManager.instance.checkStorageIntegrety();
         Editor.instance.initializeEditorStatus();
+
+        PopupManager.instance.setWindow(this._mainWindow);
 
         // Initialize Active Presenters
         this._leftPanelController = new LeftPanelController(this._mainWindow);
@@ -96,7 +97,7 @@ export default class Application
     // Function called only in debug enviroment
     private initializeDebug():void
     {
-         this._mainWindow.webContents.toggleDevTools();
+        this._mainWindow.webContents.toggleDevTools();
     }
 
     private createTrayIcon():void
@@ -210,6 +211,11 @@ export default class Application
         {
             this._mainWindow.close();
         }
+    }
+
+    public toggleDevTools():void
+    {
+        this._mainWindow.webContents.toggleDevTools();
     }
 }
 
