@@ -43,20 +43,24 @@ export default class StorageItem extends React.Component<any, any>
         ipcRenderer.send(Message.removeStorage, data);
     }
 
-    private handleNotebookContextMenu(e:any, data:any, target:any)
+    private handleNotebookContextMenu(e:any, data:any, target:any):void
     {
+        Debug.logVar(data);
+        
+        Debug.log(":: "+target.getAttribute("id"));
     }
 
 
     public render() 
     {
-        
+        let storageId:string= this.props.storage.id;
+
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
             let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.mode == NoteListMode.Notebook;
 
             return  (
-            <ContextMenuTrigger id={"NOTEBOOK_CONTEXT_MENU"} key = {notebook.id}>
+            <ContextMenuTrigger id={storageId} key = {notebook.id} attributes={{id:notebook.id}}>
                 <NotebookItem  notebook={notebook} isSelected={selected} />
             </ContextMenuTrigger>
             )
@@ -83,9 +87,12 @@ export default class StorageItem extends React.Component<any, any>
                     <button onClick={()=>this.onUnlinkButtonClick()}>-</button>
                 </div>
                 {notebooks}    
-                <ContextMenu id={"NOTEBOOK_CONTEXT_MENU"}>
-                    <MenuItem onClick={(e:any, data:any, target:any)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Added' }}>Add 1 count</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:any)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Removed' }}>Remove 1 count</MenuItem>
+                <ContextMenu id={storageId}>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Notebook</MenuItem>
+                    <MenuItem divider />
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Export' }}>Export Notebook</MenuItem>
+                    <MenuItem divider />
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Notebook</MenuItem>  
                 </ContextMenu>
             </div>
 
