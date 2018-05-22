@@ -93,7 +93,7 @@ class NoteView extends React.Component<any, NoteViewData>
 
         return (
             <div className="ui-note-view"> 
-                <NoteViewHeader/>
+                <NoteViewHeader note = {this.state.note}/>
                 {currentPanel}
             </div>
         );

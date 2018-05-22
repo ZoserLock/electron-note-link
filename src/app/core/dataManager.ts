@@ -655,6 +655,7 @@ export default class DataManager
 
     public saveNote(note:Note):boolean
     {
+        note.updateDates();
         try 
         {
             fs.ensureDirSync(note.folderPath);

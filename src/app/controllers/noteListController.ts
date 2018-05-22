@@ -68,7 +68,7 @@ export default class NoteListController extends Controller
             //Cache this list.
             notes = DataManager.instance.notes.filter((note:Note)=>
             {
-                return (!note.isTrashed);
+                return (!note.trashed);
             });
 
             noteData = notes.map((note:Note)=>
@@ -84,7 +84,7 @@ export default class NoteListController extends Controller
         {
             notes = DataManager.instance.notes.filter((note:Note)=>
             {
-                return (!note.isTrashed);
+                return (!note.trashed);
             });
             noteData = notes.map((note:Note)=>
             {
@@ -95,7 +95,7 @@ export default class NoteListController extends Controller
         {
             notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
             {
-                return note.isTrashed;
+                return note.trashed;
             });
             noteData = notes.map((note:Note)=>
             {
@@ -106,7 +106,7 @@ export default class NoteListController extends Controller
         {
             notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
             {
-                return (!note.isTrashed);
+                return (!note.trashed);
             });
             noteData = notes.map((note:Note)=>
             {
@@ -117,7 +117,7 @@ export default class NoteListController extends Controller
         {
             notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
             {
-                return note.isStarted;
+                return note.started;
             });
             noteData = notes.map((note:Note)=>
             {
@@ -197,7 +197,7 @@ export default class NoteListController extends Controller
                 Editor.instance.unselectNotebook();
             }
 
-            if(note.isTrashed)
+            if(note.trashed)
             {
                 DataManager.instance.deleteNote(note);
             }

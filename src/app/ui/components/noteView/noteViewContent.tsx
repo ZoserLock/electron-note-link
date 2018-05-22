@@ -3,6 +3,7 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 import * as Markdown from "markdown-it";
 
+var markdownHighlight = require('markdown-it-highlightjs');
 var HtmlToReactParser = require('html-to-react').Parser;
 
 // Local
@@ -19,19 +20,24 @@ interface NoteViewContentData
 
 export default class NoteViewContent extends React.Component<NoteViewContentData, NoteViewContentData> 
 {
+    private _markdownRenderer:any;
+    private _htmlParser:any;
+
     constructor(props: any)
     {
         super(props);
+        this._markdownRenderer = new Markdown();            
+        this._markdownRenderer.use(markdownHighlight);
+
+        this._htmlParser = new HtmlToReactParser();
     }
 
     public render() 
     {
         if(this.props.text != null)
         {
-            var md = new Markdown();            
-            var htmlInput = md.render(this.props.text);
-            var htmlToReactParser = new HtmlToReactParser();
-            var reactElement = htmlToReactParser.parse(htmlInput);
+            var htmlInput = this._markdownRenderer.render(this.props.text);
+            var reactElement =  this._htmlParser.parse(htmlInput);
 
             return (
                 <div className="ui-note-view-content" onDoubleClick={this.props.onDoubleClick}> 

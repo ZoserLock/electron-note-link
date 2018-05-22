@@ -1,14 +1,29 @@
 import * as Path from "path";
 import Notebook from "./notebook";
+import Debug from "../tools/debug";
 
 export default class Note
 {
+    private static sDefaultNote =
+    {
+        id:"",
+        title:"Unnamed Note",
+        text:"",
+        trashed:false,
+        started:false,
+        created:Date.now(),
+        updated:Date.now(),
+    }
+
     private _notebook:Notebook;
 
     private _id:string;
     private _folderPath:string;
     private _title:string;
     private _text:string;
+
+    private _created:number;
+    private _updated:number;
 
     private _selected:boolean;
 
@@ -49,6 +64,27 @@ export default class Note
         this._text = value;
     }
     
+    get trashed(): boolean
+    {
+        return this._trash;
+    }
+
+    set trashed(value:boolean)
+    {
+        this._trash = value;
+    }
+
+    get started(): boolean
+    {
+        return this._started;
+    }
+
+    set started(value:boolean)
+    {
+        this._started = value;
+    }
+
+    // Not saved
     get isSelected(): boolean
     {
         return this._selected;
@@ -64,16 +100,6 @@ export default class Note
         return this._dirty;
     }
 
-    get isTrashed(): boolean
-    {
-        return this._trash;
-    }
-
-    get isStarted(): boolean
-    {
-        return this._started;
-    }
-    
     get parent():Notebook
     {
         return this._notebook;
@@ -94,28 +120,28 @@ export default class Note
     public static create(id:string, path:string):Note
     {
         let note:Note = new Note();
+        note._created = Date.now();
+        note._updated = Date.now();
         note._id   = id;
         note._folderPath = path;
-        note._loaded=true;
+        note._loaded = true;
         return note;
     }
 
     public static createFromSavedData(data:any, path:string):Note
     {
         let note:Note = new Note();
-        note._id = data.id;
-        note._title = data.title;
-        note._text = data.text;
+        note.setData(data);
         note._folderPath = path;
-        note._trash   = data.trashed;
-        note._started = data.started;
-        note._loaded=true;
+        note._loaded = true;
         return note;
     }
 
     public static createUnloadedNote(path:string):Note
     {
         let note:Note = new Note();
+        note._created = -1;
+        note._updated = -1;
         note._id = "";
         note._title = "Unloaded...";
         note._text = "Loading";
@@ -126,12 +152,15 @@ export default class Note
 
     public setData(data:any):void
     {
+        data = Object.assign(Note.sDefaultNote,data);
+
         this._id      = data.id;
         this._title   = data.title;
         this._text    = data.text;
         this._trash   = data.trashed;
         this._started = data.started;
-        this._loaded  = true;
+        this._created = data.created;
+        this._updated = data.updated;
     }
 
     public setParent(notebook:Notebook):void
@@ -173,6 +202,11 @@ export default class Note
         return Path.join(this.folderPath,this.id + ".json");
     }
     
+    public updateDates():void
+    {
+
+    }
+
     public GetDataObject():any
     {
         let dataObject = {
@@ -180,7 +214,9 @@ export default class Note
             title:this._title, 
             text:this._text,
             trashed:this._trash,
-            started:this._started
+            started:this._started,
+            created:this._created,
+            updated:this._updated
         };
 
         return dataObject
@@ -188,13 +224,20 @@ export default class Note
 
     public getSaveObject():any
     {
-        let saveObject = {
+        let saveObject:any = {
             id:this._id, 
             title:this._title,
             text:this._text,
             trashed:this._trash,
-            started:this._started
+            started:this._started,
+            created:this._created,
+            updated:this._updated
         };
+
+        Debug.logVar(saveObject);
+        Debug.log(this._trash+"");
+        Debug.log(this._updated+"");
+        Debug.log(this._created+"");
 
         return saveObject
     }

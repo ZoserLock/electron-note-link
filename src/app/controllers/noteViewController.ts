@@ -48,25 +48,35 @@ export default class NoteViewController extends Controller
 
     public updateNote(data:any):void
     {
-        if(!data["id"])
+        if(!data.hasOwnProperty("id"))
         {
             return;
         }
+
+        Debug.log("1 updateNote:"+data.started);
 
         let note:Note = DataManager.instance.getNote(data.id);
 
         if(note != null)
         {
-            if(data["text"])
+            Debug.log("Note found");
+            Debug.logVar(data);
+            if(data.hasOwnProperty("text"))
             {
                 note.text = data.text;
             }
 
-            if(data["title"])
+            if(data.hasOwnProperty("title"))
             {
                 note.title = data.title;
             }
 
+            if(data.hasOwnProperty("started"))
+            {
+                Debug.log("Started Changed:"+data.started);
+                note.started = data.started;
+            }
+            
             DataManager.instance.saveNote(note);
 
             Editor.instance.updateNoteList();

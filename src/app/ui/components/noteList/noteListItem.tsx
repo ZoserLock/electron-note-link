@@ -51,13 +51,13 @@ export default class NoteListItem extends React.Component<any, any>
 
     public render() 
     {
+        let value:string=(this.props.note.title == "")?"<Empty>":this.props.note.title;
         return(
             <li className="ui-note-list-item">
                 <EditableText 
-                    value = {this.props.note.title} 
+                    value = {value} 
                     onClick={()=>this.onItemClick()} 
                     onEditFinished={(text:string)=>this.editFinished(text)}
-
                 />
             </li>
         )

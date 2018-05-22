@@ -88,6 +88,7 @@ body
 {
     background-color: #00C3FF;
     padding: 10px;
+    height: 20px;
 }
 
 .ui-note-list-header button
@@ -135,14 +136,12 @@ body
 .ui-note-view-header
 {
     background-color: #648792;
-    flex: 0 0 30px;
-    margin: 20px 20px 0 20px;
+    flex: 0 0 40px;
     overflow: hidden;
 }
 
 .ui-note-view-content
 {
-    margin: 0 20px 0 20px;
     background-color: #BFD1D6;
     flex: 1;
     overflow-x: hidden;
@@ -249,6 +248,10 @@ body
     font-size: 14px;
 }
 
+.CodeMirror-lines {
+    height: 100%;
+    padding: 10px 0;
+}
 
 /****************/
 /* Context Menu */

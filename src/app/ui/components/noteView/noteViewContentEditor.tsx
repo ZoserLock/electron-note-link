@@ -28,6 +28,9 @@ export default class NoteViewContentEditor extends React.Component<any, any>
     {
         this._codeMirror = editor; 
         this._codeMirror.setSize("100%", "100%");
+
+        // Hack for now to avoid the bad cursor size on the first render
+        setTimeout(()=>{this._codeMirror.refresh()},100);
     }
 
     public render() 
@@ -43,6 +46,7 @@ export default class NoteViewContentEditor extends React.Component<any, any>
             indentUnit:4,
             highlightFormatting:true,
         };
+        
 
         return (
             <div className="ui-note-view-content-editor"> 
@@ -51,7 +55,6 @@ export default class NoteViewContentEditor extends React.Component<any, any>
                     value={this.state.code} 
                     options={options}
                     onChange={this.props.onCodeChanged}
-                    onScroll={(editor, data) => {Debug.logVar(data)}}
                 />
             </div>
         );

@@ -18,7 +18,7 @@ class EditableText extends React.Component<any, any>
     
     public edit()
     {
-        this.setState({editing: true})
+        this.setState({editingText: this.props.value, editing: true})
     }
 
     private editTextChanged(event:any)
