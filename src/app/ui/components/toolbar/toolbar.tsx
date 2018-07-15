@@ -38,6 +38,11 @@ export default class Toolbar extends React.Component<any, any>
         ipcRenderer.send(Message.createStorage);
     }
 
+    private createNewNote():void
+    {
+        ipcRenderer.send(Message.createStorage);
+    }
+    
     private testPopup():void
     {
         ipcRenderer.send("action:TestPopup");
@@ -53,9 +58,9 @@ export default class Toolbar extends React.Component<any, any>
         return (
             <header className="ui-toolbar">
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
-                <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
+                <ToolbarItem name="Add Storage" onClick={()=>this.createNewNote()}/>
                 <SearchBar ref={(ref) => this._searchBar = ref}/>
-                <ToolbarItem name="Reload Css" onClick={()=>this.reloadCss()}/>
+                <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
             </header>
         );
     }

@@ -51,6 +51,18 @@ gulp.task("copy-assets",["clean"],function(cb)
     cb();
 });
 
+gulp.task("copy-assets-no-clean",function(cb)
+{
+    gulp.src(_inputDir + "/css/**/*").pipe(gulp.dest(_outputDir + "/css"));
+    gulp.src(_inputDir + "/lib/**/*").pipe(gulp.dest(_outputDir + "/lib"));
+    gulp.src(_inputDir + "/html/**/*").pipe(gulp.dest(_outputDir + "/html"));
+    gulp.src(_inputDir + "/img/**/*").pipe(gulp.dest(_outputDir + "/img"));
+    gulp.src(_inputDir + "/fonts/**/*").pipe(gulp.dest(_outputDir + "/fonts"));
+
+    cb();
+});
+
+
 // this function is to copy the debug or release env file to have compilation variables
 gulp.task("generate-env",["clean"],function(cb)
 {
@@ -75,6 +87,12 @@ gulp.task("dev",["build:develop"],function(cb)
 {
     run("electron .",cb);
 });
+
+gulp.task("css",["copy-assets-no-clean"],function(cb)
+{
+    run("electron .",cb);
+});
+
 
 // Just run the project
 gulp.task("run",function(cb)

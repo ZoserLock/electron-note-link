@@ -41,7 +41,9 @@ export default class SearchBar extends React.Component<any, any>
     {
         return (
             <input 
+                className="ui-toolbar-search"
                 type="text" 
+                placeholder="Search Notes"
                 value={this.state.value} 
                 onChange={(event:any)=>this.onHandleChange(event)} 
                 ref={(ref) => this._textInput = ref}

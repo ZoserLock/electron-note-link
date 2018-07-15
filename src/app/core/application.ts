@@ -97,7 +97,7 @@ export default class Application
     // Function called only in debug enviroment
     private initializeDebug():void
     {
-        this._mainWindow.webContents.toggleDevTools();
+        //this._mainWindow.webContents.toggleDevTools();
     }
 
     private createTrayIcon():void

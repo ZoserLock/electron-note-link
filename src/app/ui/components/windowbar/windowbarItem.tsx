@@ -9,7 +9,25 @@ export default class WindowbarItem extends React.Component<any, any>
     
     private getClassName():string
     {
-        return "ui-windowbar-item ui-windowbar-item-close";
+        let className = "ui-windowbar-item ";
+        
+        switch(this.props.type)
+        {
+            case "close":
+                className += "ui-windowbar-item-close";
+            break;
+            case "minimize":
+                className += "ui-windowbar-item-minimize";
+            break;
+            case "maximize":
+                className += "ui-windowbar-item-maximize";
+            break;
+            case "options":
+                className += "ui-windowbar-item-options";
+            break;
+        }
+        
+        return className ;
     }
 
     public render() 

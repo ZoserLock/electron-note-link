@@ -5,12 +5,14 @@
 
 :root 
 {
-    --window-border: #5B6DCD;
+    --window-border: #3A3D45;
     --window-bar-bg: #1D1F24;
     --window-bar-item-hover-bg: #5cbf2a;
     --window-bar-item-active-bg: #5c1f2a;
+  
 
-    --toolbar-bg: #1D1F24;
+    --toolbar-bg: #24262D;
+    --toolbar-separator: #3A3D45;
 
     --icon-window-close: url(../img/icons/icon_close.png);
     --icon-window-maximize: url(../img/icons/icon_maximize.png);
@@ -92,6 +94,26 @@ body
 .ui-windowbar-item-close
 {
     background: var(--icon-window-close) no-repeat;
+    background-size: 18px;
+    background-position: center; 
+}
+.ui-windowbar-item-minimize
+{
+    background: var(--icon-window-minimize) no-repeat;
+    background-size: 18px;
+    background-position: center; 
+}
+
+.ui-windowbar-item-maximize
+{
+    background: var(--icon-window-maximize) no-repeat;
+    background-size: 18px;
+    background-position: center; 
+}
+
+.ui-windowbar-item-options
+{
+    background: var(--icon-window-options) no-repeat;
     background-size: 18px;
     background-position: center; 
 }
@@ -237,7 +259,7 @@ body
 .ui-toolbar
 {
     display: flex;
-    background-color: red;
+    background-color: var(--toolbar-bg);
     height: 40px;
 }
 
@@ -247,6 +269,23 @@ body
     min-width: 100px;
 }
 
+.ui-toolbar-search
+{
+    background-color: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0 20px;
+    margin: 6px 0;
+    border-left: 1px solid var( --toolbar-separator);
+    border-right: 1px solid var( --toolbar-separator);
+    color: white;
+    flex-grow: 1
+}
+
+.ui-toolbar-search:focus
+{
+    outline: none;
+}
 
 /*Main Window Status Bar*/
 .ui-statusbar
@@ -261,6 +300,7 @@ body
 {
     margin-left: auto;
 }
+
 .text-unselect 
 {
     user-select: none;

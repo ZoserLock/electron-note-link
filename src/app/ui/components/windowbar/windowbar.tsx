@@ -31,11 +31,11 @@ export default class WindowBar extends React.Component<any, any>
     {
         return (
             <header className="ui-windowbar">
-                <WindowbarItem name="" onClick={()=>this.onClose()}/>
+                <WindowbarItem type="options" onClick={()=>this.onClose()}/>
                 <span className="ui-inline-spacer"></span>
-                <WindowbarItem name="" onClick={()=>this.onMinimize()}/>
-                <WindowbarItem name="" onClick={()=>this.onMaximize()}/>
-                <WindowbarItem name="" onClick={()=>this.onClose()}/>
+                <WindowbarItem type="minimize" onClick={()=>this.onMinimize()}/>
+                <WindowbarItem type="maximize" onClick={()=>this.onMaximize()}/>
+                <WindowbarItem type="close" onClick={()=>this.onClose()}/>
             </header>
         );
     }
