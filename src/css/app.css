@@ -1,23 +1,102 @@
-body
+/* NOTE LINK CSS */
+
+
+/* GLOBAL */
+
+:root 
 {
-    margin: 0;
+    --window-border: #5B6DCD;
+    --window-bar-bg: #1D1F24;
+    --window-bar-item-hover-bg: #5cbf2a;
+    --window-bar-item-active-bg: #5c1f2a;
+
+    --toolbar-bg: #1D1F24;
+
+    --icon-window-close: url(../img/icons/icon_close.png);
+    --icon-window-maximize: url(../img/icons/icon_maximize.png);
+    --icon-window-minimize: url(../img/icons/icon_minimize.png);
+    --icon-window-options: url(../img/icons/icon_options.png);
 }
 
-::-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #AAA; } ::-webkit-scrollbar-button:hover{ background-color: #AAA; } ::-webkit-scrollbar-thumb{ background-color: #CCC; } ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; } ::-webkit-scrollbar-track{ background-color: #efefef; } ::-webkit-scrollbar-track:hover{ background-color: #7d7d7d; border-radius: 0px; } ::-webkit-scrollbar{ width: 7px; }
-
-
-@font-face {
+@font-face 
+{
     font-family: 'DroidSansMono';
     src: url("../fonts/droid_sans_mono.ttf"); 
 }
 
+@font-face 
+{
+    font-family: 'Roboto';
+    src: url("../fonts/droid_sans_mono.ttf"); 
+}
+
+/* Custom ScrollBar */
+::-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #AAA; } 
+::-webkit-scrollbar-button:hover{ background-color: #AAA; } 
+::-webkit-scrollbar-thumb{ background-color: #CCC; } 
+::-webkit-scrollbar-thumb:hover{ background-color: #CCC; } 
+::-webkit-scrollbar-track{ background-color: #efefef; } 
+::-webkit-scrollbar-track:hover{ background-color: #7d7d7d; border-radius: 0px; }
+::-webkit-scrollbar{ width: 7px; }
+
+/* Body */
+body
+{
+    margin: 0;
+    user-select: none; 
+}
+
+/* WINDOW */
 
 .ui-window
 {
     display: flex;
     flex-flow: column;
     height: 100vh; 
+    border: solid var(--window-border) 1px;
+    box-sizing: border-box;
 }
+
+/* Window Bar*/
+.ui-windowbar
+{
+    -webkit-app-region: drag;
+
+    display: flex;
+    background-color: var(--window-bar-bg);
+    height: 32px;
+}
+
+.ui-windowbar-item
+{
+    -webkit-app-region: no-drag;
+    background-color:var(--window-bar-bg);
+    color:#ffffff;
+    display:inline-block;
+    font-size:17px;
+    height: 32px;
+    width: 48px;
+    line-height : 32px
+}
+
+.ui-windowbar-item:hover 
+{
+    background-color:var(--window-bar-item-hover-bg);
+}
+
+.ui-windowbar-item:active 
+{
+    background-color:var(--window-bar-item-active-bg);
+}
+
+.ui-windowbar-item-close
+{
+    background: var(--icon-window-close) no-repeat;
+    background-size: 18px;
+    background-position: center; 
+}
+
+/* END WINDOW */
 
 .ui-main
 {
@@ -168,33 +247,6 @@ body
     min-width: 100px;
 }
 
-.ui-toolbar-spacer
-{
-    margin-left: auto;
-}
-
-/*Main Window window Bar*/
-.ui-windowbar
-{
-    -webkit-app-region: drag;
-
-    display: flex;
-    flex-direction: row-reverse;
-    background-color: #1B5AD8;
-    height: 32px;
-}
-
-.ui-toolbar-spacer
-{
-    margin-left: auto;
-}
-
-.ui-windowbar-button
-{
-    -webkit-app-region: no-drag;
-    background-color: #1B5AD8;
-    height: 32px;
-}
 
 /*Main Window Status Bar*/
 .ui-statusbar
@@ -205,6 +257,10 @@ body
 }
 
 /*Misc*/
+.ui-inline-spacer
+{
+    margin-left: auto;
+}
 .text-unselect 
 {
     user-select: none;

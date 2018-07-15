@@ -2,8 +2,8 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
 // UI
-import ToolbarItem from "./toolbar/toolbarItem"; 
-import Message from "../../core/message";
+import WindowbarItem from "./windowbarItem"; 
+import Message from "../../../core/message";
 
 export default class WindowBar extends React.Component<any, any> 
 {
@@ -31,9 +31,11 @@ export default class WindowBar extends React.Component<any, any>
     {
         return (
             <header className="ui-windowbar">
-                <ToolbarItem name="Close" onClick={()=>this.onClose()}/>
-                <ToolbarItem name="Maximize" onClick={()=>this.onMaximize()}/>
-                <ToolbarItem name="Minimize" onClick={()=>this.onMinimize()}/>
+                <WindowbarItem name="" onClick={()=>this.onClose()}/>
+                <span className="ui-inline-spacer"></span>
+                <WindowbarItem name="" onClick={()=>this.onMinimize()}/>
+                <WindowbarItem name="" onClick={()=>this.onMaximize()}/>
+                <WindowbarItem name="" onClick={()=>this.onClose()}/>
             </header>
         );
     }

@@ -7,7 +7,7 @@ import NoteList from "./noteList/noteList";
 import NoteView from "./noteView/noteView";
 import StatusBar from "./statusBar";
 import Toolbar from "./toolbar/toolbar";
-import WindowBar from "./windowBar";
+import WindowBar from "./windowbar/windowbar";
 import PopupLayer from "./popupLayer"
 
 export default class ApplicationWindow extends React.Component<any, any> 

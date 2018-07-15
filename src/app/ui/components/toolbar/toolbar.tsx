@@ -43,6 +43,11 @@ export default class Toolbar extends React.Component<any, any>
         ipcRenderer.send("action:TestPopup");
     }
 
+    private reloadCss():void
+    {
+        ipcRenderer.send("action:ReloadCss");
+    }
+
     public render() 
     {
         return (
@@ -50,6 +55,7 @@ export default class Toolbar extends React.Component<any, any>
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
                 <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
                 <SearchBar ref={(ref) => this._searchBar = ref}/>
+                <ToolbarItem name="Reload Css" onClick={()=>this.reloadCss()}/>
             </header>
         );
     }
