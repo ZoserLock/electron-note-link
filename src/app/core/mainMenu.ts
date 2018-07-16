@@ -2,36 +2,36 @@
 import { Menu, MenuItem } from "electron";
 
 // Local Modules
-import Application      from "../core/application"
+import Application      from "./application"
 import Configuration    from "../tools/configuration";
 
 export default class MainMenu
 {
     private static _menu: Electron.Menu;
-    private static _fileMenu: Electron.MenuItem;
+    private static _fileMenu: Electron.MenuItem; 
 
     public static initialize():void
     {
-        this._menu = new Menu();
-
+        this._menu = new Menu(); 
+ 
         this.CreateFileMenu();
     
         this._menu.append(this._fileMenu);
 
-        Menu.setApplicationMenu(this._menu);
+        Menu.setApplicationMenu(this._menu); 
     }
 
     private static CreateFileMenu()
     {
         this._fileMenu = new MenuItem(
-        {
+        { 
             label:"File",
-            submenu:
-            [
+            submenu: 
+            [ 
                 {
                     label:"New Note",
                     accelerator: "CmdOrCtrl+P",
-                    click:() =>
+                    click:() => 
                     {
                     /*    let newNoteAction:AddNoteAction = new AddNoteAction("New note");
                         ActionManager.instance.execute(newNoteAction);*/
@@ -51,4 +51,4 @@ export default class MainMenu
             ]
         });
     }
-}
+} 

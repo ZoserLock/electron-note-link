@@ -5,6 +5,7 @@ import {ipcRenderer} from "electron";
 import ToolbarItem from "./toolbarItem"; 
 import SearchBar from "./searchBar"; 
 import Message from "../../../core/message";
+import ToolbarSeparator from "./toolbarSeparator";
 
 export default class Toolbar extends React.Component<any, any> 
 {
@@ -48,9 +49,10 @@ export default class Toolbar extends React.Component<any, any>
         ipcRenderer.send("action:TestPopup");
     }
 
-    private reloadCss():void
+    private reloadCss():void 
     {
         ipcRenderer.send("action:ReloadCss");
+ 
     }
 
     public render() 
@@ -59,7 +61,9 @@ export default class Toolbar extends React.Component<any, any>
             <header className="ui-toolbar">
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNote()}/>
+                <ToolbarSeparator/>
                 <SearchBar ref={(ref) => this._searchBar = ref}/>
+                <ToolbarSeparator/>
                 <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
             </header>
         );

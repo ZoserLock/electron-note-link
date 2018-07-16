@@ -1,19 +1,22 @@
 /* NOTE LINK CSS */
 
-
 /* GLOBAL */
-
 :root 
 {
+    /* Window Colors */
     --window-border: #3A3D45;
     --window-bar-bg: #1D1F24;
     --window-bar-item-hover-bg: #5cbf2a;
     --window-bar-item-active-bg: #5c1f2a;
-  
 
+    /* Toolbar Colors */
     --toolbar-bg: #24262D;
     --toolbar-separator: #3A3D45;
+    --toolbar-item-color: #848c94;
+    --toolbar-item-color-hover: #c0c4c8;
+    --toolbar-item-color-active: #c0c4c8;
 
+    /* Images */
     --icon-window-close: url(../img/icons/icon_close.png);
     --icon-window-maximize: url(../img/icons/icon_maximize.png);
     --icon-window-minimize: url(../img/icons/icon_minimize.png);
@@ -26,26 +29,21 @@
     src: url("../fonts/droid_sans_mono.ttf"); 
 }
 
-@font-face 
-{
-    font-family: 'Roboto';
-    src: url("../fonts/droid_sans_mono.ttf"); 
-}
-
 /* Custom ScrollBar */
 ::-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #AAA; } 
 ::-webkit-scrollbar-button:hover{ background-color: #AAA; } 
 ::-webkit-scrollbar-thumb{ background-color: #CCC; } 
 ::-webkit-scrollbar-thumb:hover{ background-color: #CCC; } 
-::-webkit-scrollbar-track{ background-color: #efefef; } 
-::-webkit-scrollbar-track:hover{ background-color: #7d7d7d; border-radius: 0px; }
-::-webkit-scrollbar{ width: 7px; }
+::-webkit-scrollbar-track{ background-color: transparent; } 
+::-webkit-scrollbar-track:hover{ background-color: transparent;}
+::-webkit-scrollbar{ width: 8px; }
 
 /* Body */
 body
 {
     margin: 0;
     user-select: none; 
+    font-family: 'Roboto', sans-serif;
 }
 
 /* WINDOW */
@@ -133,7 +131,18 @@ body
 {
     background-color: #7952C9;
     flex: 0 0 200px;
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+.ui-sidebar-header
+{
+    height: 100px;
+}
+
+.ui-sidebar-list
+{
+    overflow-y: overlay;
 }
 
 .ui-sidebar-storage-item
@@ -258,15 +267,50 @@ body
 /*Main Window Tool Bar*/
 .ui-toolbar
 {
+    position:relative;
+    z-index:2;
+
     display: flex;
-    background-color: var(--toolbar-bg);
     height: 40px;
+    background-color: var(--toolbar-bg);
+    box-shadow: 0px 0px 21px #161616;
 }
 
 .ui-toolbar-item
 {
-    margin: 5px;
+    margin: 6px;
     min-width: 100px;
+
+    border: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0px;
+
+    font-size: 14px;
+    color: var(--toolbar-item-color);
+
+}
+
+.ui-toolbar-item:hover 
+{
+    color: var(--toolbar-item-color-hover);
+}
+
+.ui-toolbar-item:active 
+{
+    color: var(--toolbar-item-color-active);
+}
+
+.ui-toolbar-item:focus
+{
+    outline: none;
+}
+
+.ui-toolbar-separator
+{
+    margin: 6px;
+    min-width: 1px;
+    border-left: 1px solid var( --toolbar-separator);
 }
 
 .ui-toolbar-search
@@ -276,8 +320,6 @@ body
     border-radius: 0;
     padding: 0 20px;
     margin: 6px 0;
-    border-left: 1px solid var( --toolbar-separator);
-    border-right: 1px solid var( --toolbar-separator);
     color: white;
     flex-grow: 1
 }

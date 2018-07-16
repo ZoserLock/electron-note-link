@@ -144,6 +144,9 @@ export default class Application
 
         this._mainWindow.on("close", (event:any) => 
         {
+            // Just for debug
+            return false;// Remove for release.
+
             if(!this._exiting)
             {
                 event.preventDefault()

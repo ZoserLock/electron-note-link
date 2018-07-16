@@ -3,9 +3,10 @@ const spawn  = require("child_process").spawn;
 const http   = require("https");
 const fs     = require("fs");
 const gulp   = require("gulp");
-const async  = require("async");
 
+const runSequence = require('run-sequence');
 const uglify = require("gulp-uglify");
+const watch = require('gulp-watch');
 
 // Constants
 const _outputDir = "dist";
@@ -27,7 +28,7 @@ gulp.task("clean", function (cb)
 });
 
 // Download some files and update them.
-gulp.task("download-assets",["clean"],function(cb)
+gulp.task("download-assets",function(cb)
 {
     async.parallel(
     [
@@ -40,18 +41,7 @@ gulp.task("download-assets",["clean"],function(cb)
 });
 
 // Copy the non script assets to the destination folder
-gulp.task("copy-assets",["clean"],function(cb)
-{
-    gulp.src(_inputDir + "/css/**/*").pipe(gulp.dest(_outputDir + "/css"));
-    gulp.src(_inputDir + "/lib/**/*").pipe(gulp.dest(_outputDir + "/lib"));
-    gulp.src(_inputDir + "/html/**/*").pipe(gulp.dest(_outputDir + "/html"));
-    gulp.src(_inputDir + "/img/**/*").pipe(gulp.dest(_outputDir + "/img"));
-    gulp.src(_inputDir + "/fonts/**/*").pipe(gulp.dest(_outputDir + "/fonts"));
-
-    cb();
-});
-
-gulp.task("copy-assets-no-clean",function(cb)
+gulp.task("copy-assets",function(cb)
 {
     gulp.src(_inputDir + "/css/**/*").pipe(gulp.dest(_outputDir + "/css"));
     gulp.src(_inputDir + "/lib/**/*").pipe(gulp.dest(_outputDir + "/lib"));
@@ -64,23 +54,53 @@ gulp.task("copy-assets-no-clean",function(cb)
 
 
 // this function is to copy the debug or release env file to have compilation variables
-gulp.task("generate-env",["clean"],function(cb)
+gulp.task("generate-env",function(cb)
 {
     fs.createReadStream("env/env.debug").pipe(fs.createWriteStream(_inputDir+"/env.ts")).on("finish", cb);
 });
 
+// Minimize the output files
+gulp.task("minimize", function(cb)
+{
+  return gulp.src(_outputDir + "/**/*.js")
+    .pipe(uglify())
+    .pipe(gulp.dest(_outputDir));
+});
 
 // Compile all the Typescript code using the tsconfig.json
-gulp.task("build",["clean","copy-assets","generate-env"],function(cb)
+gulp.task("build",function(cb)
 {
     run("webpack --config "+_webpackConfig,cb);
 });
 
 // Build the project without post proccesses
-gulp.task("build:develop",["build"]);
+gulp.task("build:develop",function(cb)
+{
+    runSequence(
+    'clean',
+    'copy-assets',
+    'build',
+    cb);
+});
 
 // Build the project with post proccesses
-gulp.task("build:release",["build","minimize"]);
+gulp.task("build:release",function(cb)
+{
+    runSequence(
+    'clean',
+    'copy-assets',
+    'build',
+    'minimize',
+    cb);
+});
+
+// Refresh Assets
+gulp.task("build:refresh",function(cb)
+{
+    runSequence(
+    'copy-assets',
+    cb);
+});
 
 // Compile and run the projectc
 gulp.task("dev",["build:develop"],function(cb)
@@ -88,29 +108,17 @@ gulp.task("dev",["build:develop"],function(cb)
     run("electron .",cb);
 });
 
-gulp.task("css",["copy-assets-no-clean"],function(cb)
+// Copy just the resources. The proyect is not built
+gulp.task("css",["build:refresh"],function(cb)
 {
     run("electron .",cb);
 });
-
 
 // Just run the project
 gulp.task("run",function(cb)
 {
     run("electron .",cb);
 });
-
-
-// Minimize the output files
-gulp.task("minimize",["build"], function(cb)
-{
-  return gulp.src(_outputDir + "/**/*.js")
-    .pipe(uglify())
-    .pipe(gulp.dest(_outputDir));
-});
-
-// Default task make the whole build
-gulp.task("default", ["dev"]); 
 
 ///////////////////////////////////////////////////////
 // Test Build
@@ -133,7 +141,6 @@ gulp.task("test",["build:tests"],function(cb)
 
 ///////////////////////////////////////////////////////
 // Utility Functions
-
 // Run function to run a command and write the output live.
 function run(command, callback)
 {
@@ -149,7 +156,28 @@ function run(command, callback)
     {
         console.log(data); 
     });
+
+    return process;
 }
+
+
+function run(command, callback)
+{
+    let process = exec(command, function (err, stdout, stderr)
+    {
+        if(callback != undefined)
+        {
+             callback(err);
+        }
+    });
+
+    process.stdout.on("data", function(data) 
+    {
+        console.log(data); 
+    });
+}
+
+
 
 function downloadFile(url,target, callback)
 {
