@@ -16,6 +16,11 @@
     --toolbar-item-color-hover: #c0c4c8;
     --toolbar-item-color-active: #c0c4c8;
 
+    /* Sidebar */
+    --sidebar-bg: #24262D;
+    --sidebar-header-list-item-color: #848c94;
+    --sidebar-header-list-item-color-hover: #3A3D45;
+
     /* Images */
     --icon-window-close: url(../img/icons/icon_close.png);
     --icon-window-maximize: url(../img/icons/icon_maximize.png);
@@ -61,6 +66,9 @@ body
 .ui-windowbar
 {
     -webkit-app-region: drag;
+
+    position:relative;
+    z-index:3;
 
     display: flex;
     background-color: var(--window-bar-bg);
@@ -129,15 +137,52 @@ body
 /* Side Bar */
 .ui-sidebar
 {
-    background-color: #7952C9;
+    background-color: var( --sidebar-bg);
     flex: 0 0 200px;
+    margin: 0px;
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
 }
 
 .ui-sidebar-header
 {
-    height: 100px;
+    padding: 5px 0px 5px 20px;
+    margin: 0px;
+    font-size: 14px;
+    color: var(--toolbar-item-color-hover);
+}
+
+.ui-sidebar-header-list
+{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.ui-sidebar-header-list-item
+{
+    display: block;
+    padding: 0px;
+    margin: 0px;
+    line-height: 35px;
+    text-decoration: none;
+    color: var(--sidebar-header-list-item-color);
+
+    font-size: 14px;
+}
+
+.ui-sidebar-header-list-item:hover
+{
+    background: var(--sidebar-header-list-item-color-hover);
+}
+
+.ui-sidebar-header-list-item span
+{
+    display: block;
+    width: 5px;
+    height: 35px;
+    margin-right: 20px;
+    float:left;
 }
 
 .ui-sidebar-list
@@ -285,7 +330,7 @@ body
     background: none;
     box-shadow: none;
     border-radius: 0px;
-
+    cursor: pointer;
     font-size: 14px;
     color: var(--toolbar-item-color);
 
