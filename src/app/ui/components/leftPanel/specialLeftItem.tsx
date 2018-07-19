@@ -16,16 +16,22 @@ export default class SpecialLeftItem extends React.Component<any, any>
 
     public render() 
     {
-        let displayClass = "ui-sidebar-header-list-item";
+        if(this.props.isSelected)
+        {
+            return (
+                <li >
+                    <a className={"ui-sidebar-header-list-item selected"}  href="#" onClick={this.props.onClick}>
+                        <span></span>{this.props.name}
+                    </a>
+                </li>
+            );
+        }
 
-        var dynamicStyle = {
-            background: 'white',
-          };
 
         return (
             <li >
-                <a className={displayClass}  href="#" onClick={this.props.onClick}>
-                    <span style={dynamicStyle}></span>{this.props.name}
+                <a className={"ui-sidebar-header-list-item"}  href="#" onClick={this.props.onClick}>
+                    <span></span>{this.props.name}
                 </a>
             </li>
         );

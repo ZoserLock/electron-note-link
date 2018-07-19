@@ -61,15 +61,13 @@ export default class NotebookItem extends React.Component<any, any>
 
     public render() 
     {
-        let displayClass = (this.props.isSelected)? "selected text-unselect": "text-unselect";
+        let displayClass = "ui-sidebar-notebook-item";
+        displayClass += (this.props.isSelected)? " selected":"";
 
-        displayClass += " ui-sidebar-notebook-item";
         return (
-            <li className={displayClass} >
-                <span onClick={()=>this.onItemClick()}>
-                    {this.props.notebook.name}
-                </span> 
-                <button onClick={()=>this.onItemDelete()}>-</button>
+            <li className={displayClass} onClick={()=>this.onItemClick()}>
+                <span></span> 
+                {this.props.notebook.name}
             </li>
         );
     }
