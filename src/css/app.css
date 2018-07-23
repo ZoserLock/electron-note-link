@@ -30,11 +30,22 @@
     --sidebar-storage-item-bg:#1D1F24;
     --toolbar-storage-item-color: #848c94;
 
+    /* Contet Menu */
+    --context-menu-background:#24262D;
+    --context-menu-border:#44464D;
+    --context-menu-item-color:#848c94;
+    --context-menu-item-color-hover:#3A3D45;
+    
+    /* Note List*/
+    --note-list-header-bg: #2A2D35;
+    --note-list-header-color: #848c94;
+    --note-list-content-bg: #2D3038;
     /* Images */
     --icon-window-close: url(../img/icons/icon_close.png);
     --icon-window-maximize: url(../img/icons/icon_maximize.png);
     --icon-window-minimize: url(../img/icons/icon_minimize.png);
     --icon-window-options: url(../img/icons/icon_options.png);
+    --icon-window-add: url(../img/icons/icon_add.png);
 }
 
 @font-face 
@@ -46,8 +57,8 @@
 /* Custom ScrollBar */
 ::-webkit-scrollbar-button{ display: none; height: 13px; border-radius: 0px; background-color: #AAA; } 
 ::-webkit-scrollbar-button:hover{ background-color: #AAA; } 
-::-webkit-scrollbar-thumb{ background-color: #CCC; } 
-::-webkit-scrollbar-thumb:hover{ background-color: #CCC; } 
+::-webkit-scrollbar-thumb{ background-color: #1D1F24; } 
+::-webkit-scrollbar-thumb:hover{ background-color: #1D1F24; } 
 ::-webkit-scrollbar-track{ background-color: transparent; } 
 ::-webkit-scrollbar-track:hover{ background-color: transparent;}
 ::-webkit-scrollbar{ width: 8px; }
@@ -166,6 +177,7 @@ body
 {
     list-style-type: none;
     padding-left: 0;
+    margin: 8px 0px;
 }
 
 /* Sidebar List Item */
@@ -209,6 +221,13 @@ body
     background:var(--badge-bg);
 }
 
+.ui-sidebar-header-list-separator
+{
+    border-bottom: 1px solid var(--context-menu-border);
+    margin: 3px 10px 3px 10px;
+}
+
+
 .ui-sidebar-list
 {
     overflow-y: overlay;
@@ -228,11 +247,44 @@ body
     cursor:default;
 }
 
-.ui-sidebar-storage-item button
+.ui-sidebar-storage-item span
 {
-    float: right;
+    margin-right: auto;
 }
 
+.ui-sidebar-storage-item-button-container
+{
+    display: none;
+}
+
+.ui-sidebar-storage-item-button-container:hover
+{
+    background: var(--sidebar-item-color-hover);
+}
+
+.ui-sidebar-storage-item-button-container:focus
+{
+    outline: none;
+}
+
+.ui-sidebar-storage-item:hover .ui-sidebar-storage-item-button-container  
+{
+    display: block;
+}
+
+.ui-sidebar-storage-item-button 
+{
+    display:inline-block;
+    background: var(--icon-window-add) no-repeat;
+    background-size: 20px;
+    background-position: center; 
+    min-width: 35px;
+    height: 35px;
+    border: 0;
+    border-radius: 0px;
+    font-size: 14px;
+    cursor:pointer;
+}
 /* Sidebar Notebook Item */
 .ui-sidebar-storage-item-notebooks
 {
@@ -247,9 +299,9 @@ body
 .ui-sidebar-notebook-item
 {
     display: flex;
-    padding: 0px 0px 0px 30px;
     margin: 0px;
     line-height: 30px;
+    height: 30px;
     text-decoration: none;
     color: var(--sidebar-item-color);
 
@@ -263,17 +315,17 @@ body
 
 .ui-sidebar-notebook-item.selected
 {
-    background: rgb(255, 255, 255);
+    background: var(--sidebar-item-color-selected);
 }
 
-.ui-sidebar-header-list-item span
+.ui-sidebar-notebook-item span
 {
     width: 5px;
-    height: 35px;
-    margin-right: 20px;
+    height: 30px;
+    margin: 0px 30px 0px 0px;
 }
 
-.ui-sidebar-header-list-item.selected span
+.ui-sidebar-notebook-item.selected span
 {
     background:var(--badge-bg);
 }
@@ -289,14 +341,40 @@ body
 
 .ui-note-list-header
 {
-    background-color: #00C3FF;
+    background: var(--note-list-header-bg);
+    color: var(--note-list-header-color);
+  
+    font-size: 14px;
     padding: 10px;
-    height: 20px;
+    height: 25px;
+    border-bottom: solid 1px var(--note-list-header-color);
 }
+
+.ui-note-list-header-title
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    width: 240px;
+    height: 25px;
+    line-height:25px;
+}
+
 
 .ui-note-list-header button
 {
     float: right;
+}
+
+.ui-note-list-content
+{
+    flex: 1;
+    background: var(--note-list-content-bg);
+}
+
+.ui-note-list-content:focus
+{
+    outline: none;
 }
 
 .ui-note-list-item 
@@ -320,10 +398,7 @@ body
     background-color: rgb(37, 150, 107);
 }
 
-.ui-note-list-content
-{
-    flex: 1;
-}
+
 
 /*********************************/
 /* Right Viewport Bar - NoteView */
@@ -414,6 +489,7 @@ body
     padding: 0 20px;
     margin: 6px 0;
     color: white;
+    font-size: 14px;
     flex-grow: 1
 }
 
@@ -434,18 +510,6 @@ body
 .ui-inline-spacer
 {
     margin-left: auto;
-}
-
-.text-unselect 
-{
-    user-select: none;
-}
-
-.text-area-fill
-{
-    width:100%;
-    height:100%; 
-    box-sizing: border-box; 
 }
 
 /*Popups*/
@@ -470,6 +534,9 @@ body
     height: 250px;
 }
 
+
+/* External CSS */
+
 /*************/
 /*Code Mirror*/
 .CodeMirror 
@@ -487,11 +554,11 @@ body
 /****************/
 /* Context Menu */
 .react-contextmenu {
-    background-color: #fff;
+    background-color: var(--context-menu-background);
     background-clip: padding-box;
-    border: 1px solid rgba(0,0,0,.15);
-    border-radius: .25rem;
-    color: #373a3c;
+    border: 1px solid var(--context-menu-border);
+    border-radius: 0;
+    color: var(--context-menu-item-color);
     font-size: 16px;
     margin: 2px 0 0;
     min-width: 160px;
@@ -500,7 +567,6 @@ body
     padding: 5px 0;
     pointer-events: none;
     text-align: left;
-    transition: opacity 250ms ease !important;
 }
 
 .react-contextmenu.react-contextmenu--visible {
@@ -512,9 +578,10 @@ body
 .react-contextmenu-item {
     background: 0 0;
     border: 0;
-    color: #373a3c;
+    color: var(--context-menu-item-color);
 	cursor: pointer;
     font-weight: 400;
+    font-size: 14px;
     line-height: 1.5;
     padding: 3px 20px;
     text-align: inherit;
@@ -524,7 +591,7 @@ body
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
     color: #fff;
-    background-color: #20a0ff;
+    background-color: var(--context-menu-item-color-hover);
     border-color: #20a0ff;
     text-decoration: none;
 }
@@ -537,21 +604,24 @@ body
 }
 
 .react-contextmenu-item--divider {
-    border-bottom: 1px solid rgba(0,0,0,.15);
+    border-bottom: 1px solid var(--context-menu-border);
     cursor: inherit;
-    margin-bottom: 3px;
+    margin: 0px 10px 3px 10px ;
     padding: 2px 0;
+    
 }
+
 .react-contextmenu-item--divider:hover {
-    background-color: transparent;
-    border-color: rgba(0,0,0,.15);
+  
 }
 
 .react-contextmenu-item.react-contextmenu-submenu {
 	padding: 0;
 }
 
-.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item {
+.react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item 
+{
+
 }
 
 .react-contextmenu-item.react-contextmenu-submenu > .react-contextmenu-item:after {

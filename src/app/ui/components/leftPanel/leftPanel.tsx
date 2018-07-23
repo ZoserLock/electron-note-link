@@ -96,6 +96,7 @@ export default class LeftPanel extends React.Component<any, any>
                     <SpecialLeftItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {mode == NoteListMode.All}/>
                     <SpecialLeftItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {mode == NoteListMode.Started}/>
                     <SpecialLeftItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {mode == NoteListMode.Trash}/>
+                    <div className="ui-sidebar-header-list-separator" />
                 </ul>
                 <div className="ui-sidebar-list">
                     {this.state.storages}

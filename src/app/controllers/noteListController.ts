@@ -52,6 +52,7 @@ export default class NoteListController extends Controller
 
         let searchData:string="";
 
+        let title:string = null;
         // HERE WE CAN IMPLEMENT A GENERIC FILTER.
         // Like current filter.filter(notes)
         let noteData:any[] = [];
@@ -65,7 +66,11 @@ export default class NoteListController extends Controller
                 minMatchCharLength: 3,
             }
 
-            //Cache this list.
+            // Process special keyworlds and cache them until the special keywords disapear.
+            
+
+
+            // Cache this list as something like current Searchable notes.
             notes = DataManager.instance.notes.filter((note:Note)=>
             {
                 return (!note.trashed);
@@ -79,6 +84,9 @@ export default class NoteListController extends Controller
             var fuse = new Fuse(noteData, options);
 
             noteData = fuse.search(Editor.instance.searchPhrase);
+            title = "Search results for: "+Editor.instance.searchPhrase;
+
+            // Avoid send if the data have not changed.
         }
         else if(mode == NoteListMode.All)
         {
@@ -90,6 +98,7 @@ export default class NoteListController extends Controller
             {
                 return note.GetDataObject();
             });
+            title = "All Notes"
         }
         else if(mode == NoteListMode.Trash)
         {
@@ -101,6 +110,7 @@ export default class NoteListController extends Controller
             {
                 return note.GetDataObject();
             });
+            title = "Trash";
         }
         else if(mode == NoteListMode.Notebook)
         {
@@ -112,6 +122,7 @@ export default class NoteListController extends Controller
             {
                 return note.GetDataObject();
             });
+            title = Editor.instance.selectedNotebook.name;
         }
         else if(mode == NoteListMode.Started)
         {
@@ -123,12 +134,14 @@ export default class NoteListController extends Controller
             {
                 return note.GetDataObject();
             });
+            title = "Started Notes";
         }
         
         let forceUpdate:boolean = true;
 
         let data =
         {
+            title:title,
             notes:noteData,
             mode:mode,
             selectedNote:selectedNote,

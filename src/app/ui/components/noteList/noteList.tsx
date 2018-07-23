@@ -20,9 +20,11 @@ export default class NoteList extends React.Component<any, any>
 
         this.state =
         {
+            title:"",
             notes:[],
             mode: NoteListMode.Notebook,
-            selectedNote:""
+            selectedNote:"",
+            forceUpdate:true,
         }
 
         this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
@@ -38,7 +40,7 @@ export default class NoteList extends React.Component<any, any>
     public componentWillUnmount()
     {
         ipcRenderer.removeListener("update:NoteList",this._updateRequestedEvent);
-        ipcRenderer.removeListener("update:NoteList",this._updateSearchRequestedEvent);
+        ipcRenderer.removeListener("update:Search",this._updateSearchRequestedEvent);
     }
 
     public updateSearchRequested(data:any):void
@@ -49,14 +51,27 @@ export default class NoteList extends React.Component<any, any>
     public updateRequested(data:any):void
     {
         // Change force update with ref ref={(ref) => this.list = ref}
-        this.setState({notes:data.notes,mode:data.mode,selectedNote:data.selectedNote, forceUpdate:data.forceUpdate});
+        this.setState({
+            title:data.title,
+            notes:data.notes,
+            mode:data.mode,
+            selectedNote:data.selectedNote, 
+            forceUpdate:data.forceUpdate
+        });
     }
 
     public render() 
     {
+        let title:string = "";
+
+        if(this.state.mode == NoteListMode.Notebook)
+        {
+            title=this.state.note
+        }
+
         return (
             <div className="ui-note-list">
-                <NoteListHeader mode   = {this.state.mode}/>
+                <NoteListHeader title = {this.state.title}/>
                 <NoteListContent notes = {this.state.notes} selectedNote={this.state.selectedNote} search={this.state.search} forceUpdate = {this.state.forceUpdate}/>
             </div>
         );

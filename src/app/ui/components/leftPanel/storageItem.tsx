@@ -72,6 +72,7 @@ export default class StorageItem extends React.Component<any, any>
         {
             notebooks = 
             (  
+                
                 <ul className="ui-sidebar-storage-item-notebooks">
                     {notebookContent}
                 </ul>
@@ -83,16 +84,19 @@ export default class StorageItem extends React.Component<any, any>
             <div>
                 <div className="ui-sidebar-storage-item"> 
                     <span>{this.props.storage.name}</span> 
-                    <button onClick={()=>this.onAddButtonClick()}>+</button>
-                    <button onClick={()=>this.onUnlinkButtonClick()}>-</button>
+                    <div className="ui-sidebar-storage-item-button-container">
+                        <button className="ui-sidebar-storage-item-button" onClick={()=>this.onAddButtonClick()}></button>
+                    </div>
                 </div>
                 {notebooks}    
                 <ContextMenu id={storageId}>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Add Note' }}>Add Note</MenuItem> 
+                    <MenuItem divider /> 
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Notebook</MenuItem>
-                    <MenuItem divider />
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Export' }}>Export Notebook</MenuItem>
-                    <MenuItem divider />
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Notebook</MenuItem>  
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Notebook</MenuItem> 
+                
+                  
                 </ContextMenu>
             </div>
 

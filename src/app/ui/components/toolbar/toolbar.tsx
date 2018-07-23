@@ -60,7 +60,7 @@ export default class Toolbar extends React.Component<any, any>
         return (
             <header className="ui-toolbar">
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
-                <ToolbarItem name="Add Storage" onClick={()=>this.createNewNote()}/>
+                <ToolbarItem name="Add Note" onClick={()=>this.createNewNote()}/>
                 <ToolbarSeparator/>
                 <SearchBar ref={(ref) => this._searchBar = ref}/>
                 <ToolbarSeparator/>

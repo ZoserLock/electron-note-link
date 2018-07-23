@@ -75,9 +75,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="565.94594"
-     inkscape:cy="39.348781"
+     inkscape:zoom="1.4"
+     inkscape:cx="220.12822"
+     inkscape:cy="-11.221418"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -210,5 +210,23 @@
          d="m -486.42275,651.95245 0,-248.59801 258.31072,0 z"
          style="opacity:1;fill:url(#linearGradient4194);fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
+    <rect
+       style="opacity:0;fill:#ddff55;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4737-1-6-1-1"
+       width="128"
+       height="128"
+       x="-151.14287"
+       y="925.505"
+       inkscape:export-filename="E:\Programming\Zostak\NodeJS\electron-notelink\src\img\icons\icon_add.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:1;fill:#848c94;fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M -96.013672 18.292969 L -96.013672 56.271484 L -133.99414 56.271484 L -133.99414 74.013672 L -96.013672 74.013672 L -96.013672 111.99414 L -78.271484 111.99414 L -78.271484 74.013672 L -40.292969 74.013672 L -40.292969 56.271484 L -78.271484 56.271484 L -78.271484 18.292969 L -96.013672 18.292969 z "
+       transform="translate(0,924.36213)"
+       id="rect4819-7"
+       inkscape:export-filename="E:\Programming\Zostak\NodeJS\electron-notelink\src\img\icons\icon_add.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>
