@@ -53,12 +53,17 @@ export default class NoteListItem extends React.Component<any, any>
     {
         let value:string=(this.props.note.title == "")?"<Empty>":this.props.note.title;
         return(
-            <li className="ui-note-list-item">
-                <EditableText 
-                    value = {value} 
-                    onClick={()=>this.onItemClick()} 
-                    onEditFinished={(text:string)=>this.editFinished(text)}
-                />
+            <li className="ui-note-list-item" onClick={()=>this.onItemClick()} >
+                <div className="ui-note-list-item-header" >
+                <span>+</span><span>Notebook</span><span className="ui-inline-spacer"/><span>date</span>
+                </div>
+                <div className="ui-note-list-item-title" >
+                    <EditableText 
+                        value = {value} 
+                        onEditFinished={(text:string)=>this.editFinished(text)}
+                    />
+                </div>
+                <div className="ui-note-list-header-list-separator" />
             </li>
         )
     }

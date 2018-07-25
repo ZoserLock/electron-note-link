@@ -34,7 +34,7 @@ export default class NoteListContent extends React.Component<any, any>
                         width={width}
                         height={height}
                         rowCount ={this.props.notes.length}
-                        rowHeight={30} 
+                        rowHeight={80} 
                         rowRenderer={this._rowRenderer}  
                         selectedNote= {this.props.selectedNote}
                         forceUpdate= {this.props.forceUpdate}

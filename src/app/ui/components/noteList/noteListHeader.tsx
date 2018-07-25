@@ -25,12 +25,13 @@ export default class NoteListHeader extends React.Component<any, any>
     public render() 
     {
         return (
-            <div className="ui-note-list-header"> 
-                <div className="ui-note-list-header-title"> {this.props.title} </div>
-                <button onClick={()=>this.onAddNoteClick()}>+</button>
+            <div className="ui-note-list-header-container"> 
+                <div className="ui-note-list-header">
+                    <div className="ui-note-list-header-title"> {this.props.title} </div>
+                    <button className = "ui-note-list-header-button" onClick={()=>this.onAddNoteClick()}></button>
+                </div>
+                <div className="ui-note-list-header-list-separator" />
             </div>
-
         );
     }
-
 }
