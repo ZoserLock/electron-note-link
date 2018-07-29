@@ -216,7 +216,8 @@ export default class Note
             trashed:this._trash,
             started:this._started,
             created:this._created,
-            updated:this._updated
+            updated:this._updated,
+            notebook:this._notebook.name
         };
 
         return dataObject

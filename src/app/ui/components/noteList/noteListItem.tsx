@@ -2,7 +2,7 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 import applyOnClickOutside from 'react-onclickoutside'
-
+import * as moment from 'moment';
 // Local
 import Debug from "../../../tools/debug";
 import Note from "../../../notes/note";
@@ -52,13 +52,22 @@ export default class NoteListItem extends React.Component<any, any>
     public render() 
     {
         let value:string=(this.props.note.title == "")?"<Empty>":this.props.note.title;
+
+        let date=moment(this.props.note.updated).fromNow();
+
+
         return(
             <li className="ui-note-list-item" onClick={()=>this.onItemClick()} >
                 <div className="ui-note-list-item-header" >
-                <span>+</span><span>Notebook</span><span className="ui-inline-spacer"/><span>date</span>
+                <span className ="ui-note-list-item-badge">
+                </span><span>{this.props.note.notebook}</span>
+                <span className="ui-inline-spacer"/><span>{date}</span>
                 </div>
-                <div className="ui-note-list-item-title" >
+                <div className="ui-note-list-item-title-container" >
                     <EditableText 
+                        normalClass = "ui-note-list-item-title"
+                        editContClass = "ui-note-list-item-title-edit-container"
+                        editClass ="ui-note-list-item-title-edit"
                         value = {value} 
                         onEditFinished={(text:string)=>this.editFinished(text)}
                     />

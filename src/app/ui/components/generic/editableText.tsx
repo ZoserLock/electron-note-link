@@ -53,8 +53,9 @@ class EditableText extends React.Component<any, any>
         if(this.state.editing)   
         {
             return (
-                <div>
+                <div className ={this.props.editContClass}>
                     <input 
+                        className ={this.props.editClass}
                         autoFocus
                         defaultValue={this.props.value}  
                         onChange={(event:any)=>this.editTextChanged(event)}
@@ -67,8 +68,8 @@ class EditableText extends React.Component<any, any>
         else
         {
             return (
-                <div onClick={this.props.onClick} onDoubleClick={()=>this.edit()}>
-                    <span>{this.props.value}</span> 
+                <div className ={this.props.normalClass} onClick={this.props.onClick} onDoubleClick={()=>this.edit()}>
+                    {this.props.value}
                  </div>
             );
         }                          
