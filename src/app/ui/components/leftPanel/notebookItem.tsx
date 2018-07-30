@@ -67,7 +67,7 @@ export default class NotebookItem extends React.Component<any, any>
         return (
             <li className={displayClass} onClick={()=>this.onItemClick()}>
                 <span></span> 
-                {this.props.notebook.name}
+                <div className="ui-sidebar-notebook-item-title">{this.props.notebook.name}</div>
             </li>
         );
     }

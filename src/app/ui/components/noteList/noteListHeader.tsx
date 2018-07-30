@@ -27,7 +27,7 @@ export default class NoteListHeader extends React.Component<any, any>
         return (
             <div className="ui-note-list-header-container"> 
                 <div className="ui-note-list-header">
-                    <div> Icon </div>
+                    <div className="ui-note-list-header-icon"/>
                     <div className="ui-note-list-header-title"> {this.props.title} </div>
                     <div className="ui-note-list-header-button-container">
                         <button className = "ui-note-list-header-button" onClick={()=>this.onAddNoteClick()}></button>

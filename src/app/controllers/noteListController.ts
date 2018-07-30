@@ -38,6 +38,11 @@ export default class NoteListController extends Controller
     public updateNoteList():void
     {
         Debug.log("updateNoteList()");
+   
+        if(Editor.instance.selectedNotebook == null)
+        {
+            return;
+        }
 
         let mode:number = Editor.instance.noteListMode;
 
@@ -67,9 +72,7 @@ export default class NoteListController extends Controller
             }
 
             // Process special keyworlds and cache them until the special keywords disapear.
-            
-
-
+         
             // Cache this list as something like current Searchable notes.
             notes = DataManager.instance.notes.filter((note:Note)=>
             {

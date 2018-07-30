@@ -56,6 +56,7 @@
     --note-list-item-color-selected: #3A3D45;
     --note-list-item-header-color: #848c94;
     --note-list-item-title-color: #c0c4c8;
+    --note-list-item-title-color-selected: #fff;
 
     /* Note View*/
     --note-view-header-bg: #24262D;
@@ -73,6 +74,7 @@
     --icon-window-minimize: url(../img/icons/icon_minimize.png);
     --icon-window-options: url(../img/icons/icon_options.png);
     --icon-window-add: url(../img/icons/icon_add.png);
+    --icon-window-notebook: url(../img/icons/icon_notebook.png);
 }
 
 @font-face 
@@ -389,6 +391,7 @@ body
     margin: 0;
     padding: 0;
     display: block;
+    width: 200px;
     text-decoration: none;
     list-style-type: none;
     cursor: pointer;
@@ -402,8 +405,14 @@ body
     height: 30px;
     text-decoration: none;
     color: var(--sidebar-item-color);
-
     font-size: 14px;
+}
+
+.ui-sidebar-notebook-item-title
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
 }
 
 .ui-sidebar-notebook-item:hover
@@ -437,6 +446,8 @@ body
     flex: 0 0 300px;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+
 }
 
 .ui-note-list-header-container
@@ -445,7 +456,6 @@ body
     flex-direction: column;
     background: var(--note-list-header-bg);
     color: var(--note-list-header-color);
-    overflow-y: scroll;
 }
 
 .ui-note-list-header
@@ -456,17 +466,29 @@ body
     cursor:default;
 }
 
+.ui-note-list-header-icon
+{
+    display: block;
+    background: var(--icon-window-notebook) no-repeat;
+    background-size: 30px;
+    background-position: center; 
+    padding: 5px 0px 5px 5px;
+    height: 35px;
+    width: 35px;
+    min-width: 45px;
+}
+
 .ui-note-list-header-title
 {
-    display: inline-block;
-    flex-grow: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow:ellipsis;
-    margin: 10px 0px 10px 10px;
+    margin: 13px 0px 7px 0px;
     height: 25px;
     line-height:25px;
+    flex-grow: 1;
 }
+
 
 .ui-note-list-header-button-container
 {
@@ -530,6 +552,29 @@ body
     cursor: pointer;
 }
 
+.ui-note-list-item-content
+{
+    display: flex;
+    flex-direction: column;
+    height: 80px;
+}
+
+.ui-note-list-item-list-separator
+{
+    border-bottom: 1px solid var(--context-menu-border);
+    margin: 3px 10px 3px 10px;
+}
+
+.ui-note-list-item-content.selected
+{
+    background: var(--note-list-item-color-selected);
+}
+
+.ui-note-list-item-content:hover
+{
+    background: var(--note-list-item-color-hover);
+}
+
 .ui-note-list-item-badge
 {
     width: 10px;
@@ -538,15 +583,6 @@ body
     background:var(--badge-bg);
 }
 
-.ui-note-list-item.selected
-{
-    background: var(--note-list-item-color-selected);
-}
-
-.ui-note-list-item:hover
-{
-    background: var(--note-list-item-color-hover);
-}
 
 .ui-note-list-item-header
 {
@@ -577,6 +613,11 @@ body
     overflow: hidden;
     text-overflow: ellipsis;
 
+}
+
+.ui-note-list-item-title.selected
+{
+    color: var( --note-list-item-title-color-selected);
 }
 
 .ui-note-list-item-title-edit-container
@@ -624,16 +665,32 @@ body
     flex-direction: column;
     background: var(--note-view-header-bg);
     color:var(--note-view-header-color);
-    height: 45px;
 }
 
 .ui-note-view-header
 {
+    display: flex;
     font-size: 14px;
-    padding: 10px;
-    height: 25px;
-    overflow: hidden;
+    height: 45px;
+    cursor:default;
 }
+
+.ui-note-view-header-title-container
+{
+    flex-grow: 1;
+}
+
+.ui-note-view-header-title
+{
+   
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    margin: 13px 0px 7px 0px;
+    height: 25px;
+    line-height:25px;
+}
+
 
 .ui-note-view-header-separator
 {

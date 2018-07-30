@@ -35,10 +35,14 @@ export default class NoteViewHeader extends React.Component<any, any>
             return (
                 <div className="ui-note-view-header-content"> 
                     <div className="ui-note-view-header"> 
-                        <button onClick={()=>this.OnStartedClick()}> Started </button>
-                        {this.props.note.title}
+                        <div className="ui-note-view-header-title-container"> 
+                            <div className="ui-note-view-header-title"> 
+                                <button onClick={()=>this.OnStartedClick()}> Started </button>
+                                {this.props.note.title}
+                            </div>
+                        </div>
                     </div>
-                    <div className="ui-note-view-header-separator"/> 
+                <div className="ui-note-view-header-separator"/> 
                 </div>
     
             );   
