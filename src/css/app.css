@@ -15,9 +15,9 @@
     /* Toolbar Colors */
     --toolbar-bg: #24262D;
     --toolbar-separator: #3A3D45;
-    --toolbar-item-color: #848c94;
-    --toolbar-item-color-hover: #c0c4c8;
-    --toolbar-item-color-active: #c0c4c8;
+    --toolbar-item-color: #c0c4c8;
+    --toolbar-item-color-hover: #ffffff;
+    --toolbar-item-color-active: #ffffff;
 
     /* Sidebar */
     --sidebar-bg: #24262D;
@@ -27,8 +27,8 @@
     --sidebar-item-bg-selected: #2A2D35;
     --sidebar-item-bg-selected-hover: #3A3D45;
     /* Item Text Color*/
-    --sidebar-item-color: #848c94;
-    --sidebar-item-color-hover: #c0c4c8;
+    --sidebar-item-color: #c0c4c8;
+    --sidebar-item-color-hover: #ffffff;
     --sidebar-item-color-selected: #ffffff;
     --sidebar-item-color-selected-hover: #c0c4c8;
 
@@ -117,7 +117,7 @@ body
     -webkit-app-region: drag;
 
     position:relative;
-    z-index:3;
+    z-index:6;
 
     display: flex;
     background-color: var(--window-bar-bg);
@@ -186,7 +186,7 @@ body
 .ui-toolbar
 {
     position:relative;
-    z-index:2;
+    z-index:4;
 
     display: flex;
     height: 40px;
@@ -447,6 +447,9 @@ body
     display: flex;
     flex-direction: column;
     min-width: 0;
+
+    z-index: 2;
+    box-shadow: 0px 0px 17px 3px rgba(2, 2, 2, 0.377);
 
 }
 
@@ -739,6 +742,7 @@ body
     display: flex;
     background-color: var(--status-bar-bg);
     height: 20px;
+    z-index: 4;
 }
 
 /*Misc*/
@@ -750,6 +754,7 @@ body
 /*Popups*/
 .ui-popup-layer
 {
+    z-index: 10;
     display: hidden;
     position: fixed;
     background-color:rgba(0,0,0,0.5);
@@ -764,12 +769,53 @@ body
 
 .ui-popup-modal 
 {
+    display: flex;
+    flex-direction: column;
     background-color:red;
-    width: 400px;
-    height: 250px;
+    width: 650px;
+    height: 350px;
+    border: 1px solid #878a8c;
 }
 
+.ui-popup-modal-header
+{
+    display: flex;
+    flex-basis: 25%;
+}
 
+.ui-popup-modal-header span
+{
+    margin:auto;
+}
+
+.ui-popup-modal-content
+{
+    display: flex;
+    background: #5cbf2a;
+    flex-basis: 55%;
+
+    border-bottom: 1px solid #878a8c;
+    border-top: 1px solid #878a8c;
+}
+
+.ui-popup-modal-content span
+{
+    margin:auto;
+}
+
+.ui-popup-modal-footer
+{
+    
+    display: flex;
+    background-color:red;
+    flex-basis: 20%;
+    flex-grow: 0;
+}
+
+.ui-popup-modal-footer button
+{
+    margin: auto;
+}
 /* External CSS */
 
 /*************/

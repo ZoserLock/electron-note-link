@@ -48,13 +48,17 @@ export default class PopupLayer extends React.Component<any, any>
         this.setState({activePopup:null});
     }
 
-    private renderConfirmationPopup(title:string,text:string,okButton:string,cancelButton:string):any
+    private renderConfirmationPopup(title:string, text:string, okButton:string, cancelButton:string):any
     {
         return(
             <div className="ui-popup-modal">
-                {title+" "+text}
+                <div className="ui-popup-modal-header"> <span>{title}</span></div>
+                <div className="ui-popup-modal-content"> <span>{text}</span></div>
+                <div className="ui-popup-modal-footer">       
                 <button onClick={()=>this.confirmationPopupResult(true)}> {okButton} </button>
                 <button onClick={()=>this.confirmationPopupResult(false)}> {cancelButton}  </button>
+                </div>
+
             </div>
         )
     }
