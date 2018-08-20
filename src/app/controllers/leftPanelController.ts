@@ -185,7 +185,7 @@ export default class LeftPanelController extends Controller
 
         if(notebook != null)
         {
-            PopupManager.instance.showConfirmationPanel("Delete Notebook?","Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
+            PopupManager.instance.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
             {
                 let isSelectedNotebook = (Editor.instance.selectedNotebook == notebook);
                 let hasSelectedNote = (Editor.instance.selectedNote.parent == notebook);

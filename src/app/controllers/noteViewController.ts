@@ -31,7 +31,7 @@ export default class NoteViewController extends Controller
 
     public testPopup():void
     {
-        PopupManager.instance.showConfirmationPanel("titulon","Texto que manda","OKA","EXIT",()=>{Debug.log("ON OK!");},()=>{Debug.log("ON CANCEL");});
+        PopupManager.instance.showConfirmationPanel("Test Popup","Testing sub Title Text","Hamaf pig fatber shankle venison beef ribs ","OKA","EXIT",()=>{Debug.log("OK");},()=>{Debug.log("CANCEL");});
     }
 
     public updateNoteView():void

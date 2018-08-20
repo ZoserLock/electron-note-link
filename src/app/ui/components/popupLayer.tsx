@@ -36,11 +36,9 @@ export default class PopupLayer extends React.Component<any, any>
     {
         if(data.type == "Confirmation")
         {
-            let activePopup:any = this.renderConfirmationPopup(data.title,data.text,data.okButton,data.cancelButton);
+            let activePopup:any = this.renderConfirmationPopup(data.title,data.subTitle,data.text,data.okButton,data.cancelButton);
             this.setState({activePopup:activePopup});
         }
-
-      
     }
 
     private hidePopup():void
@@ -48,17 +46,25 @@ export default class PopupLayer extends React.Component<any, any>
         this.setState({activePopup:null});
     }
 
-    private renderConfirmationPopup(title:string, text:string, okButton:string, cancelButton:string):any
+    private renderConfirmationPopup(title:string, subTitle:string, text:string, okButton:string, cancelButton:string):any
     {
         return(
             <div className="ui-popup-modal">
-                <div className="ui-popup-modal-header"> <span>{title}</span></div>
-                <div className="ui-popup-modal-content"> <span>{text}</span></div>
-                <div className="ui-popup-modal-footer">       
-                <button onClick={()=>this.confirmationPopupResult(true)}> {okButton} </button>
-                <button onClick={()=>this.confirmationPopupResult(false)}> {cancelButton}  </button>
-                </div>
+                <header> 
+                    <h2>{title}</h2>
+                    <span>{subTitle}</span>
+                </header>
+                <article> 
+                    <div className="ui-popup-modal-text">
+                        {text}
+                     </div>
+                </article> 
+                <footer>       
+                    <div className="ui-inline-spacer"/>
+                    <button onClick={()=>this.confirmationPopupResult(false)}> {cancelButton}  </button>
+                    <button onClick={()=>this.confirmationPopupResult(true)}> {okButton} </button>
 
+                </footer>
             </div>
         )
     }

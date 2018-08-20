@@ -62,7 +62,7 @@ export default class PopupManager
         }
     }
 
-    public showConfirmationPanel(title:string, text:string, okButton:string, cancelButton:string, onOk:() => void, onCancel:() => void):void
+    public showConfirmationPanel(title:string,subTitle:string, text:string, okButton:string, cancelButton:string, onOk:() => void, onCancel:() => void):void
     {
         if(!this._popupShown)
         {
@@ -70,6 +70,7 @@ export default class PopupManager
             {
                 type:"Confirmation",
                 title:title,
+                subTitle:subTitle,
                 text:text,
                 okButton:okButton,
                 cancelButton:cancelButton

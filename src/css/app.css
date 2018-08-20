@@ -65,8 +65,24 @@
     --note-view-content-color: #c0c4c8;
 
     /* Status Bar*/
-
     --status-bar-bg:#1D1F24;
+
+    /* Generic Colors */
+    /* Fonts */
+    --font-bright-color: #ffffff;
+    --font-normal-color: #c0c4c8;
+    --font-dark-color: #848c94;
+
+    /* Backgrounds */
+    --bg-color-dark: #1D1F24;
+    --bg-color-normal: #24262D;
+    --bg-color-light: #2D3038;
+
+    /* Borders */
+    --border-color-dark: #1D1F24;
+    --border-color-normal: #3A3D45;
+    --border-color-light: #44464D;
+    
 
     /* Images */
     --icon-window-close: url(../img/icons/icon_close.png);
@@ -707,7 +723,7 @@ body
     padding: 0 20px 0 20px;
     background: var(--note-view-content-bg);
     color: var(--note-view-content-color);
-    font-weight: 300;
+    font-weight:normal;
     flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
@@ -726,6 +742,18 @@ body
 {
     background: #2D3038;
     border-left: 10px solid var(--badge-bg);
+}
+
+.ui-note-view-content blockquote
+{
+    background: #2D3038;
+    border-left: 10px solid var(--badge-bg);
+    padding: 5px;
+}
+
+.ui-note-view-content blockquote>p
+{
+    margin-left: 5px; 
 }
 
 .ui-note-view-content-editor
@@ -749,6 +777,7 @@ body
 .ui-inline-spacer
 {
     margin-left: auto;
+    flex-grow: 1;
 }
 
 /*Popups*/
@@ -771,51 +800,92 @@ body
 {
     display: flex;
     flex-direction: column;
-    background-color:red;
-    width: 650px;
-    height: 350px;
-    border: 1px solid #878a8c;
+    width: 600px;
+    height: 390px;
+    border: 1px solid var(--border-color-dark);
 }
 
-.ui-popup-modal-header
+.ui-popup-modal header
 {
-    display: flex;
     flex-basis: 25%;
+
+    display: flex;
+    flex-direction: column;
+    background-color:var(--bg-color-dark);
 }
 
-.ui-popup-modal-header span
+.ui-popup-modal h2
 {
-    margin:auto;
+    font-size: 18px;
+    margin:auto auto 0 20px;
+    color: var(--font-bright-color);
 }
 
-.ui-popup-modal-content
+.ui-popup-modal span
+{
+    margin:5px auto auto 20px;
+    font-size: 12px;
+    color: var(--font-dark-color);
+}
+
+.ui-popup-modal article
 {
     display: flex;
     background: #5cbf2a;
     flex-basis: 55%;
-
-    border-bottom: 1px solid #878a8c;
-    border-top: 1px solid #878a8c;
+    background-color:var(--bg-color-normal);
+    border-bottom: 1px solid var(--border-color-normal);
+    border-top: 1px solid var(--border-color-normal);
 }
 
-.ui-popup-modal-content span
+.ui-popup-modal-text
 {
-    margin:auto;
+    margin: 20px auto 20px 20px;
+    font-size: 16px;
+    color: var(--font-normal-color);
 }
 
-.ui-popup-modal-footer
+
+.ui-popup-modal footer
 {
-    
     display: flex;
-    background-color:red;
+    background-color:var(--bg-color-dark);
     flex-basis: 20%;
     flex-grow: 0;
 }
 
-.ui-popup-modal-footer button
+.ui-popup-modal button
 {
     margin: auto;
+    border: 1px solid var(--border-color-normal);
+    background: none;
+    box-shadow: none;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 14px;
+    color: var(--font-normal-color);
+    padding: 10px 30px;
+    margin: auto 10px;
 }
+
+.ui-popup-modal button:focus
+{
+    outline: none;
+}
+
+.ui-popup-modal button:hover 
+{
+    color: var(--font-bright-color);
+    background: var(--bg-color-normal);
+    border: 1px solid var(--border-color-light);
+}
+
+.ui-popup-modal button:active 
+{
+    color: var(--font-dark-color);
+}
+
 /* External CSS */
 
 /*************/
@@ -867,7 +937,9 @@ body
     text-align: inherit;
     white-space: nowrap;
 }
-
+.react-contextmenu-item:focus {
+    outline: none;
+}
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
     color: #fff;
@@ -891,8 +963,8 @@ body
     
 }
 
-.react-contextmenu-item--divider:hover {
-  
+.react-contextmenu-item--divider:focus {
+  outline: none;
 }
 
 .react-contextmenu-item.react-contextmenu-submenu {
