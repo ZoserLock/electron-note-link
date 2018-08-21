@@ -1,7 +1,7 @@
 /* BASICS */
 
+
 .CodeMirror {
-  /* Set height, width, borders, and global font properties here */
   font-family: monospace;
   height: 300px;
   color: black;
@@ -11,7 +11,7 @@
 /* PADDING */
 
 .CodeMirror-lines {
-  padding: 4px 0; /* Vertical padding around content */
+  padding: 10px 0; /* Vertical padding around content */
 }
 .CodeMirror pre {
   padding: 0 20px; /* Horizontal padding of content */
@@ -339,3 +339,18 @@ div.CodeMirror-dragcursors {
 
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
+
+
+/*************/
+/*Code Mirror*/
+.CodeMirror 
+{
+    position: absolute;
+    font-family: "DroidSansMono";
+    font-size: 14px;
+}
+
+.CodeMirror-lines {
+    padding: 10px 0;
+}
+

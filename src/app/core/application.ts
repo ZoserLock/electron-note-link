@@ -159,6 +159,17 @@ export default class Application
         {
             this._mainWindow = null;
         });
+
+        // Open links in external.
+        let wc = this._mainWindow.webContents;
+        wc.on('will-navigate', function (e, url) 
+        {
+            if (url != wc.getURL()) 
+            {
+                e.preventDefault();
+                require('electron').shell.openExternal(url)
+            }
+        });
     }
 
     public exit():void

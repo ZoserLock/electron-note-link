@@ -3,9 +3,6 @@
 /* GLOBAL */
 :root 
 {
-    /**/
-    --badge-bg:#DE9536;
-
     /* Window Colors */
     --window-border: #3A3D45;
     --window-bar-bg: #1D1F24;
@@ -62,14 +59,18 @@
     --note-view-header-bg: #24262D;
     --note-view-header-color: #c0c4c8;
     --note-view-content-bg: #24262D;
-    --note-view-content-color: #c0c4c8;
+    --note-view-content-color: #d0d4d8;
 
-    /* Status Bar*/
-    --status-bar-bg:#1D1F24;
-
+    /* ************** */
     /* Generic Colors */
+
+    /* Accent */
+    --accent-bg-orange:#DE9536;
+    --accent-bg-blue:#569cd6;
+    
     /* Fonts */
-    --font-bright-color: #ffffff;
+    --font-brighter-color: #ffffff;
+    --font-bright-color: #d0d4d8;
     --font-normal-color: #c0c4c8;
     --font-dark-color: #848c94;
 
@@ -83,7 +84,6 @@
     --border-color-normal: #3A3D45;
     --border-color-light: #44464D;
     
-
     /* Images */
     --icon-window-close: url(../img/icons/icon_close.png);
     --icon-window-maximize: url(../img/icons/icon_maximize.png);
@@ -332,7 +332,7 @@ body
 
 .ui-sidebar-header-list-item.selected span
 {
-    background:var(--badge-bg);
+    background:var(--accent-bg-orange);
 }
 
 
@@ -452,7 +452,7 @@ body
 
 .ui-sidebar-notebook-item.selected span
 {
-    background:var(--badge-bg);
+    background:var(--accent-bg-orange);
 }
 /********************************/
 /* Left Viewport Bar - NoteList */
@@ -599,7 +599,7 @@ body
     width: 10px;
     height: 10px;
     margin: 0px 5px 0px 0px;
-    background:var(--badge-bg);
+    background:var(--accent-bg-orange);
 }
 
 
@@ -717,6 +717,7 @@ body
     margin: 0px 10px 3px 10px;
 }
 
+/* Note View content */
 .ui-note-view-content
 {
     user-select: text; 
@@ -729,25 +730,32 @@ body
     overflow-y: auto;
 }
 
+.ui-note-view-content h4,h3,h2,h1
+{
+    color:#569cd6;
+}
+
+.ui-note-view-content hr
+{
+    border-color:#569cd6;
+}
+
 .ui-note-view-content p>code
 {
-    color:#FA9E96;
-    background: #2D3038;
+    color:#569cd6;
     padding: 2px;
-    border-radius: 5px;
-    border: 1px solid var(--note-view-content-color);
 }
 
 .ui-note-view-content pre>code 
 {
-    background: #2D3038;
-    border-left: 10px solid var(--badge-bg);
+    background: var(--bg-color-dark);
+    border-left: 10px solid var(--accent-bg-blue);
 }
 
 .ui-note-view-content blockquote
 {
-    background: #2D3038;
-    border-left: 10px solid var(--badge-bg);
+    background: var(--bg-color-dark);
+    border-left: 10px solid var(--accent-bg-blue);
     padding: 5px;
 }
 
@@ -768,7 +776,7 @@ body
 .ui-statusbar
 {
     display: flex;
-    background-color: var(--status-bar-bg);
+    background-color: var(--bg-color-dark);
     height: 20px;
     z-index: 4;
 }
@@ -818,7 +826,7 @@ body
 {
     font-size: 18px;
     margin:auto auto 0 20px;
-    color: var(--font-bright-color);
+    color: var(--font-brighter-color);
 }
 
 .ui-popup-modal span
@@ -876,7 +884,7 @@ body
 
 .ui-popup-modal button:hover 
 {
-    color: var(--font-bright-color);
+    color: var(--font-brighter-color);
     background: var(--bg-color-normal);
     border: 1px solid var(--border-color-light);
 }
@@ -887,20 +895,6 @@ body
 }
 
 /* External CSS */
-
-/*************/
-/*Code Mirror*/
-.CodeMirror 
-{
-    position: absolute;
-    font-family: "DroidSansMono";
-    font-size: 14px;
-}
-
-.CodeMirror-lines {
-    padding: 10px 0;
-}
-
 /****************/
 /* Context Menu */
 .react-contextmenu {
