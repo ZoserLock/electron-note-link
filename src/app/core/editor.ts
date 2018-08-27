@@ -251,29 +251,40 @@ export default class Editor
         }
     }
 
-    public selectNote(noteId:string):void
+    public selectNote(noteId:string):boolean
     {
-       
         if(this._selectedNote != null && this._selectedNote.id == noteId)
         {
-            return;
-        }
-
-        if( this._selectedNote != null)
-        {
-            this._selectedNote.SetAsUnselected();
-            this._selectedNote = null;
+            return false;
         }
 
         let note:Note = DataManager.instance.getNote(noteId);
 
         if(note != null)
         {
+            if( this._selectedNote != null)
+            {
+                this._selectedNote.SetAsUnselected();
+                this._selectedNote = null;
+            }
+    
             this._selectedNote = note;
             this._selectedNote.SetAsSelected();
 
             this.updateNoteView();
             this.updateNoteList();
+            return true;
+        }
+        return false;
+    }
+
+    public selectNoteNotebook(noteId:string):void
+    {
+        let note:Note = DataManager.instance.getNote(noteId);
+
+        if(note != null)
+        {
+            this.selectNotebook(note.parent.id);
         }
     }
 

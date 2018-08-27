@@ -160,16 +160,36 @@ export default class Application
             this._mainWindow = null;
         });
 
-        // Open links in external.
+        // Open links in external web browser.
         let wc = this._mainWindow.webContents;
         wc.on('will-navigate', function (e, url) 
         {
+            Debug.log("will-navigate: "+url);
             if (url != wc.getURL()) 
             {
                 e.preventDefault();
                 require('electron').shell.openExternal(url)
             }
         });
+
+        wc.on('did-navigate-in-page', function (e:Event, url:String, isMainFrame:boolean) 
+        {
+            var hash = url.substring(url.indexOf('#'));
+            var command = hash.split(":");
+
+            if(command.length == 2)
+            {
+                if(command[0] == "#note")
+                {
+                    Editor.instance.selectNote(command[1]);
+                }
+            }
+
+            e.preventDefault();
+          
+        });
+
+       
     }
 
     public exit():void

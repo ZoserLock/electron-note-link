@@ -4,13 +4,8 @@ import {ipcRenderer} from "electron";
 import * as Markdown from "markdown-it";
 
 var markdownHighlight = require('markdown-it-highlightjs');
+var markdownHashtag = require('markdown-it-hashtag');
 var HtmlToReactParser = require('html-to-react').Parser;
-
-// Local
-import Debug from "../../../tools/debug";
-import Note from "../../../notes/note";
-
-// UI
 
 interface NoteViewContentData
 {
@@ -28,8 +23,10 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
         super(props);
         this._markdownRenderer = new Markdown();            
         this._markdownRenderer.use(markdownHighlight);
+        this._markdownRenderer.use(markdownHashtag);
 
         this._htmlParser = new HtmlToReactParser();
+        
     }
 
     public render() 

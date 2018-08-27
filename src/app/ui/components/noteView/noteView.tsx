@@ -83,11 +83,11 @@ class NoteView extends React.Component<any, NoteViewData>
         {
             if(this.state.editorMode)
             {
-                currentPanel = <NoteViewContentEditor code={this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)}/>
+                currentPanel = <NoteViewContentEditor code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)}/>
             }
             else
             {
-                currentPanel = <NoteViewContent text={this.state.note.text} onDoubleClick={()=>this.onContentClick()}/>
+                currentPanel = <NoteViewContent text = {this.state.note.text} onDoubleClick={()=>this.onContentClick()}/>
             }
         }
 
