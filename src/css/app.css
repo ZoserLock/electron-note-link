@@ -725,14 +725,10 @@ body
     cursor:pointer;
 }
 
-.ui-note-view-header-title-container
-{
-    flex-grow: 1;
-    margin: 13px 0px 7px 0px;
-}
 
 .ui-note-view-header-title
 {
+    margin: 13px 0px 7px 0px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow:ellipsis;

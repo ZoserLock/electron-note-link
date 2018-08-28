@@ -37,11 +37,9 @@ export default class NoteViewHeader extends React.Component<any, any>
             return (
                 <div className="ui-note-view-header-content"> 
                         <div className="ui-note-view-header-container"> 
-                            <div className="ui-note-view-header-title-container"> 
                                 <div className="ui-note-view-header-title"> 
                                     {this.props.note.title}
                                 </div>
-                            </div>
                             <div className="ui-inline-spacer"></div>
                             <button className={started} onClick={()=>this.OnStartedClick()}></button>
                         </div>
