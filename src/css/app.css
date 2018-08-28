@@ -91,6 +91,9 @@
     --icon-window-options: url(../img/icons/icon_options.png);
     --icon-window-add: url(../img/icons/icon_add.png);
     --icon-window-notebook: url(../img/icons/icon_notebook.png);
+
+    --icon-star-fill: url(../img/icons/icon_star_fill.png);
+    --icon-star : url(../img/icons/icon_star.png);
 }
 
 @font-face 
@@ -114,6 +117,22 @@ body
     margin: 0;
     user-select: none; 
     font-family: 'Roboto', sans-serif;
+}
+
+/* ICONS */
+
+.icon-star-fill
+{
+    background: var(--icon-star-fill) no-repeat;
+    background-size: 22px;
+    background-position: center; 
+}
+
+.icon-star
+{
+    background: var(--icon-star) no-repeat;
+    background-size: 22px;
+    background-position: center; 
 }
 
 /* WINDOW */
@@ -168,6 +187,7 @@ body
     background-size: 18px;
     background-position: center; 
 }
+
 .ui-windowbar-item-minimize
 {
     background: var(--icon-window-minimize) no-repeat;
@@ -684,32 +704,43 @@ body
     flex-direction: column;
     background: var(--note-view-header-bg);
     color:var(--note-view-header-color);
+    height: 45px;
 }
 
-.ui-note-view-header
+.ui-note-view-header-container
 {
+    flex-grow: 1;
     display: flex;
+    padding-left: 20px;
+    
+}
+
+.ui-note-view-header-container button
+{
+    min-width: 45px; 
+    border: 0;
+    border-radius: 0px;
     font-size: 14px;
-    height: 45px;
-    cursor:default;
+    margin: 13px 0px 7px 0px;
+    cursor:pointer;
 }
 
 .ui-note-view-header-title-container
 {
     flex-grow: 1;
+    margin: 13px 0px 7px 0px;
 }
 
 .ui-note-view-header-title
 {
-   
     white-space: nowrap;
     overflow: hidden;
     text-overflow:ellipsis;
-    margin: 13px 0px 7px 0px;
+
     height: 25px;
     line-height:25px;
+    font-size: 20px;
 }
-
 
 .ui-note-view-header-separator
 {
@@ -732,17 +763,18 @@ body
 
 .ui-note-view-content h4,h3,h2,h1
 {
-    color:#569cd6;
+    color:var(--accent-bg-blue);
 }
 
 .ui-note-view-content hr
 {
-    border-color:#569cd6;
+    border: 0px;
+    border-bottom: solid 1px var(--font-dark-color);
 }
 
 .ui-note-view-content p>code
 {
-    color:#569cd6;
+    color:var(--accent-bg-blue);
     padding: 2px;
 }
 
@@ -762,6 +794,12 @@ body
 .ui-note-view-content blockquote>p
 {
     margin-left: 5px; 
+}
+
+.ui-note-view-content a
+{
+    color: var(--accent-bg-blue);
+    font-size: 14px;
 }
 
 .ui-note-view-content-editor

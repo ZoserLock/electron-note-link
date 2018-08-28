@@ -63,7 +63,6 @@ export default class PopupLayer extends React.Component<any, any>
                     <div className="ui-inline-spacer"/>
                     <button onClick={()=>this.confirmationPopupResult(false)}> {cancelButton}  </button>
                     <button onClick={()=>this.confirmationPopupResult(true)}> {okButton} </button>
-
                 </footer>
             </div>
         )
