@@ -17,9 +17,7 @@ import Controller from "./controller";
 import Debug from "../tools/debug"; 
 import * as Fuse from "fuse.js";
 
-
 import {NoteListMode} from "../../enums"
-import { BlockOverflowProperty } from "csstype";
 
 export default class NoteListController extends Controller
 {
@@ -39,11 +37,6 @@ export default class NoteListController extends Controller
     {
         Debug.log("updateNoteList()");
    
-        if(Editor.instance.selectedNotebook == null)
-        {
-            return;
-        }
-
         let mode:number = Editor.instance.noteListMode;
 
         let selectedNote:string = "";
@@ -58,6 +51,7 @@ export default class NoteListController extends Controller
         let searchData:string="";
 
         let title:string = null;
+
         // HERE WE CAN IMPLEMENT A GENERIC FILTER.
         // Like current filter.filter(notes)
         let noteData:any[] = [];
@@ -105,7 +99,7 @@ export default class NoteListController extends Controller
         }
         else if(mode == NoteListMode.Trash)
         {
-            notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
+            notes = DataManager.instance.notes.filter((note:Note)=>
             {
                 return note.trashed;
             });
@@ -117,6 +111,17 @@ export default class NoteListController extends Controller
         }
         else if(mode == NoteListMode.Notebook)
         {
+            if(Editor.instance.selectedNotebook == null || DataManager.instance.notes.length == 0)
+            {
+                let data =
+                {
+                    mode:NoteListMode.Disabled,
+                }
+        
+                this.sendUIMessage(Message.updateNoteList, data);
+                return;
+            }
+
             notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
             {
                 return (!note.trashed);
@@ -129,7 +134,7 @@ export default class NoteListController extends Controller
         }
         else if(mode == NoteListMode.Started)
         {
-            notes = Editor.instance.selectedNotebook.notes.filter((note:Note)=>
+            notes = DataManager.instance.notes.filter((note:Note)=>
             {
                 return note.started;
             });
@@ -140,6 +145,9 @@ export default class NoteListController extends Controller
             title = "Started Notes";
         }
         
+
+        // Send filtered data
+
         let forceUpdate:boolean = true;
 
         let data =

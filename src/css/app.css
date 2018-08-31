@@ -94,6 +94,11 @@
 
     --icon-star-fill: url(../img/icons/icon_star_fill.png);
     --icon-star : url(../img/icons/icon_star.png);
+    --icon-notebook: url(../img/icons/icon_notebook.png);
+    --icon-all-notes: url(../img/icons/icon_all_notes.png);
+    --icon-trash: url(../img/icons/icon_trash.png);
+    --icon-search: url(../img/icons/icon_search.png);
+
 }
 
 @font-face 
@@ -124,16 +129,33 @@ body
 .icon-star-fill
 {
     background: var(--icon-star-fill) no-repeat;
-    background-size: 22px;
-    background-position: center; 
 }
 
 .icon-star
 {
     background: var(--icon-star) no-repeat;
-    background-size: 22px;
-    background-position: center; 
 }
+
+.icon-notebook
+{
+    background: var(--icon-notebook) no-repeat;
+}
+
+.icon-search
+{
+    background: var(--icon-search) no-repeat;
+}
+
+.icon-trash
+{
+    background: var(--icon-trash) no-repeat;
+}
+
+.icon-all-notes
+{
+    background: var(--icon-all-notes) no-repeat;
+}
+
 
 /* WINDOW */
 
@@ -208,6 +230,8 @@ body
     background-size: 18px;
     background-position: center; 
 }
+
+
 
 /* END WINDOW */
 
@@ -508,7 +532,6 @@ body
 .ui-note-list-header-icon
 {
     display: block;
-    background: var(--icon-window-notebook) no-repeat;
     background-size: 30px;
     background-position: center; 
     padding: 5px 0px 5px 5px;
@@ -577,8 +600,23 @@ body
 .ui-note-list-content
 {
     flex: 1;
+    display:flex;
     background: var(--note-list-content-bg);
 
+}
+
+.ui-note-list-empty-item 
+{
+    max-height: 60px;
+    color: var(--font-bright-color);
+    font-size: 14px;
+    display: flex;
+    margin: 0 auto;
+}
+
+.ui-note-list-empty-item div
+{
+    margin: auto;
 }
 
 .ui-note-list-item 
@@ -691,11 +729,17 @@ body
 /* Right Viewport Bar - NoteView */
 .ui-note-view
 {
-    background:var(--note-view-bg);
+    background:var(--bg-color-normal);
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+}
+
+.ui-note-view .center
+{
+    margin: auto;
+    color: var(--font-dark-color);
 }
 
 .ui-note-view-header-content
@@ -717,12 +761,15 @@ body
 
 .ui-note-view-header-container button
 {
+    background-size: 22px;
+    background-position: center; 
     min-width: 45px; 
     border: 0;
     border-radius: 0px;
     font-size: 14px;
     margin: 13px 0px 7px 0px;
     cursor:pointer;
+    
 }
 
 

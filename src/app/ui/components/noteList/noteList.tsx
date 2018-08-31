@@ -62,19 +62,21 @@ export default class NoteList extends React.Component<any, any>
 
     public render() 
     {
-        let title:string = "";
-
-        if(this.state.mode == NoteListMode.Notebook)
+        if(this.state.mode == NoteListMode.Disabled)
         {
-            title = this.state.note
+            return (
+                <div className="ui-note-list">
+                    <div className="ui-note-list-content"> 
+                        
+                    </div>
+                </div>
+            );
         }
-
-        Debug.log("aas this.state.selectedNote: "+this.state.selectedNote);
 
         return (
             <div className="ui-note-list">
-                <NoteListHeader title = {this.state.title}/>
-                <NoteListContent notes = {this.state.notes} selectedNote = {this.state.selectedNote} search={this.state.search} forceUpdate = {this.state.forceUpdate}/>
+                <NoteListHeader title = {this.state.title} mode = {this.state.mode}/>
+                <NoteListContent mode = {this.state.mode} notes = {this.state.notes} selectedNote = {this.state.selectedNote} search={this.state.search} forceUpdate = {this.state.forceUpdate}/>
             </div>
         );
     }

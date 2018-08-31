@@ -53,14 +53,10 @@ export default class NoteViewController extends Controller
             return;
         }
 
-        Debug.log("1 updateNote:"+data.started);
-
         let note:Note = DataManager.instance.getNote(data.id);
 
         if(note != null)
         {
-            Debug.log("Note found");
-            Debug.logVar(data);
             if(data.hasOwnProperty("text"))
             {
                 note.text = data.text;
@@ -73,7 +69,6 @@ export default class NoteViewController extends Controller
 
             if(data.hasOwnProperty("started"))
             {
-                Debug.log("Started Changed:"+data.started);
                 note.started = data.started;
             }
             

@@ -18,6 +18,7 @@ export enum NoteListMode
     Trash,
     Started,
     All,
+    Disabled,
 }
 
 export enum EditorPendingUpdate 

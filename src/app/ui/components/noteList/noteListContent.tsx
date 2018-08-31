@@ -25,6 +25,17 @@ export default class NoteListContent extends React.Component<any, any>
 
     public render() 
     {
+        if(this.props.notes.length==0)
+        {
+            return (
+                <div className="ui-note-list-content"> 
+                    <div className="ui-note-list-empty-item"> 
+                        <div>No matching notes found</div>
+                    </div>
+                </div>
+            )
+        }
+
         return (
             <div className="ui-note-list-content"> 
                 <AutoSizer>

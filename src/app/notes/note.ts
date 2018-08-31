@@ -204,7 +204,7 @@ export default class Note
     
     public updateDates():void
     {
-
+        this._updated = Date.now();
     }
 
     public GetDataObject():any

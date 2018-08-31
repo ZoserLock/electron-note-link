@@ -81,6 +81,7 @@ class NoteView extends React.Component<any, NoteViewData>
 
         if(this.state.note != null)
         {
+            Debug.logVar(this.state.note);
             if(this.state.editorMode)
             {
                 currentPanel = <NoteViewContentEditor code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)}/>
@@ -89,16 +90,25 @@ class NoteView extends React.Component<any, NoteViewData>
             {
                 currentPanel = <NoteViewContent text = {this.state.note.text} onDoubleClick={()=>this.onContentClick()}/>
             }
+
+            return (
+                <div className="ui-note-view"> 
+                    <NoteViewHeader note = {this.state.note}/>
+                    {currentPanel}
+                </div>
+            );
         }
-
-        return (
+        else
+        {
+            return (
             <div className="ui-note-view"> 
-                <NoteViewHeader note = {this.state.note}/>
-                {currentPanel}
+                <div className="center"> 
+                    No note selected
+                </div> 
             </div>
-        );
+            );
+        }
     }
-
 }
 
 export default applyOnClickOutside(NoteView);
