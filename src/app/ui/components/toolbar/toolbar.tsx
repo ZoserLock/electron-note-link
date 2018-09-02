@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 // UI
 import ToolbarItem from "./toolbarItem"; 
 import SearchBar from "./searchBar"; 
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 import ToolbarSeparator from "./toolbarSeparator";
 
 export default class Toolbar extends React.Component<any, any> 
@@ -21,12 +21,12 @@ export default class Toolbar extends React.Component<any, any>
 
     public componentDidMount() 
     {
-        ipcRenderer.addListener(Message.beginQuickSearch,this._beginQuickSearch);
+        ipcRenderer.addListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(Message.beginQuickSearch,this._beginQuickSearch);
+        ipcRenderer.removeListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
     }
 
     public beginQuickSearch(data:any):void
@@ -36,12 +36,12 @@ export default class Toolbar extends React.Component<any, any>
 
     private createNewNotebookStorage():void
     {
-        ipcRenderer.send(Message.createStorage);
+        ipcRenderer.send(MessageChannel.createStorage);
     }
 
     private createNewNote():void
     {
-        ipcRenderer.send(Message.createStorage);
+        ipcRenderer.send(MessageChannel.createStorage);
     }
     
     private testPopup():void

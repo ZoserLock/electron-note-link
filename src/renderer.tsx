@@ -9,7 +9,7 @@ const {Menu, MenuItem} = remote;
 
 // Local Imports
 import ApplicationWindow from "ui/components/applicationWindow";
-import Message from "core/message";
+import MessageChannel from "presenter/messageChannel";
 
 
 function loadCss(css:string, callback:Function):void
@@ -30,7 +30,7 @@ loadCss("../css/app.css",()=>
 {
     setTimeout(()=>
     {
-        ipcRenderer.send(Message.windowLoaded);
+        ipcRenderer.send(MessageChannel.windowLoaded);
     },500);
 });
 

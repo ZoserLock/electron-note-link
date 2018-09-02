@@ -4,16 +4,14 @@ import * as uuid from "uuid/v4";
 import * as Path from "path";
 
 import Debug from "../tools/debug";
-import Message from "../core/message"
+import Message from "presenter/messageChannel"
 import DataManager from "../core/dataManager";
 import Editor from "../core/editor";
 
 import NotebookStorage from "../core/data/storage";
 import Notebook from "../core/data/notebook";
-import Note from "../core/data/note";
 
 import Presenter from "./presenter";
-import Application from "../core/application";
 
 import {NoteListMode} from "../../enums"
 import PopupManager from "../core/popupManager";

@@ -6,7 +6,7 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 // Local
 import Debug from "../../../tools/debug";
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 // UI
 import NotebookItem from "./notebookItem";
@@ -21,14 +21,14 @@ export default class StorageItem extends React.Component<any, any>
         Debug.log("Storage Item Created");
     }
 
-    private onAddButtonClick()
+    private onAddButtonClick() 
     {
         let data =
         {
             storage:this.props.storage.id
         }
 
-        ipcRenderer.send(Message.createNotebook,data);
+        ipcRenderer.send(MessageChannel.createNotebook,data);
     }
 
     private handleNotebookContextMenu(e:any, data:any, target:any):void

@@ -3,7 +3,7 @@ import {ipcRenderer} from "electron";
 
 // UI
 import WindowbarItem from "./windowbarItem"; 
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 export default class WindowBar extends React.Component<any, any> 
 {
@@ -14,17 +14,17 @@ export default class WindowBar extends React.Component<any, any>
 
     private onMinimize():void
     {
-        ipcRenderer.send(Message.windowMinimize);
+        ipcRenderer.send(MessageChannel.windowMinimize);
     }
 
     private onMaximize():void
     {
-        ipcRenderer.send(Message.windowMaximize);
+        ipcRenderer.send(MessageChannel.windowMaximize);
     }
 
     private onClose():void
     {
-        ipcRenderer.send(Message.windowClose);
+        ipcRenderer.send(MessageChannel.windowClose);
     }
 
     public render() 

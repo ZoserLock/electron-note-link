@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 import * as moment from 'moment';
 
 // Local
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 import EditableText from "../generic/editableText";
 
@@ -26,14 +26,14 @@ export default class NoteListItem extends React.Component<any, any>
     {
         let data = {noteId:this.props.note.id}
 
-        ipcRenderer.send(Message.selectNote,data);
+        ipcRenderer.send(MessageChannel.selectNote,data);
     }
 
     private onItemDelete()
     {
         let data ={noteId:this.props.note.id}
 
-        ipcRenderer.send(Message.removeNote,data);
+        ipcRenderer.send(MessageChannel.removeNote,data);
     }
 
     public editFinished(text:string):void
@@ -44,7 +44,7 @@ export default class NoteListItem extends React.Component<any, any>
             title:text
         }
 
-        ipcRenderer.send(Message.updateNote,data);
+        ipcRenderer.send(MessageChannel.updateNote,data);
     }
 
     public render() 

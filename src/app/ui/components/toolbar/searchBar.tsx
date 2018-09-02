@@ -3,7 +3,7 @@ import {ipcRenderer, Input} from "electron";
 import * as React from "react";
 
 import Debug from "../../../tools/debug";
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 
 export default class SearchBar extends React.Component<any, any> 
@@ -34,7 +34,7 @@ export default class SearchBar extends React.Component<any, any>
     {
         Debug.log("onHandleChange");
         this.setState({value: event.target.value});
-        ipcRenderer.send(Message.searchUpdated, event.target.value);
+        ipcRenderer.send(MessageChannel.searchUpdated, event.target.value);
     }
     
     public render() 

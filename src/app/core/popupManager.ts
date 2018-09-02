@@ -1,5 +1,5 @@
 import {ipcMain,BrowserWindow} from "electron"; 
-import Message from "./message";
+import Message from "presenter/messageChannel";
 import Debug from "../tools/debug";
 
 export default class PopupManager

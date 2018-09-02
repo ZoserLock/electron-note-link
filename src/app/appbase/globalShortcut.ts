@@ -2,9 +2,8 @@
 import {globalShortcut } from "electron";
 
 // Local Modules
-import Application      from "./application";
-import Configuration    from "../tools/configuration";
-import Editor           from "./editor"
+import Application      from "appbase/application";
+import Editor           from "core/editor"
 
 export default class GlobalShortcuts
 {

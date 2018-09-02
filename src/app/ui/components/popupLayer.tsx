@@ -1,6 +1,7 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
-import Message from "../../core/message";
+
+import MessageChannel from "presenter/messageChannel";
 
 export default class PopupLayer extends React.Component<any, any> 
 {
@@ -22,14 +23,14 @@ export default class PopupLayer extends React.Component<any, any>
 
     public componentDidMount():void
     {
-        ipcRenderer.addListener(Message.showPopup,this._showPopupEvent);
-        ipcRenderer.addListener(Message.hidePopup,this._hidePopupçevent);
+        ipcRenderer.addListener(MessageChannel.showPopup,this._showPopupEvent);
+        ipcRenderer.addListener(MessageChannel.hidePopup,this._hidePopupçevent);
     }
 
     public componentWillUnmount():void
     {
-        ipcRenderer.removeListener(Message.showPopup,this._showPopupEvent);
-        ipcRenderer.removeListener(Message.hidePopup,this._hidePopupçevent);
+        ipcRenderer.removeListener(MessageChannel.showPopup,this._showPopupEvent);
+        ipcRenderer.removeListener(MessageChannel.hidePopup,this._hidePopupçevent);
     }
 
     private showPopup(data:any):void
@@ -74,7 +75,7 @@ export default class PopupLayer extends React.Component<any, any>
         {
             success:value
         }
-        ipcRenderer.send(Message.popupResult, data);
+        ipcRenderer.send(MessageChannel.popupResult, data);
         this.hidePopup();
     }
 

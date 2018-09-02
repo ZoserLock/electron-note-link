@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 
 // Local
 import Notebook from "../../../core/data/notebook";
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 import { NoteListMode } from "../../../../enums";
 
@@ -44,7 +44,7 @@ export default class NotebookItem extends React.Component<any, any>
             notebookId:this.props.notebook.id
         }
         
-        ipcRenderer.send(Message.selectNotebook, data);
+        ipcRenderer.send(MessageChannel.selectNotebook, data);
     }
 
     private onItemDelete()
@@ -54,7 +54,7 @@ export default class NotebookItem extends React.Component<any, any>
             notebookId:this.props.notebook.id
         }
         
-        ipcRenderer.send(Message.removeNotebook, data);
+        ipcRenderer.send(MessageChannel.removeNotebook, data);
     }
 
     public render() 

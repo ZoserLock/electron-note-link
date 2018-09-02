@@ -2,7 +2,7 @@
 import * as uuid from "uuid/v4"
 
 // Load Local Modules
-import Application from "./app/core/application"
+import Application from "appbase/application"
 
 
 if(process.env.DEBUG)

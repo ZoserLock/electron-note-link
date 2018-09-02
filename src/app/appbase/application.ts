@@ -2,19 +2,19 @@
 import { app, BrowserWindow, Tray, ipcMain , Menu } from "electron"
 
 // Load local Modules
-import Debug            from "../tools/debug"
-import Configuration    from "../tools/configuration"
-import MainMenu         from "../core/mainMenu"
-import GlobalShortcut   from "../core/globalShortcut"
-import DataManager      from "../core/dataManager";
-import Editor           from "../core/editor";
-import PopupManager     from "../core/popupManager";
+import Debug            from "tools/debug"
+import Configuration    from "tools/configuration"
+import MainMenu         from "./mainMenu"
+import GlobalShortcut   from "./globalShortcut"
+import DataManager      from "core/dataManager";
+import Editor           from "core/editor";
+import PopupManager     from "core/popupManager";
 
 // Controllers
 import LeftPanelController from "presenter/leftPanelController";
 import NoteListController from  "presenter/noteListController";
 import NoteViewController from  "presenter/noteViewController";
-import Message from "./message";
+import Message from "presenter/messageChannel";
 
 export default class Application
 {

@@ -3,7 +3,7 @@
 var Dropbox = require("dropbox");
 
 // Local Imports
-import DataController from "./dataController";
+import DataController from "dataSource/dataSource";
 
 
 export default class DropboxDataController extends DataController

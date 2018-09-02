@@ -11,7 +11,7 @@ import Debug from "../../../tools/debug";
 import NoteViewHeader from "./noteViewHeader"; 
 import NoteViewContent from "./noteViewContent";
 import NoteViewContentEditor from "./noteViewContentEditor";
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 interface NoteViewData
 {
@@ -38,12 +38,12 @@ class NoteView extends React.Component<any, NoteViewData>
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener(Message.updateNoteView,this._updateRequestedEvent);
+        ipcRenderer.addListener(MessageChannel.updateNoteView,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(Message.updateNoteView,this._updateRequestedEvent);
+        ipcRenderer.removeListener(MessageChannel.updateNoteView,this._updateRequestedEvent);
     }
 
     private handleClickOutside(event:any)
@@ -51,7 +51,7 @@ class NoteView extends React.Component<any, NoteViewData>
         if(this.state.editorMode)
         {
             this.setState({editorMode:false});
-            ipcRenderer.send(Message.updateNote,{id:this.state.note.id,text:this._newText});
+            ipcRenderer.send(MessageChannel.updateNote,{id:this.state.note.id,text:this._newText});
             event.stopImmediatePropagation();
         }
     }

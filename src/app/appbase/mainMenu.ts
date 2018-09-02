@@ -2,8 +2,7 @@
 import { Menu, MenuItem } from "electron";
 
 // Local Modules
-import Application      from "./application"
-import Configuration    from "../tools/configuration";
+import Application      from "appbase/application"
 
 export default class MainMenu
 {

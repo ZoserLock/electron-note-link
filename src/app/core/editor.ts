@@ -6,7 +6,7 @@ import Debug from "../tools/debug";
 import DataManager from "./dataManager";
 import Notebook from "../core/data/notebook";
 import Note from "../core/data/note";
-import Message from "./message";
+import Message from "presenter/messageChannel";
 
 import {NoteListMode,EditorPendingUpdate} from "../../enums"
 

@@ -3,7 +3,7 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
 // Local
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 import { NoteListMode } from "../../../../enums";
 
 // UI
@@ -17,7 +17,7 @@ export default class NoteListHeader extends React.Component<any, any>
 
     private onAddNoteClick()
     {
-        ipcRenderer.send(Message.createNote);
+        ipcRenderer.send(MessageChannel.createNote);
     }
 
     public render() 

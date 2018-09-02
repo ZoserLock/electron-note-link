@@ -4,7 +4,7 @@ import * as React from "react";
 
 // Local
 import Debug from "../../../tools/debug";
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 
 export default class NoteViewHeader extends React.Component<any, any> 
@@ -25,7 +25,7 @@ export default class NoteViewHeader extends React.Component<any, any>
         }
         
         Debug.log("Next Started State: "+data.started);
-        ipcRenderer.send(Message.updateNote, data);
+        ipcRenderer.send(MessageChannel.updateNote, data);
     }
     
     public render() 

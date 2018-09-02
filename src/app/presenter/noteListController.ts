@@ -6,7 +6,7 @@ import * as uuid from "uuid/v4";
 import * as Path from "path";
 
 // Core
-import Message from "../core/message"
+import Message from "presenter/messageChannel"
 import DataManager from "../core/dataManager";
 import Editor from "core/editor";
 

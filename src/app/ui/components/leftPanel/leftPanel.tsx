@@ -9,7 +9,7 @@ import Debug from "../../../tools/debug";
 // UI
 import StorageItem from "./storageItem";
 import SpecialLeftItem from "./specialLeftItem";
-import Message from "../../../core/message";
+import MessageChannel from "presenter/messageChannel";
 
 import { NoteListMode } from "../../../../enums";
 
@@ -38,12 +38,12 @@ export default class LeftPanel extends React.Component<any, any>
  
     public componentDidMount() 
     {
-        ipcRenderer.addListener(Message.updateLeftPanel,this._updateRequestedEvent);
+        ipcRenderer.addListener(MessageChannel.updateLeftPanel,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(Message.updateLeftPanel,this._updateRequestedEvent);
+        ipcRenderer.removeListener(MessageChannel.updateLeftPanel,this._updateRequestedEvent);
     }
 
     public updateRequested(data:any):void
@@ -69,21 +69,21 @@ export default class LeftPanel extends React.Component<any, any>
             mode:NoteListMode.All
         }
 
-        ipcRenderer.send(Message.setNoteListMode,data);
+        ipcRenderer.send(MessageChannel.setNoteListMode,data);
     }
 
     private onStartedClick(): void 
     {
         let data = {mode:NoteListMode.Started}
 
-        ipcRenderer.send(Message.setNoteListMode,data);
+        ipcRenderer.send(MessageChannel.setNoteListMode,data);
     }
 
     private onTrashClick(): void 
     {
         let data = {mode:NoteListMode.Trash}
 
-        ipcRenderer.send(Message.setNoteListMode,data);
+        ipcRenderer.send(MessageChannel.setNoteListMode,data);
     }
 
     //#endregion
@@ -114,7 +114,7 @@ export default class LeftPanel extends React.Component<any, any>
             storage:storageId
         }
 
-        ipcRenderer.send(Message.createNotebook, data);
+        ipcRenderer.send(MessageChannel.createNotebook, data);
     }
 
     private RemoveStorage(storageId:string)
@@ -124,7 +124,7 @@ export default class LeftPanel extends React.Component<any, any>
             storage:storageId
         }
 
-        ipcRenderer.send(Message.removeStorage, data);
+        ipcRenderer.send(MessageChannel.removeStorage, data);
     }
     //#endregion
 

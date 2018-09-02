@@ -1,7 +1,6 @@
-export default class Message
+export default class MessageChannel
 {
 
-    
     public static readonly updateLeftPanel:string   = "update:LeftPanel";
     public static readonly updateNoteList:string    = "update:NoteList";
     public static readonly updateNoteView:string    = "update:NoteView";
