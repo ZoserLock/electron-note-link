@@ -1,6 +1,7 @@
 // Global
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 // Main
 import Debug from "../../../tools/debug";
@@ -11,6 +12,7 @@ import SpecialLeftItem from "./specialLeftItem";
 import Message from "../../../core/message";
 
 import { NoteListMode } from "../../../../enums";
+
 
 export default class LeftPanel extends React.Component<any, any> 
 {
@@ -48,11 +50,17 @@ export default class LeftPanel extends React.Component<any, any>
     {
         let storages = data.storages.map((storage:any) =>
         {
-            return  <StorageItem key = {storage.id} storage = {storage} editorStatus = {data.editorStatus}/>
+            return (
+            <ContextMenuTrigger id={"StorageItem"} key = {storage.id} attributes={{id:storage.id}}>
+                <StorageItem key = {storage.id} storage = {storage} editorStatus = {data.editorStatus}/>
+            </ContextMenuTrigger>
+            )
         });
 
         this.setState({storages:storages,editorStatus:data.editorStatus});
     }
+
+    //#region Special Notebook sets.
 
     private onAllNotesClick(): void 
     {
@@ -78,12 +86,47 @@ export default class LeftPanel extends React.Component<any, any>
         ipcRenderer.send(Message.setNoteListMode,data);
     }
 
-    private onSearchClick(): void 
-    {
-        let data = {mode:NoteListMode.Search};
+    //#endregion
 
-        ipcRenderer.send(Message.setNoteListMode,data);
+    //#region Notebook Context menu functions
+
+    private handleNotebookContextMenu(e:any, data:any, target:any):void
+    {
+        let storageId = target.getAttribute("id");
+
+        switch(data.action)
+        {
+            case "AddNotebook":
+                this.AddNotebookToStorage(storageId);
+            break;
+            case "Remove":
+                this.RemoveStorage(storageId);
+            break;
+        }
     }
+
+
+    private AddNotebookToStorage(storageId:string)
+    {
+        Debug.log(" -> Adding storage to: "+storageId);
+        let data =
+        {
+            storage:storageId
+        }
+
+        ipcRenderer.send(Message.createNotebook, data);
+    }
+
+    private RemoveStorage(storageId:string)
+    {
+        let data =
+        {
+            storage:storageId
+        }
+
+        ipcRenderer.send(Message.removeStorage, data);
+    }
+    //#endregion
 
     public render() 
     {
@@ -101,6 +144,13 @@ export default class LeftPanel extends React.Component<any, any>
                 <div className="ui-sidebar-list">
                     {this.state.storages}
                 </div>
+                <ContextMenu id={"StorageItem"}>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'AddNotebook' }}>Add Notebook</MenuItem> 
+                    <MenuItem divider /> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Storage</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Remove' }}>Remove Storage</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Storage</MenuItem> 
+                </ContextMenu>
             </div>
         );
     }

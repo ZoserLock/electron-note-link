@@ -15,7 +15,12 @@ export default class Notebook
 
     private _selected:boolean;
     
-    // Get/set
+    //#region Get/Set
+    get storage(): NotebookStorage
+    {
+        return this._storage;
+    }
+
     get id(): string
     {
         return this._id;
@@ -45,7 +50,8 @@ export default class Notebook
     {
         return this._selected;
     }
-
+    //#endregion
+  
     // Member Functions
     constructor()
     {

@@ -44,6 +44,10 @@ export default class NoteViewController extends Controller
         {
             this.sendUIMessage(Message.updateNoteView,{note:selectedNote.GetDataObject()});
         }
+        else
+        {
+            this.sendUIMessage(Message.updateNoteView,{note:null});
+        }
     }
 
     public updateNote(data:any):void

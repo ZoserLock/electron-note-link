@@ -15,6 +15,7 @@ export default class Message
     public static readonly createNote:string        = "action:NewNote";
     
     public static readonly removeStorage:string     = "action:RemoveNotebookStorage";
+    public static readonly deleteStorage:string     = "action:deleteNotebookStorage";
     public static readonly removeNotebook:string    = "action:RemoveNotebook";
     public static readonly removeNote:string        = "action:RemoveNote";
 

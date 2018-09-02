@@ -70,7 +70,15 @@ class NoteView extends React.Component<any, NoteViewData>
     {
         Debug.log("updateRequested Note View");
 
-        this._newText = data.note.text;
+        if(data.note != null)
+        {
+            this._newText = data.note.text;
+        }
+        else
+        {
+            this._newText = "";
+        }
+       
 
         this.setState({note:data.note});
     }

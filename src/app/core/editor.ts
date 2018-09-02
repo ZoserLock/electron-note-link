@@ -120,6 +120,7 @@ export default class Editor
         this._searchPhrase = "";
         this.setNoteListMode(NoteListMode.Notebook);
     }
+    
     ///////////
     //UpdateActions
     public updateAll():void

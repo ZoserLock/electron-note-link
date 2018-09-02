@@ -31,6 +31,7 @@ export default class LeftPanelController extends Controller
         ipcMain.on(Message.createStorage,()=>this.actionCreateNewStorage());
 
         ipcMain.on(Message.removeStorage ,(event:any,data:any)=>this.actionRemoveStorage(data));
+        ipcMain.on(Message.deleteStorage ,(event:any,data:any)=>this.actionDeleteStorage(data));
         ipcMain.on(Message.removeNotebook ,(event:any,data:any)=>this.actionRemoveNotebook(data));
 
         ipcMain.on(Message.createNotebook,(event:any,data:any)=>this.actionNewNotebook(data));
@@ -133,15 +134,27 @@ export default class LeftPanelController extends Controller
 
     private actionRemoveStorage(data:any):void
     {
-        let storageId = data.storage;
-
+        let storageId:string = data.storage;
         let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
+        let editor:Editor = Editor.instance;
 
         if(storage != null)
         {
+            if(editor.selectedNotebook != null && editor.selectedNotebook.storage == storage)
+            {
+                Debug.log("Unselect notebook");
+                editor.unselectNotebook();
+            }
+
+            if(editor.selectedNote != null && editor.selectedNote.parent.storage == storage)
+            {
+                Debug.log("Unselect note");
+                editor.unselectNote();
+            }
+
             DataManager.instance.removeStorage(storage);
 
-            this.updateLeftPanel();
+            editor.updateAll();
         }
         else
         {
@@ -149,6 +162,35 @@ export default class LeftPanelController extends Controller
         }
     }
 
+    private actionDeleteStorage(data:any):void
+    {
+        let storageId:string = data.storage;
+        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
+        let editor:Editor = Editor.instance;
+
+        if(storage != null)
+        {
+            if(editor.selectedNotebook != null && editor.selectedNotebook.storage == storage)
+            {
+                Debug.log("Unselect notebook");
+                editor.unselectNotebook();
+            }
+
+            if(editor.selectedNote != null && editor.selectedNote.parent.storage == storage)
+            {
+                Debug.log("Unselect note");
+                editor.unselectNote();
+            }
+
+            DataManager.instance.deleteStorage(storage);
+
+            editor.updateAll();
+        }
+        else
+        {
+            Debug.logError("actionRemoveStorage: Storage does not exist.");
+        }
+    }
     ///////////////////////////
     // Notebook
      
