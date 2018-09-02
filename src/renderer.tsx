@@ -8,8 +8,8 @@ import {remote} from "electron";
 const {Menu, MenuItem} = remote;
 
 // Local Imports
-import ApplicationWindow from "./app/ui/components/applicationWindow";
-import Message from "./app/core/message";
+import ApplicationWindow from "ui/components/applicationWindow";
+import Message from "core/message";
 
 
 function loadCss(css:string, callback:Function):void

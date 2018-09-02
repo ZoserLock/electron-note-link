@@ -4,8 +4,16 @@ import * as uuid from "uuid/v4"
 // Load Local Modules
 import Application from "./app/core/application"
 
-// Load Enviromental Variables
-require("./env")
+
+if(process.env.DEBUG)
+{
+    console.log("Notelink [Development Mode]");
+}
+else
+{
+    console.log("Notelink [Production Mode]");
+}
+
 
 // Called to avoid loading after
 uuid();
