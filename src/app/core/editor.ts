@@ -120,7 +120,7 @@ export default class Editor
         this._searchPhrase = "";
         this.setNoteListMode(NoteListMode.Notebook);
     }
-    
+
     ///////////
     //UpdateActions
     public updateAll():void
@@ -242,7 +242,7 @@ export default class Editor
 
     public unselectNote():void
     {
-        if( this._selectedNote!=null)
+        if( this._selectedNote != null)
         {
             this._selectedNote.SetAsUnselected();
             this._selectedNote = null;
