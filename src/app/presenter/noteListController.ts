@@ -8,7 +8,7 @@ import * as Path from "path";
 // Core
 import Message from "../core/message"
 import DataManager from "../core/dataManager";
-import Editor from "../core/editor";
+import Editor from "core/editor";
 
 // Notes
 import Note from "../core/data/note";

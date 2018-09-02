@@ -1,9 +1,11 @@
 
+// Node.js
 import * as Path from "path";
 
-import Notebook from "./notebook"
+// Core Package
+import Notebook from "core/data/notebook"
 
-export default class NotebookStorage
+export default class Storage
 {
     private static sNotebooksFolderName:string = "notebooks";
     private static sStorageFileName:string     = "notelink.json";
@@ -45,17 +47,17 @@ export default class NotebookStorage
         this._folderPath = "";
     }
     
-    public static create(id:string, path:string):NotebookStorage
+    public static create(id:string, path:string):Storage
     {
-        let storage:NotebookStorage = new NotebookStorage();
+        let storage:Storage = new Storage();
         storage._id   = id;
         storage._folderPath = path;
         return storage;
     }
 
-    public static createFromSavedData(data:any, path:string):NotebookStorage
+    public static createFromSavedData(data:any, path:string):Storage
     {
-        let storage:NotebookStorage = new NotebookStorage();
+        let storage:Storage = new Storage();
         storage._id   = data.id;
         storage._name = data.name;
         
@@ -122,12 +124,12 @@ export default class NotebookStorage
 
     public getFullPath():string
     {
-        return Path.join(this._folderPath,NotebookStorage.sStorageFileName);
+        return Path.join(this._folderPath,Storage.sStorageFileName);
     }
 
     public getNotebooksFolderPath():string
     {
-        return Path.join(this._folderPath,NotebookStorage.sNotebooksFolderName);
+        return Path.join(this._folderPath,Storage.sNotebooksFolderName);
     }
 
     public getSaveObject():any

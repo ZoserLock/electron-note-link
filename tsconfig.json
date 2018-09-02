@@ -9,7 +9,8 @@
         "noImplicitAny": true,
         "noImplicitReturns":true,
         "noImplicitThis":true,
-        "outDir": "dist"
+        "outDir": "dist",
+        "baseUrl": "src/app",
     },
     "include": 
     [

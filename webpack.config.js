@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack");
+const TSConfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const commonConfig = 
 {
@@ -27,6 +28,10 @@ const commonConfig =
         [
             path.join(__dirname, "app"),
             "node_modules"
+        ],
+        plugins:
+        [
+            new TSConfigPathsPlugin({configFile: "./tsconfig.json" }) // This plugin is for use the base path defined in the tsconfig.json
         ]
     },
     output: 
@@ -37,7 +42,7 @@ const commonConfig =
     plugins: 
     [
       new webpack.DefinePlugin({ "global.GENTLY": false }),
-      new webpack.SourceMapDevToolPlugin({ filename: '[name].js.map' })
+      new webpack.SourceMapDevToolPlugin({ filename: '[name].js.map' }),
     ]
 }
 
