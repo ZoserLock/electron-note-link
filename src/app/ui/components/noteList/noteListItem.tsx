@@ -1,11 +1,9 @@
-// Global
+// Node.js
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
-import applyOnClickOutside from 'react-onclickoutside'
 import * as moment from 'moment';
+
 // Local
-import Debug from "../../../tools/debug";
-import Note from "../../../notes/note";
 import Message from "../../../core/message";
 
 import EditableText from "../generic/editableText";

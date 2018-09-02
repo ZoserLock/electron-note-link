@@ -6,8 +6,6 @@ import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 // Local
 import Debug from "../../../tools/debug";
-import NotebookStorage from "../../../notes/notebookStorage";
-import Notebook from "../../../notes/notebook";
 import Message from "../../../core/message";
 
 // UI

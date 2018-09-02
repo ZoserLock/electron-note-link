@@ -8,17 +8,17 @@ import Message from "../core/message"
 import DataManager from "../core/dataManager";
 import Editor from "../core/editor";
 
-import NotebookStorage from "../notes/notebookStorage";
-import Notebook from "../notes/notebook";
-import Note from "../notes/note";
+import NotebookStorage from "../core/data/storage";
+import Notebook from "../core/data/notebook";
+import Note from "../core/data/note";
 
-import Controller from "./controller";
+import Presenter from "./presenter";
 import Application from "../core/application";
 
 import {NoteListMode} from "../../enums"
 import PopupManager from "../core/popupManager";
 
-export default class LeftPanelController extends Controller
+export default class LeftPanelController extends Presenter
 {
 
     private _updates:number=0;

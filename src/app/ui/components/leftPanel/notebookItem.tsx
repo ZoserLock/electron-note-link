@@ -3,10 +3,8 @@ import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
 // Local
-import Debug from "../../../tools/debug";
-import Notebook from "../../../notes/notebook";
+import Notebook from "../../../core/data/notebook";
 import Message from "../../../core/message";
-import Editor from "../../../core/editor";
 
 import { NoteListMode } from "../../../../enums";
 

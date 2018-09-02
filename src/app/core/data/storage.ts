@@ -1,7 +1,6 @@
 
 import * as Path from "path";
 
-import Debug from "../tools/debug";
 import Notebook from "./notebook"
 
 export default class NotebookStorage

@@ -1,5 +1,7 @@
-import {ipcMain, BrowserWindow} from "electron"; 
 
+
+// Node
+import {ipcMain, BrowserWindow} from "electron"; 
 import * as uuid from "uuid/v4";
 import * as Path from "path";
 
@@ -9,17 +11,15 @@ import DataManager from "../core/dataManager";
 import Editor from "../core/editor";
 
 // Notes
-import NotebookStorage from "../notes/notebookStorage";
-import Notebook from "../notes/notebook";
-import Note from "../notes/note";
+import Note from "../core/data/note";
 
-import Controller from "./controller";
+import Presenter from "./presenter";
 import Debug from "../tools/debug"; 
 import * as Fuse from "fuse.js";
 
 import {NoteListMode} from "../../enums"
 
-export default class NoteListController extends Controller
+export default class NoteListController extends Presenter
 {
     constructor(window:Electron.BrowserWindow)
     {

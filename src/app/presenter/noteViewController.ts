@@ -8,15 +8,12 @@ import Message from "../core/message"
 import DataManager from "../core/dataManager";
 import Editor from "../core/editor";
 
-import NotebookStorage from "../notes/notebookStorage";
-import Notebook from "../notes/notebook";
-import Note from "../notes/note";
+import Note from "../core/data/note";
 
-import Controller from "./controller";
-import Application from "../core/application";
+import Presenter from "./presenter";
 import PopupManager from "../core/popupManager";
 
-export default class NoteViewController extends Controller
+export default class NoteViewController extends Presenter
 {
     constructor(window:Electron.BrowserWindow)
     {

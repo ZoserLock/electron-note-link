@@ -1,19 +1,17 @@
 
+// Node
 import { app, ipcMain,BrowserWindow} from "electron";
 import * as Path from "path";
 import * as fs from "fs-extra";
 
-
+// Utils
 import Debug from "../tools/debug";
 import FileTools from "../tools/fileTools";
 
-import NotebookStorage from "../notes/notebookStorage";
-import Notebook from "../notes/notebook";
-import Note from "../notes/note";
-import Message from "./message";
-import { CacheAction } from "../../enums";
-
-
+// Core
+import NotebookStorage from "../core/data/storage";
+import Notebook from "../core/data/notebook";
+import Note from "../core/data/note";
 
 interface NotebookMap 
 {

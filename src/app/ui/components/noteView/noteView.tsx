@@ -4,7 +4,7 @@ import {ipcRenderer} from "electron";
 import applyOnClickOutside from 'react-onclickoutside'
 
 // Local
-import Note from "../../../notes/note";
+import Note from "../../../core/data/note";
 import Debug from "../../../tools/debug";
 
 // UI

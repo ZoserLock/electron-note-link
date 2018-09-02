@@ -1,13 +1,10 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
-import Note from "../../../notes/note";
-
 // UI
 import NoteListHeader from "./noteListHeader"; 
 import NoteListContent from "./noteListContent"; 
 import { NoteListMode } from "../../../../enums";
-import Debug from "../../../tools/debug";
 
 export default class NoteList extends React.Component<any, any> 
 {

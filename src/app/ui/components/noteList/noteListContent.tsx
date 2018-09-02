@@ -4,7 +4,6 @@ import {ipcRenderer} from "electron";
 
 // Local
 import Debug from "../../../tools/debug";
-import Note from "../../../notes/note";
 
 // UI
 import NoteListItem from "./noteListItem";
@@ -23,7 +22,7 @@ export default class NoteListContent extends React.Component<any, any>
 
     }
 
-    private handleNotebookContextMenu(e:any, data:any, target:any):void
+    private handleNoteContextMenu(e:any, data:any, target:any):void
     {
         Debug.logVar(data);
         
@@ -60,12 +59,12 @@ export default class NoteListContent extends React.Component<any, any>
                     )}
                 </AutoSizer>
                 <ContextMenu id={"NoteItem"}>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Copy Link' }}>Copy Link</MenuItem> 
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'View Source' }}>View Source</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: 'Copy Link' }}>Copy Link</MenuItem> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: 'View Source' }}>View Source</MenuItem>
                     <MenuItem divider /> 
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Dumplicate' }}>Duplicate Note</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Note</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Note</MenuItem> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: 'Dumplicate' }}>Duplicate Note</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Note</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Note</MenuItem> 
                 </ContextMenu>
             </div>
             

@@ -1,7 +1,7 @@
 import {ipcMain, BrowserWindow} from "electron"; 
 import * as EventEmitter from "events";
 
-export default class Controller
+export default class Presenter
 {
     private _window:Electron.BrowserWindow;
 

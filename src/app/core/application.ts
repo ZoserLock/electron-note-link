@@ -11,9 +11,9 @@ import Editor           from "../core/editor";
 import PopupManager     from "../core/popupManager";
 
 // Controllers
-import LeftPanelController from "../controllers/leftPanelController";
-import NoteListController from "../controllers/noteListController";
-import NoteViewController from "../controllers/noteViewController";
+import LeftPanelController from "../presenter/leftPanelController";
+import NoteListController from "../presenter/noteListController";
+import NoteViewController from "../presenter/noteViewController";
 import Message from "./message";
 
 export default class Application

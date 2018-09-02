@@ -1,15 +1,11 @@
 
 import {ipcMain} from "electron"; 
 import * as process from "process";
-import * as uuid from "uuid/v4";
-import * as Path from "path";
 
 import Debug from "../tools/debug";
-import Application from "./application";
 import DataManager from "./dataManager";
-import NotebookStorage from "../notes/notebookStorage";
-import Notebook from "../notes/notebook";
-import Note from "../notes/note";
+import Notebook from "../core/data/notebook";
+import Note from "../core/data/note";
 import Message from "./message";
 
 import {NoteListMode,EditorPendingUpdate} from "../../enums"

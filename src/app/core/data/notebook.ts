@@ -1,8 +1,7 @@
 import * as Path from "path";
 
-import Debug from "../tools/debug";
 import Note from "./note";
-import NotebookStorage from "./notebookStorage";
+import NotebookStorage from "./storage";
 
 export default class Notebook
 {

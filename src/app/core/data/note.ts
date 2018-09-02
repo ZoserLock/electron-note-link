@@ -1,6 +1,6 @@
 import * as Path from "path";
 import Notebook from "./notebook";
-import Debug from "../tools/debug";
+import Debug from "../../tools/debug";
 
 export default class Note
 {
