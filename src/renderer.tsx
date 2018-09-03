@@ -1,16 +1,15 @@
 // Node Imports
-import {ipcRenderer} from "electron"; 
+import {ipcRenderer, remote} from "electron"; 
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 
-
-import {remote} from "electron"; 
 const {Menu, MenuItem} = remote;
 
 // Local Imports
 import ApplicationWindow from "ui/components/applicationWindow";
 import MessageChannel from "presenter/messageChannel";
 
+// Create UI overlord
 
 function loadCss(css:string, callback:Function):void
 {
@@ -35,7 +34,6 @@ loadCss("../css/app.css",()=>
 });
 
 
-
 let rightClickPosition:any = null;
 
 const menu = new Menu();
@@ -53,7 +51,7 @@ window.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     rightClickPosition = {x: e.x, y: e.y}
     menu.popup({window: remote.getCurrentWindow()})
-  }, false)
+}, false)
 
 
 // Render the actual application

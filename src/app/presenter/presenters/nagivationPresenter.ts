@@ -27,7 +27,7 @@ export default class NavigationPresenter extends Presenter
 
     protected onRegisterListeners():void
     {
-        this.registerUIListener(MessageChannel.updateNavigationPanel    ,(data:any) => this.onUpdateRequested());
+        this.registerUIListener(MessageChannel.updateNavigationPanel    ,(data:any) => this.update());
 
         this.registerUIListener(MessageChannel.createStorage      ,(data:any) => this.actionCreateNewStorage());
 

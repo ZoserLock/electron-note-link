@@ -18,7 +18,8 @@ export default class NoteListPresenter extends Presenter
 {
     protected onRegisterListeners():void
     {
-        this.registerUIListener(MessageChannel.updateNoteListPanel , (data:any) => this.onUpdateRequested());
+        this.registerUIListener(MessageChannel.updateNoteListPanel , (data:any) => this.update());
+        
         this.registerUIListener(MessageChannel.createNote          , (data:any) => this.actionNewNote());
         this.registerUIListener(MessageChannel.selectNote          , (data:any) => this.actionSelectNote(data));
         this.registerUIListener(MessageChannel.removeNote          , (data:any) => this.actionRemoveNote(data));

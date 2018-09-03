@@ -1,8 +1,7 @@
+// Node.js
 import * as React from "react";
 
-import Debug from "../../tools/debug"
-
-import LeftPanel from "./leftPanel/leftPanel";
+import NavigationPanel from "./navigationPanel/navigationPanel"
 import NoteList from "./noteList/noteList";
 import NoteView from "./noteView/noteView";
 import StatusBar from "./statusBar";
@@ -12,30 +11,25 @@ import PopupLayer from "./popupLayer"
 
 export default class ApplicationWindow extends React.Component<any, any> 
 {
-    constructor(props: any)
+    // Never update this component as is a layout only component
+    public shouldComponentUpdate(nextProps: any, nextState: any, nextContext: any):boolean
     {
-        super(props);
-
-        this.state = 
-        {
-            toolbar:null,
-        };
+        return false;
     }
 
-    render() 
+    public render():React.ReactNode
     {
-        Debug.log("Render Application window");
         return(
             <div className="ui-window">
                 <WindowBar/>
                 <Toolbar/>
                 <div className="ui-main">
-                    <LeftPanel/>
+                    <NavigationPanel/>
                     <NoteList/>
                     <NoteView/>
                 </div>
                 <StatusBar/>
-                <PopupLayer />
+                <PopupLayer/>
             </div>
         );
     }

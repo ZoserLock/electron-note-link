@@ -1,11 +1,10 @@
 // Global
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
-
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 // Local
-import Debug from "../../../tools/debug";
+import Debug from "tools/debug";
 import MessageChannel from "presenter/messageChannel";
 
 // UI

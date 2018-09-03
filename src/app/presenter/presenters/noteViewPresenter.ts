@@ -20,7 +20,7 @@ export default class NoteViewPresenter extends Presenter
 {
     protected onRegisterListeners():void
     {
-        this.registerUIListener(MessageChannel.updateNoteViewPanel  ,(data:any) => this.onUpdateRequested());
+        this.registerUIListener(MessageChannel.updateNoteViewPanel  ,(data:any) => this.update());
         this.registerUIListener(MessageChannel.updateNote           ,(data:any) => this.updateNote(data));
 
         this.registerUIListener(MessageChannel.testPopup            ,(data:any) => this.testPopup());
