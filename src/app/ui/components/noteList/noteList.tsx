@@ -1,6 +1,7 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
+import MessageChannel from "presenter/messageChannel"
 // UI
 import NoteListHeader from "./noteListHeader"; 
 import NoteListContent from "./noteListContent"; 
@@ -29,13 +30,13 @@ export default class NoteList extends React.Component<any, any>
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener("update:NoteList",this._updateRequestedEvent);
+        ipcRenderer.addListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
         ipcRenderer.addListener("update:Search",this._updateSearchRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener("update:NoteList",this._updateRequestedEvent);
+        ipcRenderer.removeListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
         ipcRenderer.removeListener("update:Search",this._updateSearchRequestedEvent);
     }
 

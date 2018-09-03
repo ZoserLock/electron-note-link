@@ -38,12 +38,12 @@ class NoteView extends React.Component<any, NoteViewData>
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener(MessageChannel.updateNoteView,this._updateRequestedEvent);
+        ipcRenderer.addListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(MessageChannel.updateNoteView,this._updateRequestedEvent);
+        ipcRenderer.removeListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
     }
 
     private handleClickOutside(event:any)

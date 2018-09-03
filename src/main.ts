@@ -37,13 +37,13 @@ uuid();
 // Create dependencies
 let platform     = new Application();
 
-let presentation = new MainPresentation([
-    new PopupPresenter(),
-    new ApplicationPresenter(),
-    new NavigationPresenter(),
-    new NoteListPresenter(),
-    new NoteViewPresenter()
-]);
+let presentation = new MainPresentation();
+
+presentation.setApplicationPresenter (new ApplicationPresenter());
+presentation.setNavigationPresenter  (new NavigationPresenter());
+presentation.setNoteListPresenter    (new NoteListPresenter());
+presentation.setNoteViewPresenter    (new NoteViewPresenter());
+presentation.setPopupPresenter       (new PopupPresenter());
 
 let core = new Core(platform, presentation);
 

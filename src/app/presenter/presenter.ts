@@ -25,13 +25,23 @@ export default class Presenter
         this._core         = core;
         this._platform     = platform;
         this._presentation = presentation;
-        
+
         this.onRegisterListeners();
     }
 
     public update():void
     {
         this.onUpdateRequested();
+    }
+
+    protected registerUIListener(channel:string, callback:(data:any) => void):void
+    {
+        this._platform.registerUIListener(channel,callback);
+    }
+    
+    protected sendUIMessage(channel:string, data?:any):void
+    {
+        this._platform.sendUIMessage(channel,data);
     }
 
     // Overridable Functions

@@ -20,10 +20,10 @@ export default class NoteViewPresenter extends Presenter
 {
     protected onRegisterListeners():void
     {
-        this._platform.registerUIListener(MessageChannel.updateNoteView ,(data:any) => this.updateNoteView());
-        this._platform.registerUIListener(MessageChannel.updateNote     ,(data:any) => this.updateNote(data));
+        this.registerUIListener(MessageChannel.updateNoteViewPanel  ,(data:any) => this.onUpdateRequested());
+        this.registerUIListener(MessageChannel.updateNote           ,(data:any) => this.updateNote(data));
 
-        this._platform.registerUIListener(MessageChannel.testPopup      ,(data:any) => this.testPopup());
+        this.registerUIListener(MessageChannel.testPopup            ,(data:any) => this.testPopup());
     }
 
     public testPopup():void
@@ -31,7 +31,7 @@ export default class NoteViewPresenter extends Presenter
         PopupManager.instance.showConfirmationPanel("Test Popup","Testing sub Title Text","Hamaf pig fatber shankle venison beef ribs ","OKA","EXIT",()=>{Debug.log("OK");},()=>{Debug.log("CANCEL");});
     }
 
-    public updateNoteView():void
+    public onUpdateRequested():void
     {
         Debug.log("updateNoteView()");
 
@@ -39,11 +39,11 @@ export default class NoteViewPresenter extends Presenter
 
         if(selectedNote != null)
         {
-            this._platform.sendUIMessage(MessageChannel.updateNoteView,{note:selectedNote.GetDataObject()});
+            this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:selectedNote.GetDataObject()});
         }
         else
         {
-            this._platform.sendUIMessage(MessageChannel.updateNoteView,{note:null});
+            this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:null});
         }
     }
 

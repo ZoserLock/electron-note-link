@@ -1,10 +1,11 @@
 export default class MessageChannel
 {
+    // Update Messages
+    public static readonly updateNavigationPanel:string   = "update:NavigationPanel";
+    public static readonly updateNoteListPanel:string     = "update:NoteListPanel";
+    public static readonly updateNoteViewPanel:string     = "update:NoteViewPanel";
 
-    public static readonly updateLeftPanel:string   = "update:LeftPanel";
-    public static readonly updateNoteList:string    = "update:NoteList";
-    public static readonly updateNoteView:string    = "update:NoteView";
-
+    // Search Messages
     public static readonly beginQuickSearch:string  = "action:BeginQuickSearch";
     public static readonly searchUpdated:string     = "action:SearchUpdated";
     public static readonly searchCancelled:string   = "action:SearchCancelled";

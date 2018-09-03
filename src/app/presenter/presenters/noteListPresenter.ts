@@ -3,7 +3,7 @@ import * as uuid from "uuid/v4";
 import * as Path from "path";
 
 // Core
-import Message from "presenter/messageChannel"
+import MessageChannel from "presenter/messageChannel"
 import DataManager from "core/dataManager";
 import Core from "core/core";
 
@@ -18,16 +18,16 @@ export default class NoteListPresenter extends Presenter
 {
     protected onRegisterListeners():void
     {
-        this._platform.registerUIListener(Message.updateNoteList, (data:any) => this.updateNoteList());
-        this._platform.registerUIListener(Message.createNote    , (data:any) => this.actionNewNote());
-        this._platform.registerUIListener(Message.selectNote    , (data:any) =>{this.actionSelectNote(data);});
-        this._platform.registerUIListener(Message.removeNote    , (data:any) =>{this.actionRemoveNote(data);});
+        this.registerUIListener(MessageChannel.updateNoteListPanel , (data:any) => this.onUpdateRequested());
+        this.registerUIListener(MessageChannel.createNote          , (data:any) => this.actionNewNote());
+        this.registerUIListener(MessageChannel.selectNote          , (data:any) => this.actionSelectNote(data));
+        this.registerUIListener(MessageChannel.removeNote          , (data:any) => this.actionRemoveNote(data));
 
-        this._platform.registerUIListener(Message.searchUpdated     , (data:any) => this.actionSearchUpdated(data));
-        this._platform.registerUIListener(Message.beginQuickSearch  , (data:any) => this.beginQuickSearch(data));
+        this.registerUIListener(MessageChannel.searchUpdated       , (data:any) => this.actionSearchUpdated(data));
+        this.registerUIListener(MessageChannel.beginQuickSearch    , (data:any) => this.beginQuickSearch(data));
     }
 
-    public updateNoteList():void
+    public onUpdateRequested():void
     {
         Debug.log("updateNoteList()");
    
@@ -112,7 +112,7 @@ export default class NoteListPresenter extends Presenter
                     mode:NoteListMode.Disabled,
                 }
         
-                this._platform.sendUIMessage(Message.updateNoteList, data);
+                this._platform.sendUIMessage(MessageChannel.updateNoteListPanel, data);
                 return;
             }
 
@@ -154,12 +154,12 @@ export default class NoteListPresenter extends Presenter
             forceUpdate:(forceUpdate)?Math.random():0
         }
 
-        this._platform.sendUIMessage(Message.updateNoteList, data);
+        this._platform.sendUIMessage(MessageChannel.updateNoteListPanel, data);
     }
 
     private beginQuickSearch(data:any):void
     {
-        this._platform.sendUIMessage(Message.beginQuickSearch);
+        this._platform.sendUIMessage(MessageChannel.beginQuickSearch);
     }
 
     private actionSearchUpdated(data:any):void
@@ -199,7 +199,7 @@ export default class NoteListPresenter extends Presenter
                 DataManager.instance.saveNote(note);
                 selectedNotebook.addNote(note);
                 this._core.selectNote(note.id);
-                this.updateNoteList();
+                this.update();
             }
         }
     }

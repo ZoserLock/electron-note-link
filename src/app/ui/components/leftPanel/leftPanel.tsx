@@ -35,12 +35,12 @@ export default class LeftPanel extends React.Component<any, any>
  
     public componentDidMount() 
     {
-        ipcRenderer.addListener(MessageChannel.updateLeftPanel,this._updateRequestedEvent);
+        ipcRenderer.addListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(MessageChannel.updateLeftPanel,this._updateRequestedEvent);
+        ipcRenderer.removeListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
     }
 
     public updateRequested(data:any):void

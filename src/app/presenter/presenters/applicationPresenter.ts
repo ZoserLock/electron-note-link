@@ -11,10 +11,10 @@ export default class ApplicationPresenter extends Presenter
     
     protected onRegisterListeners():void
     {
-        this._platform.registerUIListener(MessageChannel.windowMinimize    ,(data:any) => this.onWindowMinimize());
-        this._platform.registerUIListener(MessageChannel.windowMaximize    ,(data:any) => this.onWindowMaximize());
-        this._platform.registerUIListener(MessageChannel.windowClose       ,(data:any) => this.onWindowClose());
-        this._platform.registerUIListener(MessageChannel.windowLoaded      ,(data:any) => this.onWindowLoaded());
+        this.registerUIListener(MessageChannel.windowMinimize    ,(data:any) => this.onWindowMinimize());
+        this.registerUIListener(MessageChannel.windowMaximize    ,(data:any) => this.onWindowMaximize());
+        this.registerUIListener(MessageChannel.windowClose       ,(data:any) => this.onWindowClose());
+        this.registerUIListener(MessageChannel.windowLoaded      ,(data:any) => this.onWindowLoaded());
     }
 
     // Window command

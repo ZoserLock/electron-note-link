@@ -6,9 +6,7 @@ import Debug from "../tools/debug";
 import DataManager from "./dataManager";
 import Notebook from "../core/data/notebook";
 import Note from "../core/data/note";
-import Message from "presenter/messageChannel";
-
-import {EditorPendingUpdate} from "../../enums"
+import MessageChannel from "presenter/messageChannel";
 
 import Presentation from "core/presentation";
 import Platform     from "core/platform";
@@ -28,10 +26,6 @@ export default class Core
 
     // Search Data
     private _searchPhrase = "";
-
-    // Update Status
-    private _willUpdateNextTick:boolean   = false;
-    private _pendingUpdate:number = EditorPendingUpdate.None;
 
     //#region Get/Set
     get noteListMode(): number 
@@ -78,7 +72,7 @@ export default class Core
 
         this.initializeEditorStatus();
 
-        this.updateAll();
+        this.updateAllPanels();
        
     }
 
@@ -107,7 +101,7 @@ export default class Core
 
     public beginQuickSearch():void
     {
-        ipcMain.emit(Message.beginQuickSearch);
+        ipcMain.emit(MessageChannel.beginQuickSearch);
     }
 
     // Search
@@ -131,65 +125,36 @@ export default class Core
         this.setNoteListMode(NoteListMode.Notebook);
     }
 
-    ///////////
-    //UpdateActions
-    public updateAll():void
+    ////////////////////
+    // Update Actions //
+    ////////////////////
+    
+    public updateAllPanels():void
     {
-        this.updateLeftPanel();
+        this.updateNavigationPanel();
         this.updateNoteList();
         this.updateNoteView();
     }
 
-    public updateLeftPanel():void
+    public updateNavigationPanel():void
     {
-        this._pendingUpdate |= EditorPendingUpdate.LeftPanel;
-        this.tryUpdateNextTick();
+        this._presentation.updateNavigationPanel();
     }
 
     public updateNoteList():void
     {
-        this._pendingUpdate |= EditorPendingUpdate.NoteList;
-        this.tryUpdateNextTick();
+        this._presentation.updateNoteListPanel();
     }
 
     public updateNoteView():void
     {
-        this._pendingUpdate |= EditorPendingUpdate.NoteView;
-        this.tryUpdateNextTick();
+        this._presentation.UpdateNoteViewPanel();
     }
 
-    private tryUpdateNextTick():void
-    {
-        if(!this._willUpdateNextTick)
-        {
-            process.nextTick(()=>this.onNextTick());
-            this._willUpdateNextTick=true;
-        }
-    }
-    
-    private onNextTick():void
-    {
-        if((this._pendingUpdate & EditorPendingUpdate.LeftPanel)!=0)
-        {
-            ipcMain.emit(Message.updateLeftPanel);
-        }
+    /////////////
+    // Actions //
+    /////////////
 
-        if((this._pendingUpdate & EditorPendingUpdate.NoteList)!=0)
-        {
-            ipcMain.emit(Message.updateNoteList);
-        }
-
-        if((this._pendingUpdate & EditorPendingUpdate.NoteView)!=0)
-        {
-            ipcMain.emit(Message.updateNoteView);
-        }
-
-        this._willUpdateNextTick = false;
-        this._pendingUpdate = EditorPendingUpdate.None;
-    }
-
-    ///////////
-    //Actions
     public unselectNotebook():void
     {
         if( this._selectedNotebook!=null)
@@ -199,7 +164,7 @@ export default class Core
             this._selectedNotebook.SetAsUnselected();
             this._selectedNotebook = null;
 
-            this.updateLeftPanel();
+            this.updateNavigationPanel();
             this.updateNoteList();
 
             if(shouldUpdateNoteView)
@@ -231,7 +196,7 @@ export default class Core
                 this.selectNote(note.id);
             }
 
-            this.updateLeftPanel();
+            this.updateNavigationPanel();
             this.updateNoteList();
         }
 
@@ -245,7 +210,7 @@ export default class Core
             Debug.log("setNoteListMode: "+mode);
             this._noteListMode = mode;
 
-            this.updateLeftPanel();
+            this.updateNavigationPanel();
             this.updateNoteList();
         }
     }

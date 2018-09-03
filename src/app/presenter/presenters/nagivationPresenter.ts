@@ -25,29 +25,24 @@ export default class NavigationPresenter extends Presenter
 
     private _updates:number = 0;
 
-    constructor()
-    {
-        super();
-    }
-
     protected onRegisterListeners():void
     {
-        this._platform.registerUIListener(MessageChannel.updateLeftPanel    ,(data:any) => this.updateLeftPanel());
-        this._platform.registerUIListener(MessageChannel.createStorage      ,(data:any) => this.actionCreateNewStorage());
+        this.registerUIListener(MessageChannel.updateNavigationPanel    ,(data:any) => this.onUpdateRequested());
 
-        this._platform.registerUIListener(MessageChannel.removeStorage      ,(data:any) => this.actionRemoveStorage(data));
-        this._platform.registerUIListener(MessageChannel.deleteStorage      ,(data:any) => this.actionDeleteStorage(data));
-        this._platform.registerUIListener(MessageChannel.removeNotebook     ,(data:any) => this.actionRemoveNotebook(data));
+        this.registerUIListener(MessageChannel.createStorage      ,(data:any) => this.actionCreateNewStorage());
 
-        this._platform.registerUIListener(MessageChannel.createNotebook     ,(data:any) => this.actionNewNotebook(data));
-        this._platform.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
-        this._platform.registerUIListener(MessageChannel.setNoteListMode    ,(data:any) => this.actionSetNoteListMode(data));
+        this.registerUIListener(MessageChannel.removeStorage      ,(data:any) => this.actionRemoveStorage(data));
+        this.registerUIListener(MessageChannel.deleteStorage      ,(data:any) => this.actionDeleteStorage(data));
+        this.registerUIListener(MessageChannel.removeNotebook     ,(data:any) => this.actionRemoveNotebook(data));
+
+        this.registerUIListener(MessageChannel.createNotebook     ,(data:any) => this.actionNewNotebook(data));
+        this.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
+        this.registerUIListener(MessageChannel.setNoteListMode    ,(data:any) => this.actionSetNoteListMode(data));
     }
 
-    // Updates
-    public updateLeftPanel():void
+    public onUpdateRequested():void
     {
-        Debug.log("updateLeftPanel() "+this._updates);
+        Debug.log("onUpdateRequested: "+this._updates);
 
         this._updates++;
 
@@ -66,7 +61,7 @@ export default class NavigationPresenter extends Presenter
             editorStatus: editorData
         }
 
-        this._platform.sendUIMessage(MessageChannel.updateLeftPanel, sendData);
+        this._platform.sendUIMessage(MessageChannel.updateNavigationPanel, sendData);
     }
 
     ///////////////////////////
@@ -109,7 +104,7 @@ export default class NavigationPresenter extends Presenter
         DataManager.instance.addStorage(storage);
         DataManager.instance.saveStorage(storage);
 
-        this.updateLeftPanel();
+        this.update();
     }
     
     private addExistingStorage(path:string):boolean
@@ -129,7 +124,7 @@ export default class NavigationPresenter extends Presenter
         {
             if(DataManager.instance.addStorage(storage))
             {
-                this.updateLeftPanel();
+                this.update();
                 return true;
             }
         }
@@ -158,7 +153,7 @@ export default class NavigationPresenter extends Presenter
 
             DataManager.instance.removeStorage(storage);
 
-            this._core.updateAll();
+            this._core.updateAllPanels();
         }
         else
         {
@@ -187,7 +182,7 @@ export default class NavigationPresenter extends Presenter
 
             DataManager.instance.deleteStorage(storage);
 
-            this._core.updateAll();
+            this._core.updateAllPanels();
         }
         else
         {
@@ -214,7 +209,7 @@ export default class NavigationPresenter extends Presenter
                 DataManager.instance.saveStorage(storage);
             }
 
-            this.updateLeftPanel();
+            this.update();
         }
         else
         {
@@ -237,7 +232,7 @@ export default class NavigationPresenter extends Presenter
                 
                 DataManager.instance.deleteNotebook(notebook);
 
-                this.updateLeftPanel();
+                this.update();
     
                 if(isSelectedNotebook)
                 {
@@ -280,7 +275,7 @@ export default class NavigationPresenter extends Presenter
         if(notebook != null)
         {
             DataManager.instance.saveNotebook(notebook);
-            this.updateLeftPanel();
+            this.update();
         }
         else
         {
