@@ -2,8 +2,7 @@
 import {globalShortcut } from "electron";
 
 // Local Modules
-import Application      from "appbase/application";
-import Editor           from "core/editor"
+import Core           from "core/core"
 
 export default class GlobalShortcuts
 {
@@ -11,14 +10,14 @@ export default class GlobalShortcuts
     {
         globalShortcut.register("CommandOrControl+R", () =>
         {
-            Application.instance.windowShow()
+           // Application.instance.windowShow()
 
-            Editor.instance.beginQuickSearch();
+           //Core.instance.beginQuickSearch();
         }); 
 
         globalShortcut.register("CommandOrControl+Q", () =>
         {
-            Application.instance.toggleDevTools();
+          //  Application.instance.toggleDevTools();
         });
     }
 }

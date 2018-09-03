@@ -2,7 +2,7 @@
 import { Menu, MenuItem } from "electron";
 
 // Local Modules
-import Application      from "appbase/application"
+import Application      from "platform/application"
 
 export default class MainMenu
 {
@@ -44,7 +44,7 @@ export default class MainMenu
                     accelerator: "CmdOrCtrl+X",
                     click:() =>
                     {
-                        Application.instance.exit();
+                       // Application.instance.exit();
                     }
                 }
             ]

@@ -9,29 +9,9 @@ import Debug from "../tools/debug";
 import FileTools from "../tools/fileTools";
 
 // Core
-import NotebookStorage from "../core/data/storage";
+import Storage from "../core/data/storage";
 import Notebook from "../core/data/notebook";
 import Note from "../core/data/note";
-
-interface NotebookMap 
-{
-    [id: string]: Notebook;
-}
-
-interface StorageMap 
-{
-    [id: string]: NotebookStorage;
-}
-
-interface NoteMap 
-{
-    [id: string]: Note;
-}
-
-interface TagMap 
-{
-    [id: string]: Note;
-}
 
 export default class DataManager
 {
@@ -55,25 +35,21 @@ export default class DataManager
     // Member Variables
     private _savePath:string;
 
-    private _storageList: Array<NotebookStorage> = new Array<NotebookStorage>();
-    private _notebookList: Array<Notebook>       = new Array<Notebook>();
-    private _noteList: Array<Note>               = new Array<Note>();
-
-    // add all notes.
-    
+    private _storageList: Array<Storage>    = new Array<Storage>();
+    private _notebookList: Array<Notebook>  = new Array<Notebook>();
+    private _noteList: Array<Note>          = new Array<Note>();
 
     // Data maps
-    private _storages: StorageMap ={};
-    private _notebooks: NotebookMap = {};
-    private _notes: NoteMap = {};
-    private _notePerTag: TagMap = {}
+    private _storages: Dictionary<Storage>   = {};
+    private _notebooks: Dictionary<Notebook> = {};
+    private _notes: Dictionary<Note>         = {};
 
     // Cache
     private _cacheWindow:BrowserWindow;
 
     // Get/Set
     
-    get noteStorages(): Array<NotebookStorage>  
+    get noteStorages(): Array<Storage>  
     {
         return this._storageList;
     }
@@ -91,20 +67,20 @@ export default class DataManager
     // Member Functions
     private constructor()
     {
-        this._storageList = new Array<NotebookStorage>();
+        this._storageList = new Array<Storage>();
         this._savePath = Path.join(app.getPath("userData"),this.sSaveFileName);
         
         Debug.log("[DataManager] Save File Location: "+this._savePath);
     }
 
     // data Management
-    private registerStorage(storage:NotebookStorage):void
+    private registerStorage(storage:Storage):void
     {
         this._storages[storage.id] = storage;
         this._storageList.push(storage);
     }
 
-    private unregisterStorage(storage:NotebookStorage):void
+    private unregisterStorage(storage:Storage):void
     {
         delete this._storages[storage.id];
 
@@ -175,7 +151,7 @@ export default class DataManager
     
     private createApplicationData():void
     {
-        this._storageList = new Array<NotebookStorage>();
+        this._storageList  = new Array<Storage>();
         this._notebookList = new  Array<Notebook>();
     }
 
@@ -363,7 +339,7 @@ export default class DataManager
 
     /////////////////////
     // Storage  Functions
-    public addStorage(storage:NotebookStorage):boolean
+    public addStorage(storage:Storage):boolean
     {
         if(this._storages[storage.id] == undefined)
         {
@@ -394,7 +370,7 @@ export default class DataManager
         return true;
     }
 
-    public getStorage(id:string):NotebookStorage
+    public getStorage(id:string):Storage
     {
         if(this._storages[id] != undefined)
         {
@@ -404,7 +380,7 @@ export default class DataManager
         return null;
     }
 
-    public loadStorage(path:string):NotebookStorage
+    public loadStorage(path:string):Storage
     {
         let storageDataRaw = FileTools.readJsonSync(path);
   
@@ -414,8 +390,8 @@ export default class DataManager
             return null;
         }
 
-        let noteStorage:NotebookStorage = NotebookStorage.createFromSavedData(storageDataRaw, Path.dirname(path));
-        let notebookStorageFolder= noteStorage.getNotebooksFolderPath();
+        let noteStorage:Storage   = Storage.createFromSavedData(storageDataRaw, Path.dirname(path));
+        let notebookStorageFolder = noteStorage.getNotebooksFolderPath();
 
         // Load Notebooks
         let storageNotebookFiles:string[] = FileTools.getJsonFilesInFolder(notebookStorageFolder);
@@ -440,7 +416,7 @@ export default class DataManager
         return noteStorage;
     }
 
-    public saveStorage(storage:NotebookStorage, cascade:boolean = false):boolean
+    public saveStorage(storage:Storage, cascade:boolean = false):boolean
     {
         if(cascade)
         {
@@ -466,7 +442,7 @@ export default class DataManager
         return true;
     }
 
-    public removeStorage(storage:NotebookStorage):boolean
+    public removeStorage(storage:Storage):boolean
     {
         if(this._storages[storage.id] != undefined)
         {
@@ -482,7 +458,7 @@ export default class DataManager
         return false;
     }
 
-    public deleteStorage(storage:NotebookStorage):boolean
+    public deleteStorage(storage:Storage):boolean
     {
         if(this._storages[storage.id] != undefined)
         {

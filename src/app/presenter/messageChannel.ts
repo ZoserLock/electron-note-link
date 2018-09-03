@@ -38,7 +38,8 @@ export default class MessageChannel
     public static readonly windowClose:string       = "action:window:Close";
     public static readonly windowLoaded:string      = "action:window:loaded";
    
-
+    // Test Related
+    public static readonly testPopup:string         = "test:popup";
 
     
 } 

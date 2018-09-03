@@ -1,20 +1,48 @@
-import {ipcMain, BrowserWindow} from "electron"; 
-import * as EventEmitter from "events";
+// Node.js
+import {ipcMain} from "electron"; 
+
+// Tools
+import Debug from "tools/debug";
+
+// Core
+import Core         from "core/core";
+import Platform     from "core/platform";
+import Presentation from "core/presentation";
 
 export default class Presenter
 {
-    private _window:Electron.BrowserWindow;
+    protected _core: Core;
+    protected _platform: Platform;
+    protected _presentation: Presentation;
 
-    constructor(window:Electron.BrowserWindow)
+    constructor()
     {
-        this._window = window;
+
     }
 
-    protected sendUIMessage(channel:string, data?:any):void
+    public initialize(presentation:Presentation, core:Core, platform:Platform):void
     {
-        if(this._window != null)
-        {
-            this._window.webContents.send(channel,data);
-        }
+        this._core         = core;
+        this._platform     = platform;
+        this._presentation = presentation;
+        
+        this.onRegisterListeners();
     }
+
+    public update():void
+    {
+        this.onUpdateRequested();
+    }
+
+    // Overridable Functions
+    protected onRegisterListeners():void
+    {
+        // Overridable
+    }
+
+    protected onUpdateRequested():void
+    {
+        // Overridable
+    }
+
 }

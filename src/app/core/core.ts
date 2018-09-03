@@ -8,23 +8,16 @@ import Notebook from "../core/data/notebook";
 import Note from "../core/data/note";
 import Message from "presenter/messageChannel";
 
-import {NoteListMode,EditorPendingUpdate} from "../../enums"
+import {EditorPendingUpdate} from "../../enums"
 
-export default class Editor
+import Presentation from "core/presentation";
+import Platform     from "core/platform";
+
+export default class Core
 {
-    // Singleton
-    private static sInstance:Editor;
-
-    // Get/Set
-    static get instance(): Editor 
-    {
-        return this.sInstance;
-    }
-
-    static initialize():void
-    {
-        this.sInstance = new Editor();
-    }
+    // Dependencies
+    private _presentation:Presentation;
+    private _platform:Platform;
 
     // Editor Status
     private _noteListMode:NoteListMode;
@@ -40,8 +33,7 @@ export default class Editor
     private _willUpdateNextTick:boolean   = false;
     private _pendingUpdate:number = EditorPendingUpdate.None;
 
-    ///////////
-    //Get/Set
+    //#region Get/Set
     get noteListMode(): number 
     {
         return this._noteListMode;
@@ -61,11 +53,33 @@ export default class Editor
     {
         return this._searchPhrase;
     }
+    //#endregion
 
     // Member Functions
-    private constructor()
+    public constructor(platform:Platform, presentation:Presentation)
     {
-        
+        this._platform     = platform;
+        this._presentation = presentation;
+    }
+
+    public initialize():void
+    {
+        Debug.log("[Core] Initialize");
+        DataManager.initialize();
+
+        this._platform      .initialize(this);
+        this._presentation  .initialize(this, this._platform);
+    }
+
+    public mainWindowLoaded():void
+    {
+        Debug.log("[Core] Main Window Loaded");
+        DataManager.instance.checkStorageIntegrety();
+
+        this.initializeEditorStatus();
+
+        this.updateAll();
+       
     }
 
     public initializeEditorStatus():void

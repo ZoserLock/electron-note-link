@@ -4,8 +4,6 @@ import {ipcRenderer} from "electron";
 
 // Local
 import MessageChannel from "presenter/messageChannel";
-import { NoteListMode } from "../../../../enums";
-
 // UI
 
 export default class NoteListHeader extends React.Component<any, any> 

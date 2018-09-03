@@ -1,40 +1,47 @@
-import {ipcMain, BrowserWindow, dialog} from "electron"; 
+// Node.js
+import {dialog}         from "electron"; 
 
-import * as uuid from "uuid/v4";
-import * as Path from "path";
+import * as uuid        from "uuid/v4";
+import * as Path        from "path";
 
-import Debug from "../tools/debug";
-import Message from "presenter/messageChannel"
-import DataManager from "../core/dataManager";
-import Editor from "../core/editor";
+// Tools
+import Debug            from "tools/debug";
 
-import NotebookStorage from "../core/data/storage";
-import Notebook from "../core/data/notebook";
+// Presenter
+import Presenter        from "presenter/presenter";
+import MessageChannel   from "presenter/messageChannel"
 
-import Presenter from "./presenter";
+// Core
+import DataManager      from "core/dataManager";
+import Core             from "core/core";
+import Storage          from "core/data/storage";
+import Notebook         from "core/data/notebook";
 
-import {NoteListMode} from "../../enums"
-import PopupManager from "../core/popupManager";
+// Move later
+import PopupManager     from "core/popupManager";
 
-export default class LeftPanelController extends Presenter
+export default class NavigationPresenter extends Presenter
 {
 
-    private _updates:number=0;
+    private _updates:number = 0;
 
-    constructor(window:Electron.BrowserWindow)
+    constructor()
     {
-        super(window);
-        ipcMain.on(Message.updateLeftPanel,()=>this.updateLeftPanel());
+        super();
+    }
 
-        ipcMain.on(Message.createStorage,()=>this.actionCreateNewStorage());
+    protected onRegisterListeners():void
+    {
+        this._platform.registerUIListener(MessageChannel.updateLeftPanel    ,(data:any) => this.updateLeftPanel());
+        this._platform.registerUIListener(MessageChannel.createStorage      ,(data:any) => this.actionCreateNewStorage());
 
-        ipcMain.on(Message.removeStorage ,(event:any,data:any)=>this.actionRemoveStorage(data));
-        ipcMain.on(Message.deleteStorage ,(event:any,data:any)=>this.actionDeleteStorage(data));
-        ipcMain.on(Message.removeNotebook ,(event:any,data:any)=>this.actionRemoveNotebook(data));
+        this._platform.registerUIListener(MessageChannel.removeStorage      ,(data:any) => this.actionRemoveStorage(data));
+        this._platform.registerUIListener(MessageChannel.deleteStorage      ,(data:any) => this.actionDeleteStorage(data));
+        this._platform.registerUIListener(MessageChannel.removeNotebook     ,(data:any) => this.actionRemoveNotebook(data));
 
-        ipcMain.on(Message.createNotebook,(event:any,data:any)=>this.actionNewNotebook(data));
-        ipcMain.on(Message.selectNotebook,(event:any,data:any)=>this.actionSelectNotebook(data));
-        ipcMain.on(Message.setNoteListMode, (event:any,data:any) =>{this.actionSetNoteListMode(data);});
+        this._platform.registerUIListener(MessageChannel.createNotebook     ,(data:any) => this.actionNewNotebook(data));
+        this._platform.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
+        this._platform.registerUIListener(MessageChannel.setNoteListMode    ,(data:any) => this.actionSetNoteListMode(data));
     }
 
     // Updates
@@ -44,14 +51,14 @@ export default class LeftPanelController extends Presenter
 
         this._updates++;
 
-        let storages:NotebookStorage[] = DataManager.instance.noteStorages;
+        let storages:Storage[] = DataManager.instance.noteStorages;
 
-        let storagesData:any[] = storages.map((storage:NotebookStorage) =>
+        let storagesData:any[] = storages.map((storage:Storage) =>
         {
             return storage.GetDataObject();
         });
 
-        let editorData:any = Editor.instance.getEditorStatusData();
+        let editorData:any = this._core.getEditorStatusData();
 
         let sendData =
         {
@@ -59,7 +66,7 @@ export default class LeftPanelController extends Presenter
             editorStatus: editorData
         }
 
-        this.sendUIMessage(Message.updateLeftPanel,sendData);
+        this._platform.sendUIMessage(MessageChannel.updateLeftPanel, sendData);
     }
 
     ///////////////////////////
@@ -97,7 +104,7 @@ export default class LeftPanelController extends Presenter
 
     private createNewStorage(path:string):void
     {
-        let storage = NotebookStorage.create(uuid(), path);
+        let storage = Storage.create(uuid(), path);
 
         DataManager.instance.addStorage(storage);
         DataManager.instance.saveStorage(storage);
@@ -132,27 +139,26 @@ export default class LeftPanelController extends Presenter
 
     private actionRemoveStorage(data:any):void
     {
-        let storageId:string = data.storage;
-        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
-        let editor:Editor = Editor.instance;
+        let storageId:string    = data.storage;
+        let storage:Storage     = DataManager.instance.getStorage(storageId);
 
         if(storage != null)
         {
-            if(editor.selectedNotebook != null && editor.selectedNotebook.storage == storage)
+            if(this._core.selectedNotebook != null && this._core.selectedNotebook.storage == storage)
             {
                 Debug.log("Unselect notebook");
-                editor.unselectNotebook();
+                this._core.unselectNotebook();
             }
 
-            if(editor.selectedNote != null && editor.selectedNote.parent.storage == storage)
+            if(this._core.selectedNote != null && this._core.selectedNote.parent.storage == storage)
             {
                 Debug.log("Unselect note");
-                editor.unselectNote();
+                this._core.unselectNote();
             }
 
             DataManager.instance.removeStorage(storage);
 
-            editor.updateAll();
+            this._core.updateAll();
         }
         else
         {
@@ -163,26 +169,25 @@ export default class LeftPanelController extends Presenter
     private actionDeleteStorage(data:any):void
     {
         let storageId:string = data.storage;
-        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
-        let editor:Editor = Editor.instance;
+        let storage:Storage  = DataManager.instance.getStorage(storageId);
 
         if(storage != null)
         {
-            if(editor.selectedNotebook != null && editor.selectedNotebook.storage == storage)
+            if(this._core.selectedNotebook != null && this._core.selectedNotebook.storage == storage)
             {
                 Debug.log("Unselect notebook");
-                editor.unselectNotebook();
+                this._core.unselectNotebook();
             }
 
-            if(editor.selectedNote != null && editor.selectedNote.parent.storage == storage)
+            if(this._core.selectedNote != null && this._core.selectedNote.parent.storage == storage)
             {
                 Debug.log("Unselect note");
-                editor.unselectNote();
+                this._core.unselectNote();
             }
 
             DataManager.instance.deleteStorage(storage);
 
-            editor.updateAll();
+            this._core.updateAll();
         }
         else
         {
@@ -196,7 +201,7 @@ export default class LeftPanelController extends Presenter
     {
         let storageId = data.storage;
 
-        let storage:NotebookStorage = DataManager.instance.getStorage(storageId);
+        let storage:Storage = DataManager.instance.getStorage(storageId);
 
         if(storage != null)
         {
@@ -227,8 +232,8 @@ export default class LeftPanelController extends Presenter
         {
             PopupManager.instance.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
             {
-                let isSelectedNotebook = (Editor.instance.selectedNotebook == notebook);
-                let hasSelectedNote = (Editor.instance.selectedNote.parent == notebook);
+                let isSelectedNotebook = (this._core.selectedNotebook == notebook);
+                let hasSelectedNote = (this._core.selectedNote.parent == notebook);
                 
                 DataManager.instance.deleteNotebook(notebook);
 
@@ -239,11 +244,11 @@ export default class LeftPanelController extends Presenter
                     if(DataManager.instance.notebooks.length > 0)
                     {
                         let next:Notebook = DataManager.instance.notebooks[0];
-                        Editor.instance.selectNotebook(next.id);
+                        this._core.selectNotebook(next.id);
                     }
                     else
                     {
-                        Editor.instance.unselectNotebook();
+                        this._core.unselectNotebook();
                     }
                 }
             },null);
@@ -257,12 +262,12 @@ export default class LeftPanelController extends Presenter
 
     private actionSetNoteListMode(data:any):void
     {
-        Editor.instance.setNoteListMode(data.mode);
+        this._core.setNoteListMode(data.mode);
     }
     
     private actionSelectNotebook(data:any)
     {
-        Editor.instance.selectNotebook(data.notebookId);
+        this._core.selectNotebook(data.notebookId);
     };
     
     private actionChangeNotebookName(data:any)

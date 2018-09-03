@@ -6,9 +6,6 @@ import {ipcRenderer} from "electron";
 import Notebook from "../../../core/data/notebook";
 import MessageChannel from "presenter/messageChannel";
 
-import { NoteListMode } from "../../../../enums";
-
-
 interface NotebookItemData
 {
     notebook:Notebook;

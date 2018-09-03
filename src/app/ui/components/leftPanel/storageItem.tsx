@@ -10,7 +10,6 @@ import MessageChannel from "presenter/messageChannel";
 
 // UI
 import NotebookItem from "./notebookItem";
-import { NoteListMode } from "../../../../enums";
 
 export default class StorageItem extends React.Component<any, any> 
 {

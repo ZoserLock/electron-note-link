@@ -11,16 +11,6 @@ export enum CacheAction
     RemoveNote,      
 }
 
-export enum NoteListMode 
-{
-    Notebook = 1,
-    Search,
-    Trash,
-    Started,
-    All,
-    Disabled,
-}
-
 export enum EditorPendingUpdate 
 {
     None        = 0x0,

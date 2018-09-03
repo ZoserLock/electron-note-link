@@ -11,9 +11,6 @@ import StorageItem from "./storageItem";
 import SpecialLeftItem from "./specialLeftItem";
 import MessageChannel from "presenter/messageChannel";
 
-import { NoteListMode } from "../../../../enums";
-
-
 export default class LeftPanel extends React.Component<any, any> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
