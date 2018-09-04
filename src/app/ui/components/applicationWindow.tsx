@@ -3,7 +3,7 @@ import * as React from "react";
 
 import NavigationPanel from "./navigationPanel/navigationPanel"
 import NoteListPanel from "./noteListPanel/noteListPanel";
-import NoteView from "./noteView/noteView";
+import NoteView from "./noteViewPanel/noteViewPanel";
 import StatusBar from "./statusBar";
 import Toolbar from "./toolbar/toolbar";
 import WindowBar from "./windowbar/windowbar";

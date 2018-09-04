@@ -1,15 +1,11 @@
-// Global
+// Node Modules
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 
 require("codemirror/mode/gfm/gfm");
 require("codemirror/mode/javascript/javascript");
 require("codemirror/mode/clike/clike");
 require("codemirror/keyMap/sublime");
-
-// Local
-import Debug from "../../../tools/debug";
 
 export default class NoteViewContentEditor extends React.Component<any, any> 
 {
@@ -30,11 +26,12 @@ export default class NoteViewContentEditor extends React.Component<any, any>
         this._codeMirror.setSize("100%", "100%");
 
         // Hack for now to avoid the bad cursor size on the first render
-        setTimeout(()=>{this._codeMirror.refresh()},100);
+        setTimeout(()=>{this._codeMirror.refresh()}, 100);
     }
 
     public render() 
     {
+        // Move to const
         var options = 
         {
             lineNumbers: true,
@@ -47,7 +44,6 @@ export default class NoteViewContentEditor extends React.Component<any, any>
             highlightFormatting:true,
         };
         
-
         return (
             <div className="ui-note-view-content-editor"> 
                 <CodeMirror
@@ -58,7 +54,5 @@ export default class NoteViewContentEditor extends React.Component<any, any>
                 />
             </div>
         );
-  
-
     }
 }

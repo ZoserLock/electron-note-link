@@ -1,17 +1,21 @@
-// Global
+// Node Modules
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 import applyOnClickOutside from 'react-onclickoutside'
 
 // Local
-import Note from "../../../core/data/note";
-import Debug from "../../../tools/debug";
+import Note from "core/data/note";
+
+// Tools
+import Debug from "tools/debug";
+
+// Presenter
+import MessageChannel from "presenter/messageChannel";
 
 // UI
-import NoteViewHeader from "./noteViewHeader"; 
-import NoteViewContent from "./noteViewContent";
-import NoteViewContentEditor from "./noteViewContentEditor";
-import MessageChannel from "presenter/messageChannel";
+import UIComponent           from "ui/components/generic/uiComponent";
+import NoteViewHeader        from "ui/components/noteViewPanel/noteViewHeader"; 
+import NoteViewContent       from "ui/components/noteViewPanel/noteViewContent";
+import NoteViewContentEditor from "ui/components/noteViewPanel/noteViewContentEditor";
 
 interface NoteViewData
 {
@@ -19,10 +23,11 @@ interface NoteViewData
     editorMode:boolean;
 }
 
-class NoteView extends React.Component<any, NoteViewData> 
+class NoteViewPanel extends UIComponent<any, NoteViewData> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
-    private _newText:string ="";
+
+    private _newText:string = "";
 
     constructor(props: any)
     {
@@ -34,16 +39,17 @@ class NoteView extends React.Component<any, NoteViewData>
             editorMode:false
         }
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(event,data);
+        this._updateRequestedEvent = (event:any,data:any) => this.updateRequested(event,data);
     }
+
     public componentDidMount() 
     {
-        ipcRenderer.addListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
+        this.registerMainListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
+        this.unregisterMainListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
     }
 
     private handleClickOutside(event:any)
@@ -51,7 +57,7 @@ class NoteView extends React.Component<any, NoteViewData>
         if(this.state.editorMode)
         {
             this.setState({editorMode:false});
-            ipcRenderer.send(MessageChannel.updateNote,{id:this.state.note.id,text:this._newText});
+            this.sendMainMessage(MessageChannel.updateNote,{id:this.state.note.id,text:this._newText})
             event.stopImmediatePropagation();
         }
     }
@@ -119,4 +125,4 @@ class NoteView extends React.Component<any, NoteViewData>
     }
 }
 
-export default applyOnClickOutside(NoteView);
+export default applyOnClickOutside(NoteViewPanel);

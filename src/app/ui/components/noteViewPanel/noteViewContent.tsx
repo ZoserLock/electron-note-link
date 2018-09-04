@@ -1,11 +1,10 @@
-// Global
+// Node Modules
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 import * as Markdown from "markdown-it";
 
-var markdownHighlight = require('markdown-it-highlightjs');
-var markdownHashtag = require('markdown-it-hashtag');
-var HtmlToReactParser = require('html-to-react').Parser;
+const markdownHighlight = require('markdown-it-highlightjs');
+const markdownHashtag   = require('markdown-it-hashtag');
+const HtmlToReactParser = require('html-to-react').Parser;
 
 interface NoteViewContentData
 {
@@ -21,6 +20,7 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
     constructor(props: any)
     {
         super(props);
+
         this._markdownRenderer = new Markdown();            
         this._markdownRenderer.use(markdownHighlight);
         this._markdownRenderer.use(markdownHashtag);
@@ -28,6 +28,8 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
         this._htmlParser = new HtmlToReactParser();
         
     }
+
+    // add should update text == new text
 
     public render() 
     {

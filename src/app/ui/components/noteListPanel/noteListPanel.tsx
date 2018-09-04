@@ -26,9 +26,10 @@ export default class NoteListPanel extends UIComponent<any, any>
             forceUpdate:true,
         }
 
-        this._updateRequestedEvent       = (event:any,data:any)=>this.updateRequested(data);
+        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
 
     }
+    
     public componentDidMount() 
     {
         this.registerMainListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);

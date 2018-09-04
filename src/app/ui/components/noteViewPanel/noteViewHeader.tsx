@@ -1,13 +1,14 @@
-// Global
-import { ipcRenderer } from "electron";
+// Node Modules
 import * as React from "react";
 
-// Local
-import Debug from "../../../tools/debug";
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
+// UI
+import UIComponent from "ui/components/generic/uiComponent";
 
-export default class NoteViewHeader extends React.Component<any, any> 
+
+export default class NoteViewHeader extends UIComponent<any, any> 
 {
     constructor(props: any)
     {
@@ -16,16 +17,13 @@ export default class NoteViewHeader extends React.Component<any, any>
 
     private OnStartedClick()
     {
-        Debug.log("Started: " + this.props.note.started);
-
         let data =
         {
             id:this.props.note.id,
             started:!this.props.note.started,
         }
         
-        Debug.log("Next Started State: "+data.started);
-        ipcRenderer.send(MessageChannel.updateNote, data);
+        this.sendMainMessage(MessageChannel.updateNote, data);
     }
     
     public render() 
