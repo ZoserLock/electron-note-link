@@ -1,18 +1,30 @@
 // Global
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
-// Main
-import Debug from "tools/debug";
+// Tools
+import Debug          from "tools/debug";
 
-// UI
-import StorageItem from "./storageItem";
-import NavigationItem from "./navigationItem";
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
-export default class NavigationPanel extends React.Component<any, any> 
+// UI
+import NavigationStorageItem from "ui/components/navigationPanel/navigationStorageItem"
+import NavigationItem        from "ui/components/navigationPanel/navigationItem"
+import UIComponent from "../generic/uiComponent";
+
+export default class NavigationPanel extends UIComponent<any,any>
 {
+    // Context Menu Id
+    readonly sStorageContextMenuId:string = "StorageItem";
+
+    // Context menu options
+    private readonly sContextMenuNewNotebook:string = "AddNotebook"; 
+    private readonly sContextMenuRename:string      = "Rename"; 
+    private readonly sContextMenuRemove:string      = "Remove"; 
+    private readonly sContextMenuDelete:string      = "Delete"; 
+    
+    // Event Listeners
     private _updateRequestedEvent: (event: any, data: any) => void;
 
     constructor(props: any)
@@ -30,26 +42,30 @@ export default class NavigationPanel extends React.Component<any, any>
             }
         }  
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
+        this._updateRequestedEvent = (event:any, data:any) => this.updateRequested(data);
     }
  
     public componentDidMount() 
     {
-        ipcRenderer.addListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
+        this.registerMainListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
+        this.unregisterMainListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
     }
 
     public updateRequested(data:any):void
     {
+        Debug.log("[UI] NavigationPanel Update Requested");
+        Debug.logVar(data);
+
+
         let storages = data.storages.map((storage:any) =>
         {
             return (
-            <ContextMenuTrigger id={"StorageItem"} key = {storage.id} attributes={{id:storage.id}}>
-                <StorageItem key = {storage.id} storage = {storage} editorStatus = {data.editorStatus}/>
+            <ContextMenuTrigger id={this.sStorageContextMenuId} key = {storage.id} attributes={{id:storage.id}}>
+                <NavigationStorageItem key = {storage.id} storage = {storage} editorStatus = {data.editorStatus}/>
             </ContextMenuTrigger>
             )
         });
@@ -57,35 +73,32 @@ export default class NavigationPanel extends React.Component<any, any>
         this.setState({storages:storages,editorStatus:data.editorStatus});
     }
 
-    //#region Special Notebook sets.
+    //#region Navigation Item Handle Functions.
 
-    private onAllNotesClick(): void 
+    private handleAllNotesClick(): void 
     {
-        let data =
-        {
-            mode:NoteListMode.All
-        }
+        let data ={mode:NoteListMode.All}
 
-        ipcRenderer.send(MessageChannel.setNoteListMode,data);
+        this.sendMainMessage(MessageChannel.setNoteListMode, data);
     }
 
-    private onStartedClick(): void 
+    private handleStartedNotesClick(): void 
     {
         let data = {mode:NoteListMode.Started}
 
-        ipcRenderer.send(MessageChannel.setNoteListMode,data);
+        this.sendMainMessage(MessageChannel.setNoteListMode, data);
     }
 
-    private onTrashClick(): void 
+    private handleTrashNotesClick(): void 
     {
         let data = {mode:NoteListMode.Trash}
 
-        ipcRenderer.send(MessageChannel.setNoteListMode,data);
+        this.sendMainMessage(MessageChannel.setNoteListMode,data);
     }
 
     //#endregion
 
-    //#region Notebook Context menu functions
+    //#region Notebook Context Menu Handle Functions.
 
     private handleNotebookContextMenu(e:any, data:any, target:any):void
     {
@@ -94,7 +107,7 @@ export default class NavigationPanel extends React.Component<any, any>
         switch(data.action)
         {
             case "AddNotebook":
-                this.AddNotebookToStorage(storageId);
+                this.CreateNotebook(storageId);
             break;
             case "Remove":
                 this.RemoveStorage(storageId);
@@ -103,15 +116,11 @@ export default class NavigationPanel extends React.Component<any, any>
     }
 
 
-    private AddNotebookToStorage(storageId:string)
+    private CreateNotebook(storageId:string)
     {
-        Debug.log(" -> Adding storage to: "+storageId);
-        let data =
-        {
-            storage:storageId
-        }
+        let data = {storage:storageId}
 
-        ipcRenderer.send(MessageChannel.createNotebook, data);
+        this.sendMainMessage(MessageChannel.createNotebook, data);
     }
 
     private RemoveStorage(storageId:string)
@@ -121,32 +130,31 @@ export default class NavigationPanel extends React.Component<any, any>
             storage:storageId
         }
 
-        ipcRenderer.send(MessageChannel.removeStorage, data);
+        this.sendMainMessage(MessageChannel.removeStorage, data);
     }
     //#endregion
 
     public render() 
     {
-
         let mode:number = this.state.editorStatus.mode;
 
         return (
-            <div className="ui-sidebar">
-                <ul className="ui-sidebar-header-list">
-                    <NavigationItem onClick={()=>this.onAllNotesClick()} name="All Notes" isSelected = {mode == NoteListMode.All}/>
-                    <NavigationItem onClick={()=>this.onStartedClick()} name="Started" isSelected = {mode == NoteListMode.Started}/>
-                    <NavigationItem onClick={()=>this.onTrashClick()} name="Trash" isSelected = {mode == NoteListMode.Trash}/>
+            <div className = "ui-sidebar">
+                <ul className = "ui-sidebar-header-list">
+                    <NavigationItem onClick={()=>this.handleAllNotesClick()}     name = "All Notes" isSelected = {mode == NoteListMode.All}/>
+                    <NavigationItem onClick={()=>this.handleStartedNotesClick()} name = "Started"   isSelected = {mode == NoteListMode.Started}/>
+                    <NavigationItem onClick={()=>this.handleTrashNotesClick()}   name = "Trash"     isSelected = {mode == NoteListMode.Trash}/>
                     <div className="ui-sidebar-header-list-separator" />
                 </ul>
-                <div className="ui-sidebar-list">
+                <div className = "ui-sidebar-list">
                     {this.state.storages}
                 </div>
-                <ContextMenu id={"StorageItem"}>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'AddNotebook' }}>Add Notebook</MenuItem> 
+                <ContextMenu id = {this.sStorageContextMenuId}>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuNewNotebook }}>Add Notebook</MenuItem> 
                     <MenuItem divider /> 
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Storage</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Remove' }}>Remove Storage</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Storage</MenuItem> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Storage</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRemove }}>Remove Storage</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuDelete }}>Delete Storage</MenuItem> 
                 </ContextMenu>
             </div>
         );

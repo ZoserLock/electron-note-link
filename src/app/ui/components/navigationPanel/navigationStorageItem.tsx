@@ -1,23 +1,20 @@
-// Global
+// Node.js
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
-// Local
-import Debug from "tools/debug";
+// Tools
+import Debug          from "tools/debug";
+
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
 // UI
-import NotebookItem from "./notebookItem";
+import UIComponent            from "ui/components/generic/uiComponent";
+import NavigationNotebookItem from "ui/components/navigationPanel/navigationNotebookItem";
 
-export default class StorageItem extends React.Component<any, any> 
+export default class NavigationStorageItem extends UIComponent<any,any>
 {
-    constructor(props: any)
-    {
-        super(props);
-
-        Debug.log("Storage Item Created");
-    }
+    readonly sNotebookContextMenuId:string = "NotebookItem";
 
     private onAddButtonClick() 
     {
@@ -26,7 +23,7 @@ export default class StorageItem extends React.Component<any, any>
             storage:this.props.storage.id
         }
 
-        ipcRenderer.send(MessageChannel.createNotebook,data);
+        this.sendMainMessage(MessageChannel.createNotebook, data);
     }
 
     private handleNotebookContextMenu(e:any, data:any, target:any):void
@@ -39,13 +36,15 @@ export default class StorageItem extends React.Component<any, any>
 
     public render() 
     {
+        Debug.logVar(this.props.storage);
+
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
             let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.mode == NoteListMode.Notebook;
 
             return  (
-            <ContextMenuTrigger id={"NotebookItem"} key = {notebook.id} attributes={{id:notebook.id}}>
-                <NotebookItem  notebook={notebook} isSelected={selected} />
+            <ContextMenuTrigger id={this.sNotebookContextMenuId} key = {notebook.id} attributes={{id:notebook.id}}>
+                <NavigationNotebookItem  notebook={notebook} isSelected={selected} />
             </ContextMenuTrigger>
             )
         });
@@ -61,7 +60,6 @@ export default class StorageItem extends React.Component<any, any>
                 </ul>
             );
         }
-        
 
         return (
             <div>
@@ -72,7 +70,7 @@ export default class StorageItem extends React.Component<any, any>
                     </div>
                 </div>
                 {notebooks}    
-                <ContextMenu id={"NotebookItem"}>
+                <ContextMenu id={this.sNotebookContextMenuId}>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Add Note' }}>Add Note</MenuItem> 
                     <MenuItem divider /> 
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Notebook</MenuItem>

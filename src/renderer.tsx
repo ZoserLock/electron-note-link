@@ -14,7 +14,7 @@ import MessageChannel from "presenter/messageChannel";
 function loadCss(css:string, callback:Function):void
 {
     var s = document.createElement('link');
-    s.rel="stylesheet";
+    s.rel  = "stylesheet";
     s.type = "text/css";
     s.href = css;
     s.addEventListener('load', function (e) 
