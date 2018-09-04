@@ -1,15 +1,17 @@
+// Node.js
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 
-import MessageChannel from "presenter/messageChannel"
+// Presenter
+import MessageChannel  from "presenter/messageChannel"
+
 // UI
-import NoteListHeader from "./noteListHeader"; 
-import NoteListContent from "./noteListContent"; 
+import UIComponent     from "ui/components/generic/uiComponent";
+import NoteListHeader  from "ui/components/noteListPanel/noteListHeader"; 
+import NoteListContent from "ui/components/noteListPanel/noteListContent"; 
 
-export default class NoteList extends React.Component<any, any> 
+export default class NoteListPanel extends UIComponent<any, any> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
-    private _updateSearchRequestedEvent: (event: any, data: any) => void;
 
     constructor(props: any)
     {
@@ -24,20 +26,17 @@ export default class NoteList extends React.Component<any, any>
             forceUpdate:true,
         }
 
-        this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
-        this._updateSearchRequestedEvent = (event:any,data:any)=>this.updateSearchRequested(data);
+        this._updateRequestedEvent       = (event:any,data:any)=>this.updateRequested(data);
 
     }
     public componentDidMount() 
     {
-        ipcRenderer.addListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
-        ipcRenderer.addListener("update:Search",this._updateSearchRequestedEvent);
+        this.registerMainListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
-        ipcRenderer.removeListener("update:Search",this._updateSearchRequestedEvent);
+        this.unregisterMainListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
     }
 
     public updateSearchRequested(data:any):void

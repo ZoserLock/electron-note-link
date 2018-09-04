@@ -1,26 +1,22 @@
-// Global
+// Node.js
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 
-// Local
+// Presenter
 import MessageChannel from "presenter/messageChannel";
+
 // UI
+import UIComponent from "ui/components/generic/uiComponent";
 
-export default class NoteListHeader extends React.Component<any, any> 
+export default class NoteListHeader extends UIComponent<any, any> 
 {
-    constructor(props: any)
+    private handleAddNoteClick()
     {
-        super(props);
-    }
-
-    private onAddNoteClick()
-    {
-        ipcRenderer.send(MessageChannel.createNote);
+        this.sendMainMessage(MessageChannel.createNote);
     }
 
     public render() 
     {
-        let iconClass:string ="";
+        let iconClass:string = "";
         let addButton:any;
 
         if(this.props.mode == NoteListMode.Notebook)
@@ -28,7 +24,7 @@ export default class NoteListHeader extends React.Component<any, any>
             iconClass="icon-notebook";
             addButton = (
             <div className="ui-note-list-header-button-container">
-                <button className = "ui-note-list-header-button" onClick={()=>this.onAddNoteClick()}></button>
+                <button className = "ui-note-list-header-button" onClick={()=>this.handleAddNoteClick()}></button>
             </div>)
         }
         else if(this.props.mode == NoteListMode.Search)

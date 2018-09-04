@@ -1,14 +1,13 @@
-// Global
+// Node.js
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
-
-// Local
-import Debug from "../../../tools/debug";
-
-// UI
-import NoteListItem from "./noteListItem";
 import { List, AutoSizer } from 'react-virtualized'
 import { ContextMenuTrigger, ContextMenu, MenuItem } from "react-contextmenu";
+
+// Tools
+import Debug from "tools/debug";
+
+// UI
+import NoteListItem from "ui/components/noteListPanel/noteListItem";
 
 export default class NoteListContent extends React.Component<any, any> 
 {
@@ -19,15 +18,14 @@ export default class NoteListContent extends React.Component<any, any>
         super(props);
 
         this._rowRenderer = ({index, isScrolling, key, style}:any)=>this.rowRenderer({index, isScrolling, key, style});
-
     }
 
+    //#region Handle Context Menu Functions
     private handleNoteContextMenu(e:any, data:any, target:any):void
     {
-        Debug.logVar(data);
-        
-        Debug.log(":: "+target.getAttribute("id"));
+
     }
+    //#endregion
 
     public render() 
     {

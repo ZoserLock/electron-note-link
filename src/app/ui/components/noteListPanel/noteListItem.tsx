@@ -1,15 +1,15 @@
 // Node.js
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 import * as moment from 'moment';
 
-// Local
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
-import EditableText from "../generic/editableText";
+// UI
+import UIComponent  from "ui/components/generic/uiComponent";
+import EditableText from "ui/components/generic/editableText";
 
-
-export default class NoteListItem extends React.Component<any, any> 
+export default class NoteListItem extends UIComponent<any, any> 
 {
     constructor(props: any)
     {
@@ -26,14 +26,14 @@ export default class NoteListItem extends React.Component<any, any>
     {
         let data = {noteId:this.props.note.id}
 
-        ipcRenderer.send(MessageChannel.selectNote,data);
+        this.sendMainMessage(MessageChannel.selectNote,data);
     }
 
     private onItemDelete()
     {
         let data ={noteId:this.props.note.id}
 
-        ipcRenderer.send(MessageChannel.removeNote,data);
+        this.sendMainMessage(MessageChannel.removeNote,data);
     }
 
     public editFinished(text:string):void
@@ -44,16 +44,17 @@ export default class NoteListItem extends React.Component<any, any>
             title:text
         }
 
-        ipcRenderer.send(MessageChannel.updateNote,data);
+        this.sendMainMessage(MessageChannel.updateNote,data);
     }
 
     public render() 
     {
         let value:string = (this.props.note.title == "")?"<Empty>":this.props.note.title;
 
-        let date     = moment(this.props.note.updated).fromNow();
+        let date = moment(this.props.note.updated).fromNow();
 
         let addClass = "";
+        
         if(this.props.isSelected )
         {
             addClass = " selected";

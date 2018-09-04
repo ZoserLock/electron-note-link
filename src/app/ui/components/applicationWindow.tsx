@@ -2,7 +2,7 @@
 import * as React from "react";
 
 import NavigationPanel from "./navigationPanel/navigationPanel"
-import NoteList from "./noteList/noteList";
+import NoteListPanel from "./noteListPanel/noteListPanel";
 import NoteView from "./noteView/noteView";
 import StatusBar from "./statusBar";
 import Toolbar from "./toolbar/toolbar";
@@ -25,7 +25,7 @@ export default class ApplicationWindow extends React.Component<any, any>
                 <Toolbar/>
                 <div className="ui-main">
                     <NavigationPanel/>
-                    <NoteList/>
+                    <NoteListPanel/>
                     <NoteView/>
                 </div>
                 <StatusBar/>
