@@ -1,11 +1,14 @@
+// Node Modules
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 
-// UI
-import WindowbarItem from "./windowbarItem"; 
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
-export default class WindowBar extends React.Component<any, any> 
+// UI
+import UIComponent from "ui/components/generic/uiComponent";
+import WindowbarItem from "ui/components/windowbar/windowbarItem"; 
+
+export default class WindowBar extends UIComponent<any, any> 
 {
     constructor(props: any)
     {
@@ -14,17 +17,17 @@ export default class WindowBar extends React.Component<any, any>
 
     private onMinimize():void
     {
-        ipcRenderer.send(MessageChannel.windowMinimize);
+        this.sendMainMessage(MessageChannel.windowMinimize);
     }
 
     private onMaximize():void
     {
-        ipcRenderer.send(MessageChannel.windowMaximize);
+        this.sendMainMessage(MessageChannel.windowMaximize);
     }
 
     private onClose():void
     {
-        ipcRenderer.send(MessageChannel.windowClose);
+        this.sendMainMessage(MessageChannel.windowClose);
     }
 
     public render() 

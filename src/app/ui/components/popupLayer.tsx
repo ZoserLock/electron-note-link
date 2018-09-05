@@ -1,5 +1,5 @@
+// Node Modules
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 
 // Presenter
 import MessageChannel from "presenter/messageChannel";
@@ -27,14 +27,14 @@ export default class PopupLayer extends UIComponent<any, any>
 
     public componentDidMount():void
     {
-        ipcRenderer.addListener(MessageChannel.showPopup,this._showPopupEvent);
-        ipcRenderer.addListener(MessageChannel.hidePopup,this._hidePopupEvent);
+        this.registerMainListener(MessageChannel.showPopup,this._showPopupEvent);
+        this.registerMainListener(MessageChannel.hidePopup,this._hidePopupEvent);
     }
 
     public componentWillUnmount():void
     {
-        ipcRenderer.removeListener(MessageChannel.showPopup,this._showPopupEvent);
-        ipcRenderer.removeListener(MessageChannel.hidePopup,this._hidePopupEvent);
+        this.registerMainListener(MessageChannel.showPopup,this._showPopupEvent);
+        this.registerMainListener(MessageChannel.hidePopup,this._hidePopupEvent);
     }
 
     private showPopup(data:any):void
@@ -79,7 +79,7 @@ export default class PopupLayer extends UIComponent<any, any>
         {
             success:value
         }
-        ipcRenderer.send(MessageChannel.popupResult, data);
+        this.sendMainMessage(MessageChannel.popupResult, data);
         this.hidePopup();
     }
 

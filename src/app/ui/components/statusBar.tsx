@@ -1,13 +1,8 @@
+// Node Modules
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
 
-export default class Statusbar extends React.Component<any, any> 
+export default class Statusbar extends React.PureComponent<any, any> 
 {
-    constructor(props: any)
-    {
-        super(props);
-    }
-
     public render() 
     {
         return (

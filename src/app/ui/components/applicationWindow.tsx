@@ -1,22 +1,18 @@
-// Node.js
+// Node Modules
 import * as React from "react";
 
-import NavigationPanel from "./navigationPanel/navigationPanel"
-import NoteListPanel from "./noteListPanel/noteListPanel";
-import NoteView from "./noteViewPanel/noteViewPanel";
-import StatusBar from "./statusBar";
-import Toolbar from "./toolbar/toolbar";
-import WindowBar from "./windowbar/windowbar";
-import PopupLayer from "./popupLayer"
+// UI
+import NavigationPanel  from "ui/components/navigationPanel/navigationPanel"
+import NoteListPanel    from "ui/components/noteListPanel/noteListPanel";
+import NoteView         from "ui/components/noteViewPanel/noteViewPanel";
 
-export default class ApplicationWindow extends React.Component<any, any> 
+import WindowBar        from "ui/components/windowbar/windowbar";
+import Toolbar          from "ui/components/toolbar/toolbar";
+import StatusBar        from "ui/components/statusBar";
+import PopupLayer       from "ui/components/popupLayer";
+
+export default class ApplicationWindow extends React.PureComponent<any, any> 
 {
-    // Never update this component as is a layout only component
-    public shouldComponentUpdate(nextProps: any, nextState: any, nextContext: any):boolean
-    {
-        return false;
-    }
-
     public render():React.ReactNode
     {
         return(
