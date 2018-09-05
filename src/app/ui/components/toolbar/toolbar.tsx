@@ -1,16 +1,18 @@
 import * as React from "react";
-import {ipcRenderer} from "electron"; 
+
+// Presenter
+import MessageChannel from "presenter/messageChannel";
 
 // UI
-import ToolbarItem from "./toolbarItem"; 
-import SearchBar from "./searchBar"; 
-import MessageChannel from "presenter/messageChannel";
-import ToolbarSeparator from "./toolbarSeparator";
+import UIComponent      from "ui/components/generic/uiComponent";
+import ToolbarItem      from "ui/components/toolbar/toolbarItem"
+import ToolbarSearchBar from "ui/components/toolbar/toolbarSearch"; 
+import ToolbarSeparator from "ui/components/toolbar/toolbarSeparator";
 
-export default class Toolbar extends React.Component<any, any> 
+export default class Toolbar extends UIComponent<any, any> 
 {
     private _beginQuickSearch: (event: any, data: any) => void;
-    private _searchBar:SearchBar;
+    private _searchBar:ToolbarSearchBar;
 
     constructor(props: any)
     {
@@ -21,12 +23,12 @@ export default class Toolbar extends React.Component<any, any>
 
     public componentDidMount() 
     {
-        ipcRenderer.addListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
+        this.registerMainListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
     }
 
     public componentWillUnmount()
     {
-        ipcRenderer.removeListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
+        this.unregisterMainListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
     }
 
     public beginQuickSearch(data:any):void
@@ -36,23 +38,17 @@ export default class Toolbar extends React.Component<any, any>
 
     private createNewNotebookStorage():void
     {
-        ipcRenderer.send(MessageChannel.createStorage);
+        this.sendMainMessage(MessageChannel.createStorage);
     }
 
     private createNewNote():void
     {
-        ipcRenderer.send(MessageChannel.createStorage);
+        this.sendMainMessage(MessageChannel.createStorage);
     }
     
     private testPopup():void
     {
-        ipcRenderer.send("action:TestPopup");
-    }
-
-    private reloadCss():void 
-    {
-        ipcRenderer.send("action:ReloadCss");
- 
+        this.sendMainMessage("action:TestPopup");
     }
 
     public render() 
@@ -62,7 +58,7 @@ export default class Toolbar extends React.Component<any, any>
                 <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
                 <ToolbarItem name="Add Note" onClick={()=>this.createNewNote()}/>
                 <ToolbarSeparator/>
-                <SearchBar ref={(ref) => this._searchBar = ref}/>
+                <ToolbarSearchBar ref={(ref) => this._searchBar = ref}/>
                 <ToolbarSeparator/>
                 <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
             </header>

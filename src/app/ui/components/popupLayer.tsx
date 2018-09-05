@@ -1,12 +1,16 @@
 import * as React from "react";
 import {ipcRenderer} from "electron"; 
 
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
-export default class PopupLayer extends React.Component<any, any> 
+// UI
+import UIComponent from "ui/components/generic/uiComponent";
+
+export default class PopupLayer extends UIComponent<any, any> 
 {
     private _showPopupEvent: (event: any, data: any) => void;
-    private _hidePopupçevent: (event: any, data: any) => void;
+    private _hidePopupEvent: (event: any, data: any) => void;
 
     constructor(props: any)
     {
@@ -18,19 +22,19 @@ export default class PopupLayer extends React.Component<any, any>
         }
 
         this._showPopupEvent = (event:any,data:any)=>this.showPopup(data);
-        this._hidePopupçevent = (event:any,data:any)=>this.hidePopup();
+        this._hidePopupEvent = (event:any,data:any)=>this.hidePopup();
     }
 
     public componentDidMount():void
     {
         ipcRenderer.addListener(MessageChannel.showPopup,this._showPopupEvent);
-        ipcRenderer.addListener(MessageChannel.hidePopup,this._hidePopupçevent);
+        ipcRenderer.addListener(MessageChannel.hidePopup,this._hidePopupEvent);
     }
 
     public componentWillUnmount():void
     {
         ipcRenderer.removeListener(MessageChannel.showPopup,this._showPopupEvent);
-        ipcRenderer.removeListener(MessageChannel.hidePopup,this._hidePopupçevent);
+        ipcRenderer.removeListener(MessageChannel.hidePopup,this._hidePopupEvent);
     }
 
     private showPopup(data:any):void

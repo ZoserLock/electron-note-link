@@ -1,7 +1,6 @@
+// Node Modules
 import * as React from "react";
 import applyOnClickOutside from 'react-onclickoutside'
-
-import Debug from "../../../tools/debug";
 
 class EditableText extends React.Component<any, any> 
 {

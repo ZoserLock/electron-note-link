@@ -1,12 +1,14 @@
-
-import {ipcRenderer, Input} from "electron"; 
+// Node Modules
 import * as React from "react";
 
-import Debug from "../../../tools/debug";
+// Presenter
 import MessageChannel from "presenter/messageChannel";
 
+// UI
+import UIComponent from "ui/components/generic/uiComponent";
 
-export default class SearchBar extends React.Component<any, any> 
+
+export default class ToolbarSearchBar extends UIComponent<any, any> 
 {
     private _textInput:any;
 
@@ -19,12 +21,6 @@ export default class SearchBar extends React.Component<any, any>
         }  
     }
     
-
-    private getClassName():string
-    {
-        return "ui-toolbar-item";
-    }
-
     public focus()
     {
         this._textInput.select();
@@ -32,9 +28,8 @@ export default class SearchBar extends React.Component<any, any>
 
     private onHandleChange(event:any) 
     {
-        Debug.log("onHandleChange");
         this.setState({value: event.target.value});
-        ipcRenderer.send(MessageChannel.searchUpdated, event.target.value);
+        this.sendMainMessage(MessageChannel.searchUpdated, event.target.value);
     }
     
     public render() 
@@ -45,8 +40,8 @@ export default class SearchBar extends React.Component<any, any>
                 type="text" 
                 placeholder="Search Notes"
                 value={this.state.value} 
-                onChange={(event:any)=>this.onHandleChange(event)} 
-                ref={(ref) => this._textInput = ref}
+                onChange={(event:any) => this.onHandleChange(event)} 
+                ref = {(ref) => this._textInput = ref}
             />
         );
     }

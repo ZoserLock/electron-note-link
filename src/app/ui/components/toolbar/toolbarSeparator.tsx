@@ -1,12 +1,8 @@
+// Node Modules
 import * as React from "react";
 
-export default class ToolbarSeparator extends React.Component<any, any> 
+export default class ToolbarSeparator extends React.PureComponent<any, any> 
 {
-    constructor(props: any)
-    {
-        super(props);
-    }
-
     public render() 
     {
         return (
