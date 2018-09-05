@@ -92,7 +92,7 @@ export default class MainPresentation implements Presentation
         this.tryUpdateNextTick();
     }
 
-    public UpdateNoteViewPanel():void
+    public updateNoteViewPanel():void
     {
         this._pendingUpdate |= PendingUpdate.NoteView;
         this.tryUpdateNextTick();

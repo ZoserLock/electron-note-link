@@ -63,7 +63,7 @@ export default class NoteListPresenter extends Presenter
             // Process special keyworlds and cache them until the special keywords disapear.
          
             // Cache this list as something like current Searchable notes.
-            notes = DataManager.instance.notes.filter((note:Note)=>
+            notes = this._core.dataManager.notes.filter((note:Note)=>
             {
                 return (!note.trashed);
             });
@@ -82,7 +82,7 @@ export default class NoteListPresenter extends Presenter
         }
         else if(mode == NoteListMode.All)
         {
-            notes = DataManager.instance.notes.filter((note:Note)=>
+            notes = this._core.dataManager.notes.filter((note:Note)=>
             {
                 return (!note.trashed);
             });
@@ -94,7 +94,7 @@ export default class NoteListPresenter extends Presenter
         }
         else if(mode == NoteListMode.Trash)
         {
-            notes = DataManager.instance.notes.filter((note:Note)=>
+            notes = this._core.dataManager.notes.filter((note:Note)=>
             {
                 return note.trashed;
             });
@@ -106,7 +106,7 @@ export default class NoteListPresenter extends Presenter
         }
         else if(mode == NoteListMode.Notebook)
         {
-            if(this._core.selectedNotebook == null || DataManager.instance.notes.length == 0)
+            if(this._core.selectedNotebook == null || this._core.dataManager.notes.length == 0)
             {
                 let data =
                 {
@@ -129,7 +129,7 @@ export default class NoteListPresenter extends Presenter
         }
         else if(mode == NoteListMode.Started)
         {
-            notes = DataManager.instance.notes.filter((note:Note)=>
+            notes = this._core.dataManager.notes.filter((note:Note)=>
             {
                 return note.started;
             });
@@ -195,9 +195,9 @@ export default class NoteListPresenter extends Presenter
         {
             let note:Note = Note.create(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
             
-            if(DataManager.instance.addNote(note))
+            if(this._core.dataManager.addNote(note))
             {
-                DataManager.instance.saveNote(note);
+                this._core.dataManager.saveNote(note);
                 selectedNotebook.addNote(note);
                 this._core.selectNote(note.id);
                 this.update();
@@ -207,7 +207,7 @@ export default class NoteListPresenter extends Presenter
 
     private actionRemoveNote(data:any):void
     {
-        let note:Note = DataManager.instance.getNote(data.noteId);
+        let note:Note = this._core.dataManager.getNote(data.noteId);
 
         if(note != null)
         {
@@ -218,12 +218,12 @@ export default class NoteListPresenter extends Presenter
 
             if(note.trashed)
             {
-                DataManager.instance.deleteNote(note);
+                this._core.dataManager.deleteNote(note);
             }
             else
             {
                 note.setTrashed(true);
-                DataManager.instance.saveNote(note);
+                this._core.dataManager.saveNote(note);
             }
             
             this._core.updateNoteList();

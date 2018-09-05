@@ -15,19 +15,6 @@ import Note from "../core/data/note";
 
 export default class DataManager
 {
-    // Singleton 
-    public static sInstance:DataManager;
-
-    static get instance(): DataManager 
-    {
-        return DataManager.sInstance;
-    }
-
-    static initialize():void
-    {
-        DataManager.sInstance = new DataManager();
-    }
-
     // Static variables
     private sSaveFileName:string = "data.json";
     private sVersion:number = 1;
@@ -65,7 +52,7 @@ export default class DataManager
     }
 
     // Member Functions
-    private constructor()
+    public constructor()
     {
         this._storageList = new Array<Storage>();
         this._savePath = Path.join(app.getPath("userData"),this.sSaveFileName);

@@ -43,10 +43,9 @@ export default class NavigationPresenter extends Presenter
     public onUpdateRequested():void
     {
         Debug.log("onUpdateRequested: "+this._updates);
-
         this._updates++;
 
-        let storages:Storage[] = DataManager.instance.noteStorages;
+        let storages:Storage[] = this._core.dataManager.noteStorages;
 
         let storagesData:any[] = storages.map((storage:Storage) =>
         {
@@ -75,7 +74,7 @@ export default class NavigationPresenter extends Presenter
         {
             let storagePath = targetPath[0];
 
-            if(DataManager.instance.isLocationStorage(storagePath))
+            if(this._core.dataManager.isLocationStorage(storagePath))
             {
                 if(!this.addExistingStorage(storagePath))
                 {
@@ -84,7 +83,7 @@ export default class NavigationPresenter extends Presenter
             }
             else
             {
-                if(DataManager.instance.canUseStorageLocation(storagePath))
+                if(this._core.dataManager.canUseStorageLocation(storagePath))
                 {
                     this.createNewStorage(storagePath);
                 }
@@ -101,8 +100,8 @@ export default class NavigationPresenter extends Presenter
     {
         let storage = Storage.create(uuid(), path);
 
-        DataManager.instance.addStorage(storage);
-        DataManager.instance.saveStorage(storage);
+        this._core.dataManager.addStorage(storage);
+        this._core.dataManager.saveStorage(storage);
 
         this.update();
     }
@@ -111,18 +110,18 @@ export default class NavigationPresenter extends Presenter
     {
         Debug.logError("addExistingNotebookStorage: "+path);
 
-        if(  DataManager.instance.hasStorageWithPath(path)) // I can check the id too
+        if(  this._core.dataManager.hasStorageWithPath(path)) // I can check the id too
         {
             Debug.logError("Already have that storage");
             return false;
         }
 
         let storagePath = Path.join(path,"notelink.json");
-        let storage = DataManager.instance.loadStorage(storagePath);
+        let storage = this._core.dataManager.loadStorage(storagePath);
 
         if(storage != null)
         {
-            if(DataManager.instance.addStorage(storage))
+            if(this._core.dataManager.addStorage(storage))
             {
                 this.update();
                 return true;
@@ -135,7 +134,7 @@ export default class NavigationPresenter extends Presenter
     private actionRemoveStorage(data:any):void
     {
         let storageId:string    = data.storage;
-        let storage:Storage     = DataManager.instance.getStorage(storageId);
+        let storage:Storage     = this._core.dataManager.getStorage(storageId);
 
         if(storage != null)
         {
@@ -151,7 +150,7 @@ export default class NavigationPresenter extends Presenter
                 this._core.unselectNote();
             }
 
-            DataManager.instance.removeStorage(storage);
+            this._core.dataManager.removeStorage(storage);
 
             this._core.updateAllPanels();
         }
@@ -164,7 +163,7 @@ export default class NavigationPresenter extends Presenter
     private actionDeleteStorage(data:any):void
     {
         let storageId:string = data.storage;
-        let storage:Storage  = DataManager.instance.getStorage(storageId);
+        let storage:Storage  = this._core.dataManager.getStorage(storageId);
 
         if(storage != null)
         {
@@ -180,7 +179,7 @@ export default class NavigationPresenter extends Presenter
                 this._core.unselectNote();
             }
 
-            DataManager.instance.deleteStorage(storage);
+            this._core.dataManager.deleteStorage(storage);
 
             this._core.updateAllPanels();
         }
@@ -196,17 +195,17 @@ export default class NavigationPresenter extends Presenter
     {
         let storageId = data.storage;
 
-        let storage:Storage = DataManager.instance.getStorage(storageId);
+        let storage:Storage = this._core.dataManager.getStorage(storageId);
 
         if(storage != null)
         {
             let notebook:Notebook = Notebook.create(uuid(), Path.join(storage.folderPath,"/notebooks"));
 
-            if(DataManager.instance.saveNotebook(notebook))
+            if(this._core.dataManager.saveNotebook(notebook))
             {
-                DataManager.instance.addNotebook(notebook);
+                this._core.dataManager.addNotebook(notebook);
                 storage.addNotebook(notebook);
-                DataManager.instance.saveStorage(storage);
+                this._core.dataManager.saveStorage(storage);
             }
 
             this.update();
@@ -221,24 +220,24 @@ export default class NavigationPresenter extends Presenter
     {
         let notebookId = data.notebookId;
 
-        let notebook:Notebook = DataManager.instance.getNotebook(notebookId);
+        let notebook:Notebook = this._core.dataManager.getNotebook(notebookId);
 
         if(notebook != null)
         {
-            PopupManager.instance.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
+            this._core.popupManager.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
             {
                 let isSelectedNotebook = (this._core.selectedNotebook == notebook);
                 let hasSelectedNote = (this._core.selectedNote.parent == notebook);
                 
-                DataManager.instance.deleteNotebook(notebook);
+                this._core.dataManager.deleteNotebook(notebook);
 
                 this.update();
     
                 if(isSelectedNotebook)
                 {
-                    if(DataManager.instance.notebooks.length > 0)
+                    if(this._core.dataManager.notebooks.length > 0)
                     {
-                        let next:Notebook = DataManager.instance.notebooks[0];
+                        let next:Notebook = this._core.dataManager.notebooks[0];
                         this._core.selectNotebook(next.id);
                     }
                     else
@@ -270,11 +269,11 @@ export default class NavigationPresenter extends Presenter
         let notebookId = data.notebookId;
         let newName    = data.name;
 
-        let notebook:Notebook = DataManager.instance.getNotebook(notebookId);
+        let notebook:Notebook = this._core.dataManager.getNotebook(notebookId);
 
         if(notebook != null)
         {
-            DataManager.instance.saveNotebook(notebook);
+            this._core.dataManager.saveNotebook(notebook);
             this.update();
         }
         else

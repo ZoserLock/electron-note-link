@@ -20,14 +20,8 @@ import PopupManager from "core/popupManager";
 
 export default class PopupPresenter extends Presenter
 {
-    constructor()
-    {
-        super();
-    }
-    
     protected onRegisterListeners():void
     {
        // Overridable
     }
-
 }

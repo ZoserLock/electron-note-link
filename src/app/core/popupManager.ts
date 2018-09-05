@@ -1,46 +1,21 @@
-import {ipcMain,BrowserWindow} from "electron"; 
 import Message from "presenter/messageChannel";
 import Debug from "../tools/debug";
+import Platform from "./platform";
 
 export default class PopupManager
 {
-    // Singleton
-    private static sInstance:PopupManager;
+    // Dependencies
+    private _platform:Platform;
 
-    // Get/Set
-    static get instance(): PopupManager 
-    {
-        return this.sInstance;
-    }
-
-    static initialize():void
-    {
-        this.sInstance = new PopupManager();
-    }
-
-    private _window:BrowserWindow;
-
-    private _onOkFunction:()=>void;
-    private _onCancelFunction:()=>void;
+    private _onOkFunction:()     => void;
+    private _onCancelFunction:() => void;
 
     private _popupShown:boolean = false;
 
-    constructor()
+    constructor(platform:Platform)
     {
-        ipcMain.on(Message.popupResult,(event:any,data:any) =>{this.onPopupResult(data);});
-    }
-
-    public setWindow(window:BrowserWindow):void
-    {
-        this._window = window;
-    }
-
-    protected sendUIMessage(channel:string, data?:any):void
-    {
-        if(this._window != null)
-        {
-            this._window.webContents.send(channel,data);
-        }
+        this._platform = platform;
+        this._platform.registerUIListener(Message.popupResult,(data:any) =>{this.onPopupResult(data);});
     }
 
     public onPopupResult(data:any):void
@@ -58,11 +33,10 @@ export default class PopupManager
             {
                 this._onCancelFunction();
             }
-         
         }
     }
 
-    public showConfirmationPanel(title:string,subTitle:string, text:string, okButton:string, cancelButton:string, onOk:() => void, onCancel:() => void):void
+    public showConfirmationPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:() => void, onCancel:() => void):void
     {
         if(!this._popupShown)
         {
@@ -79,7 +53,7 @@ export default class PopupManager
             this._onOkFunction     = onOk;
             this._onCancelFunction = onCancel;
 
-            this.sendUIMessage(Message.showPopup, data);
+            this._platform.sendUIMessage(Message.showPopup, data);
         }
         else
         {

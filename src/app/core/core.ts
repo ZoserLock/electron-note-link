@@ -1,21 +1,32 @@
 
+// Node Modules
 import {ipcMain} from "electron"; 
-import * as process from "process";
 
-import Debug from "../tools/debug";
-import DataManager from "./dataManager";
-import Notebook from "../core/data/notebook";
-import Note from "../core/data/note";
-import MessageChannel from "presenter/messageChannel";
+// Tools
+import Debug from "tools/debug";
 
-import Presentation from "core/presentation";
-import Platform     from "core/platform";
+// Core
+import DataManager      from "core/dataManager";
+import Presentation     from "core/presentation";
+import Platform         from "core/platform";
+import Notebook         from "core/data/notebook";
+import Note             from "core/data/note";
+
+// Presenter
+import MessageChannel   from "presenter/messageChannel";
+import PopupManager from "./popupManager";
 
 export default class Core
 {
     // Dependencies
     private _presentation:Presentation;
     private _platform:Platform;
+    private _dataManager:DataManager;
+    private _popupManager:PopupManager;
+
+    // Controllers
+    // NoteController
+    // NotebookController;
 
     // Editor Status
     private _noteListMode:NoteListMode;
@@ -47,6 +58,17 @@ export default class Core
     {
         return this._searchPhrase;
     }
+
+    // For the moment. The data manager and the popup manager is supposed to be called only for the core package.
+    get dataManager(): DataManager 
+    {
+        return this._dataManager;
+    }
+
+    get popupManager(): PopupManager 
+    {
+        return this._popupManager;
+    }
     //#endregion
 
     // Member Functions
@@ -54,13 +76,15 @@ export default class Core
     {
         this._platform     = platform;
         this._presentation = presentation;
+
+        this._popupManager = new PopupManager(this._platform);
+        this._dataManager  = new DataManager();
     }
 
     public initialize():void
     {
         Debug.log("[Core] Initialize");
-        DataManager.initialize();
-
+      
         this._platform      .initialize(this);
         this._presentation  .initialize(this, this._platform);
     }
@@ -68,7 +92,7 @@ export default class Core
     public mainWindowLoaded():void
     {
         Debug.log("[Core] Main Window Loaded");
-        DataManager.instance.checkStorageIntegrety();
+        this._dataManager.checkStorageIntegrety();
 
         this.initializeEditorStatus();
 
@@ -80,7 +104,7 @@ export default class Core
     {
         this._noteListMode = NoteListMode.Notebook; 
 
-        let storages = DataManager.instance.noteStorages;
+        let storages = this._dataManager.noteStorages;
         if(storages.length > 0)
         {
             let notebooks = storages[0].notebooks;
@@ -148,7 +172,7 @@ export default class Core
 
     public updateNoteView():void
     {
-        this._presentation.UpdateNoteViewPanel();
+        this._presentation.updateNoteViewPanel();
     }
 
     /////////////
@@ -182,7 +206,7 @@ export default class Core
             this._selectedNotebook = null;
         }
 
-        let notebook:Notebook = DataManager.instance.getNotebook(notebookId);
+        let notebook:Notebook = this._dataManager.getNotebook(notebookId);
 
         if(notebook != null)
         {
@@ -234,7 +258,7 @@ export default class Core
             return false;
         }
 
-        let note:Note = DataManager.instance.getNote(noteId);
+        let note:Note = this._dataManager.getNote(noteId);
 
         if(note != null)
         {
@@ -256,7 +280,7 @@ export default class Core
 
     public selectNoteNotebook(noteId:string):void
     {
-        let note:Note = DataManager.instance.getNote(noteId);
+        let note:Note = this._dataManager.getNote(noteId);
 
         if(note != null)
         {

@@ -38,8 +38,6 @@ export default class Application implements Platform
     {
         this._core = core;
 
-        PopupManager.initialize();
-
         this._trayController.initialize();
         
         this._mainWindow = new Window();

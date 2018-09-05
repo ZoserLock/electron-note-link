@@ -28,7 +28,7 @@ export default class NoteViewPresenter extends Presenter
 
     public testPopup():void
     {
-        PopupManager.instance.showConfirmationPanel("Test Popup","Testing sub Title Text","Hamaf pig fatber shankle venison beef ribs ","OKA","EXIT",()=>{Debug.log("OK");},()=>{Debug.log("CANCEL");});
+        this._core.popupManager.showConfirmationPanel("Test Popup","Testing sub Title Text","Hamaf pig fatber shankle venison beef ribs ","OKA","EXIT",()=>{Debug.log("OK");},()=>{Debug.log("CANCEL");});
     }
 
     public onUpdateRequested():void
@@ -54,7 +54,7 @@ export default class NoteViewPresenter extends Presenter
             return;
         }
 
-        let note:Note = DataManager.instance.getNote(data.id);
+        let note:Note = this._core.dataManager.getNote(data.id);
 
         if(note != null)
         {
@@ -73,7 +73,7 @@ export default class NoteViewPresenter extends Presenter
                 note.started = data.started;
             }
             
-            DataManager.instance.saveNote(note);
+            this._core.dataManager.saveNote(note);
 
             this._core.updateNoteList();
 
