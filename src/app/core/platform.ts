@@ -16,4 +16,7 @@ export default interface Platform
 
     // Window event
     windowLoadedEvent():void;
+
+    // System Popups
+    showOpenDirectoryDialog(title:string):string;
 }

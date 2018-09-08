@@ -48,7 +48,7 @@ export default class Toolbar extends UIComponent<any, any>
     
     private testPopup():void
     {
-        this.sendMainMessage("action:TestPopup");
+        this.sendMainMessage(MessageChannel.testPopup);
     }
 
     public render() 

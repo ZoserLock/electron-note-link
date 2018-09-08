@@ -65,22 +65,6 @@ export default class Storage
         return storage;
     }
 
-    public GetDataObject():any
-    {
-        let notebooks:any[] = this._notebooks.map((notebook:Notebook) =>
-        {
-            return notebook.GetDataObject();
-        });
-
-        let dataObject = {
-            id:this._id, 
-            name:this._name,
-            notebooks:notebooks
-        };
-
-        return dataObject
-    }
-
     public addNotebook(notebook:Notebook):void
     {
         notebook.setParent(this);
@@ -104,6 +88,7 @@ export default class Storage
     {
         this._notebooks = [];
     }
+    
     //////////////////
     // Other Functions
 
@@ -137,8 +122,5 @@ export default class Storage
         let saveObject = {id:this._id, name:this._name};
 
         return saveObject
- 
     }
-
-
 }

@@ -12,9 +12,15 @@ import Platform         from "core/platform";
 import Notebook         from "core/data/notebook";
 import Note             from "core/data/note";
 
+import PopupController    from "core/controllers/popupController";
+import StorageController  from "core/controllers/storageController";
+import NotebookController from "core/controllers/notebookController";
+
 // Presenter
 import MessageChannel   from "presenter/messageChannel";
-import PopupManager from "./popupManager";
+
+
+
 
 export default class Core
 {
@@ -22,9 +28,12 @@ export default class Core
     private _presentation:Presentation;
     private _platform:Platform;
     private _dataManager:DataManager;
-    private _popupManager:PopupManager;
 
     // Controllers
+    private _popupController:PopupController;
+    private _storageController:StorageController;
+    private _notebookController:NotebookController;
+
     // NoteController
     // NotebookController;
 
@@ -65,9 +74,19 @@ export default class Core
         return this._dataManager;
     }
 
-    get popupManager(): PopupManager 
+    get popupController(): PopupController 
     {
-        return this._popupManager;
+        return this._popupController;
+    }
+
+    get storageController():StorageController
+    {
+        return this._storageController;
+    }
+
+    get notebookController():NotebookController
+    {
+        return this._notebookController;
     }
     //#endregion
 
@@ -77,8 +96,12 @@ export default class Core
         this._platform     = platform;
         this._presentation = presentation;
 
-        this._popupManager = new PopupManager(this._platform);
-        this._dataManager  = new DataManager();
+        this._dataManager        = new DataManager();
+
+        this._popupController    = new PopupController(this,this._platform, this._presentation,this._dataManager);
+        this._storageController  = new StorageController(this,this._platform, this._presentation,this._dataManager);
+        this._notebookController = new NotebookController(this,this._platform, this._presentation,this._dataManager);
+        
     }
 
     public initialize():void
@@ -286,16 +309,5 @@ export default class Core
         {
             this.selectNotebook(note.parent.id);
         }
-    }
-
-    public getEditorStatusData():any
-    {
-        let data:any =
-        {
-            selectedNote:(this._selectedNote!=null)?this._selectedNote.id:"",
-            selectedNotebook:(this._selectedNotebook!=null)?this._selectedNotebook.id:"",
-            mode:this._noteListMode
-        }
-        return data;
     }
 }

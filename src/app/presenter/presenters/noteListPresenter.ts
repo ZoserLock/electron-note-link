@@ -45,7 +45,7 @@ export default class NoteListPresenter extends Presenter
 
         let searchData:string="";
 
-        let title:string = null;
+        let title:string = "";
 
         // HERE WE CAN IMPLEMENT A GENERIC FILTER.
         // Like current filter.filter(notes)

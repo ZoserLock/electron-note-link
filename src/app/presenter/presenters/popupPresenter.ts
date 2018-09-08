@@ -16,7 +16,7 @@ import Core         from "core/core";
 import Storage      from "core/data/storage";
 import Notebook     from "core/data/notebook";
 
-import PopupManager from "core/popupManager";
+import PopupManager from "core/controllers/popupController";
 
 export default class PopupPresenter extends Presenter
 {

@@ -60,7 +60,6 @@ export default class NavigationPanel extends UIComponent<any,any>
         Debug.log("[UI] NavigationPanel Update Requested");
         Debug.logVar(data);
 
-
         let storages = data.storages.map((storage:any) =>
         {
             return (

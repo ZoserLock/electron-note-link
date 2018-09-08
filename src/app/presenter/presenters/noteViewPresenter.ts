@@ -10,7 +10,7 @@ import Debug from "tools/debug";
 import DataManager  from "core/dataManager";
 import Core         from "core/core";
 import Note         from "core/data/note";
-import PopupManager from "core/popupManager";
+import PopupManager from "core/controllers/popupController";
 
 // Presenter
 import Presenter      from "presenter/presenter";
@@ -28,7 +28,7 @@ export default class NoteViewPresenter extends Presenter
 
     public testPopup():void
     {
-        this._core.popupManager.showConfirmationPanel("Test Popup","Testing sub Title Text","Hamaf pig fatber shankle venison beef ribs ","OKA","EXIT",()=>{Debug.log("OK");},()=>{Debug.log("CANCEL");});
+        this._core.popupController.showConfirmationPanel("Test Popup","Testing sub Title Text","Hamaf pig fatber shankle venison beef ribs ","OKA","EXIT",()=>{Debug.log("OK");},()=>{Debug.log("CANCEL");});
     }
 
     public onUpdateRequested():void

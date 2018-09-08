@@ -1,20 +1,36 @@
-import Message from "presenter/messageChannel";
-import Debug from "../tools/debug";
-import Platform from "./platform";
+
+// Tools
+import Debug    from "tools/debug";
+
+// Presenter
+import Message  from "presenter/messageChannel";
+
+// Core
+import Core             from "core/core";
+import Platform         from "core/platform";
+import Presentation     from "core/presentation";
+import DataManager      from "core/dataManager";
 
 export default class PopupManager
 {
     // Dependencies
+    private _core:Core;
     private _platform:Platform;
+    private _presentation:Presentation;
+    private _dataManager:DataManager;
+
+    private _popupShown:boolean = false;
 
     private _onOkFunction:()     => void;
     private _onCancelFunction:() => void;
 
-    private _popupShown:boolean = false;
-
-    constructor(platform:Platform)
+    constructor(core:Core, platform:Platform, presentation:Presentation, dataManager:DataManager)
     {
-        this._platform = platform;
+        this._core         = core;
+        this._presentation = presentation;
+        this._platform     = platform;
+        this._dataManager  = dataManager;
+
         this._platform.registerUIListener(Message.popupResult,(data:any) =>{this.onPopupResult(data);});
     }
 
@@ -36,7 +52,7 @@ export default class PopupManager
         }
     }
 
-    public showConfirmationPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:() => void, onCancel:() => void):void
+    public showConfirmationPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:VoidAction, onCancel:VoidAction):void
     {
         if(!this._popupShown)
         {

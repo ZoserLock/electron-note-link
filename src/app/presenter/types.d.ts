@@ -5,3 +5,28 @@ declare const enum PendingUpdate
     NoteList          = 0x2,
     NoteView          = 0x4,
 }
+
+
+// Parsers
+
+// CoreStatus Data
+declare interface CoreStatusData
+{
+    readonly selectedNotebook:string;
+    readonly selectedNote:string;
+    readonly noteListMode:number;
+}
+
+// Navigation Panel Item Data
+declare interface NavStorageItemData
+{
+    readonly id:string;
+    readonly name:string;
+    readonly notebooks:NavNotebookItemData[];
+}
+
+declare interface NavNotebookItemData
+{
+    readonly id:string;
+    readonly name:string;
+}

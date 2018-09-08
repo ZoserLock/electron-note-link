@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow, ipcMain, dialog } from "electron"
 
 import Debug           from "tools/debug";
 
@@ -9,7 +9,7 @@ import Window          from "platform/window";
 import TrayController  from "platform/trayController";
 
 import MessageChannel  from "presenter/messageChannel";
-import PopupManager    from "core/popupManager";
+import PopupManager    from "core/controllers/popupController";
 
 
 export default class Application implements Platform
@@ -108,5 +108,20 @@ export default class Application implements Platform
     public sendUIMessage(channel:string, data?:any):void
     {
         this._mainWindow.sendUIMessage(channel,data);
+    }
+
+    // Dialog management
+    public showOpenDirectoryDialog(title: string):string
+    {
+        let targetPath = dialog.showOpenDialog({title:title,properties:["openDirectory"]});
+
+        if(targetPath != null && targetPath.length > 0)
+        {
+            return targetPath[0];
+        }
+        else
+        {
+            return null;
+        }
     }
 }
