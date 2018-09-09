@@ -6,7 +6,7 @@ export default class MessageChannel
     public static readonly updateNoteViewPanel:string     = "update:NoteViewPanel";
 
     // Search Messages
-    public static readonly beginQuickSearch:string  = "action:BeginQuickSearch";
+    public static readonly searchBegin:string       = "action:SearchBegin";
     public static readonly searchUpdated:string     = "action:SearchUpdated";
     public static readonly searchCancelled:string   = "action:SearchCancelled";
 

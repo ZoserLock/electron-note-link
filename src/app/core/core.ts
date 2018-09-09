@@ -153,13 +153,7 @@ export default class Core
         }
     }
 
-    public beginQuickSearch():void
-    {
-        ipcMain.emit(MessageChannel.beginQuickSearch);
-    }
-
     // Search
-
     public beginSearch(search:string):void
     {
         this._searchPhrase = search;

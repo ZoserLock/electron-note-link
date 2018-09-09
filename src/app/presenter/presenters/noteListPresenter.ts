@@ -11,7 +11,7 @@ import Note from "core/data/note";
 
 // Presenter
 import Presenter from "presenter/presenter";
-import NoteViewPanelParser from "presenter/parsers/noteViewPanelParser";
+import NoteViewPanelParser from "presenter/parsers/noteViewPanelParser"; 
 
 export default class NoteListPresenter extends Presenter
 {
@@ -24,7 +24,7 @@ export default class NoteListPresenter extends Presenter
         this.registerUIListener(MessageChannel.removeNote          , (data:any) => this.actionRemoveNote(data));
 
         this.registerUIListener(MessageChannel.searchUpdated       , (data:any) => this.actionSearchUpdated(data));
-        this.registerUIListener(MessageChannel.beginQuickSearch    , (data:any) => this.beginQuickSearch(data));
+        this.registerUIListener(MessageChannel.searchBegin         , (data:any) => this.beginQuickSearch(data));
     }
 
     public onUpdateRequested():void
@@ -46,7 +46,7 @@ export default class NoteListPresenter extends Presenter
 
         // HERE WE CAN IMPLEMENT A GENERIC FILTER.
         // Like current filter.filter(notes)
-        let noteData:any[] = [];
+        let noteData:ViewNoteFullItemData[] = [];
 
         if(mode == NoteListMode.Search)
         {
@@ -67,7 +67,7 @@ export default class NoteListPresenter extends Presenter
 
             noteData = notes.map((note:Note)=>
             {
-                return NoteViewPanelParser.createFullNoteData(note);
+                return NoteViewPanelParser.createNoteData(note);
             });
 
             var fuse = new Fuse(noteData, options);
@@ -85,7 +85,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return NoteViewPanelParser.createFullNoteData(note);
+                return NoteViewPanelParser.createNoteData(note);
             });
             title = "All Notes"
         }
@@ -97,7 +97,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return NoteViewPanelParser.createFullNoteData(note);
+                return NoteViewPanelParser.createNoteData(note);
             });
             title = "Trash";
         }
@@ -120,7 +120,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return NoteViewPanelParser.createFullNoteData(note);
+                return NoteViewPanelParser.createNoteData(note);
             });
             title = this._core.selectedNotebook.name;
         }
@@ -132,7 +132,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return NoteViewPanelParser.createFullNoteData(note);
+                return NoteViewPanelParser.createNoteData(note);
             });
             title = "Started Notes";
         }
@@ -152,12 +152,24 @@ export default class NoteListPresenter extends Presenter
             forceUpdate:(forceUpdate)?Math.random():0
         }
 
+        /*
+        let data =
+        {
+            listData:
+            notes:
+            status:
+            forceUpdate:(forceUpdate)?Math.random():0
+        }
+        */
+
+
+
         this._platform.sendUIMessage(MessageChannel.updateNoteListPanel, data);
     }
 
     private beginQuickSearch(data:any):void
     {
-        this._platform.sendUIMessage(MessageChannel.beginQuickSearch);
+        this._platform.sendUIMessage(MessageChannel.searchBegin);
     }
 
     private actionSearchUpdated(data:any):void

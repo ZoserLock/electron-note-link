@@ -44,7 +44,8 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
             {
                 noteListMode:NoteListMode.Notebook,
                 selectedNotebook:"",
-                selectedNote:""
+                selectedNote:"",
+                searchPhrase:""
             }
         }  
 
@@ -65,12 +66,9 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
     {
         Debug.log("[UI] NavigationPanel Update Requested");
 
-        let storages:ViewStorageItemData[] = data.storages;
-        let editorStatus:ViewCoreData      = data.editorStatus;
-
         this.setState({
-            storages:storages,
-            status:data.editorStatus
+            storages:data.storages,
+            status:data.status
         });
     }
 
@@ -78,7 +76,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
 
     private handleAllNotesClick(): void 
     {
-        let data ={mode:NoteListMode.All}
+        let data = {mode:NoteListMode.All}
 
         this.sendMainMessage(MessageChannel.setNoteListMode, data);
     }

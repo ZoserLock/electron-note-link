@@ -3,7 +3,7 @@ import Note from "core/data/note";
 
 export default class NoteViewPanelParser
 {
-    public static createFullNoteData(note:Note):ViewNoteItemData
+    public static createNoteData(note:Note):ViewNoteFullItemData
     {
         return {
             id:note.id, 

@@ -10,7 +10,8 @@ export default class CoreStatusParser
         return {
             selectedNote:(core.selectedNote != null)?core.selectedNote.id:"",
             selectedNotebook:(core.selectedNotebook != null)?core.selectedNotebook.id:"",
-            noteListMode:core.noteListMode
+            noteListMode:core.noteListMode,
+            searchPhrase:core.searchPhrase
         }
     }
 }

@@ -19,7 +19,7 @@ import NoteViewContentEditor from "ui/components/noteViewPanel/noteViewContentEd
 
 interface NavigationPanelState
 {
-    note:ViewNoteItemData;
+    note:ViewNoteFullItemData;
     editing:boolean;
 }
 
@@ -56,7 +56,7 @@ class NoteViewPanel extends UIComponent<any, NavigationPanelState>
     {
         Debug.log("[UI] Note View Panel Update Requested");
 
-        let note:ViewNoteItemData = data.note;
+        let note:ViewNoteFullItemData = data.note;
 
         Debug.logVar(data);
 

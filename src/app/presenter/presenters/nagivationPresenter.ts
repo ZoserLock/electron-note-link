@@ -28,7 +28,7 @@ export default class NavigationPresenter extends Presenter
         let data =
         {
             storages: NavigationPanelParser.createListData(storages),
-            editorStatus: CoreStatusParser.createCoreStatus(this._core)
+            status: CoreStatusParser.createCoreStatus(this._core)
         }
 
         this._platform.sendUIMessage(MessageChannel.updateNavigationPanel, data);

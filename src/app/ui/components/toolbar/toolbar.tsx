@@ -11,37 +11,38 @@ import ToolbarSeparator from "ui/components/toolbar/toolbarSeparator";
 
 export default class Toolbar extends UIComponent<any, any> 
 {
-    private _beginQuickSearch: (event: any, data: any) => void;
+    private _beginSearchEvent: (event: any, data: any) => void;
     private _searchBar:ToolbarSearchBar;
 
     constructor(props: any)
     {
         super(props);
         
-        this._beginQuickSearch = (event:any,data:any)=>this.beginQuickSearch(data);
+        this._beginSearchEvent = (event:any,data:any) => this.beginSearchRequested(data);
     }
 
     public componentDidMount() 
     {
-        this.registerMainListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
+        this.registerMainListener(MessageChannel.searchBegin,this._beginSearchEvent);
     }
 
     public componentWillUnmount()
     {
-        this.unregisterMainListener(MessageChannel.beginQuickSearch,this._beginQuickSearch);
+        this.unregisterMainListener(MessageChannel.searchBegin,this._beginSearchEvent);
     }
 
-    public beginQuickSearch(data:any):void
+    public beginSearchRequested(data:any):void
     {
         this._searchBar.focus();
     }
 
-    private createNewNotebookStorage():void
+    //#region Handle UI Events
+    private HandleCreateNewStorage():void
     {
         this.sendMainMessage(MessageChannel.createStorage);
     }
 
-    private createNewNote():void
+    private handleCreateNewNote():void
     {
         this.sendMainMessage(MessageChannel.createStorage);
     }
@@ -50,13 +51,14 @@ export default class Toolbar extends UIComponent<any, any>
     {
         this.sendMainMessage(MessageChannel.testPopup);
     }
+    //#endregion
 
     public render() 
     {
         return (
             <header className="ui-toolbar">
-                <ToolbarItem name="Add Storage" onClick={()=>this.createNewNotebookStorage()}/>
-                <ToolbarItem name="Add Note" onClick={()=>this.createNewNote()}/>
+                <ToolbarItem name="Add Storage" onClick={()=>this.HandleCreateNewStorage()}/>
+                <ToolbarItem name="Add Note" onClick={()=>this.handleCreateNewNote()}/>
                 <ToolbarSeparator/>
                 <ToolbarSearchBar ref={(ref) => this._searchBar = ref}/>
                 <ToolbarSeparator/>

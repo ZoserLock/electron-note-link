@@ -13,6 +13,7 @@ declare interface ViewCoreData
     readonly selectedNotebook:string;
     readonly selectedNote:string;
     readonly noteListMode:number;
+    readonly searchPhrase:string;
 }
 
 declare interface ViewStorageItemData
@@ -28,14 +29,22 @@ declare interface ViewNotebookItemData
     readonly name:string;
 }
 
+declare interface ViewNoteFullItemData
+{
+    readonly id:string, 
+    readonly title:string, 
+    readonly text:string,
+    readonly trashed:boolean,
+    readonly started:boolean,
+    readonly created:number,
+    readonly updated:number,
+    readonly notebookName:string,
+}
+
 declare interface ViewNoteItemData
 {
-    id:string, 
-    title:string, 
-    text:string,
-    trashed:boolean,
-    started:boolean,
-    created:number,
-    updated:number,
-    notebookName:string,
+    readonly id:string, 
+    readonly title:string, 
+    readonly created:number,
+    readonly updated:number,
 }

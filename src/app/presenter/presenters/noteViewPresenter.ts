@@ -32,7 +32,7 @@ export default class NoteViewPresenter extends Presenter
 
         if(selectedNote != null)
         {
-            noteData = NoteViewPanelParser.createFullNoteData(selectedNote);
+            noteData = NoteViewPanelParser.createNoteData(selectedNote);
         }
         
         this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:noteData});
