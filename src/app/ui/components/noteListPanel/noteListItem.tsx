@@ -65,7 +65,7 @@ export default class NoteListItem extends UIComponent<any, any>
                 <div className = {"ui-note-list-item-content" + addClass}>
                     <div className = "ui-note-list-item-header" >
                         <span className ="ui-note-list-item-badge">
-                        </span><span>{this.props.note.notebook}</span>
+                        </span><span>{this.props.note.notebookName}</span>
                         <span className="ui-inline-spacer"/><span>{date}</span>
                     </div>
                     <div className="ui-note-list-item-title-container" >

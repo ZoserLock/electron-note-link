@@ -17,13 +17,13 @@ import NoteViewHeader        from "ui/components/noteViewPanel/noteViewHeader";
 import NoteViewContent       from "ui/components/noteViewPanel/noteViewContent";
 import NoteViewContentEditor from "ui/components/noteViewPanel/noteViewContentEditor";
 
-interface NoteViewData
+interface NavigationPanelState
 {
-    note:Note;
-    editorMode:boolean;
+    note:ViewNoteItemData;
+    editing:boolean;
 }
 
-class NoteViewPanel extends UIComponent<any, NoteViewData> 
+class NoteViewPanel extends UIComponent<any, NavigationPanelState> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
 
@@ -36,7 +36,7 @@ class NoteViewPanel extends UIComponent<any, NoteViewData>
         this.state =
         {
             note:null,
-            editorMode:false
+            editing:false
         }
 
         this._updateRequestedEvent = (event:any,data:any) => this.updateRequested(event,data);
@@ -52,11 +52,26 @@ class NoteViewPanel extends UIComponent<any, NoteViewData>
         this.unregisterMainListener(MessageChannel.updateNoteViewPanel,this._updateRequestedEvent);
     }
 
+    public updateRequested(event:any, data:any):void
+    {
+        Debug.log("[UI] Note View Panel Update Requested");
+
+        let note:ViewNoteItemData = data.note;
+
+        Debug.logVar(data);
+
+        this._newText = (data.note != null)?data.note.text:"";
+
+        this.setState({
+            note:note
+        });
+    }
+
     private handleClickOutside(event:any)
     {
-        if(this.state.editorMode)
+        if(this.state.editing)
         {
-            this.setState({editorMode:false});
+            this.setState({editing:false});
 
             let data:NoteUpdateData =
             {
@@ -64,14 +79,14 @@ class NoteViewPanel extends UIComponent<any, NoteViewData>
                 text:this._newText
             }
 
-            this.sendMainMessage(MessageChannel.updateNote,data);
+            this.sendMainMessage(MessageChannel.updateNote, data);
             event.stopImmediatePropagation();
         }
     }
 
     private onContentClick()
     {
-        this.setState({editorMode:true});
+        this.setState({editing:true});
     }
 
     private onCodeChanged(editor:any, data:any, value:any)
@@ -79,22 +94,6 @@ class NoteViewPanel extends UIComponent<any, NoteViewData>
         this._newText = value;
     }
 
-    public updateRequested(event:any, data:any):void
-    {
-        Debug.log("updateRequested Note View");
-
-        if(data.note != null)
-        {
-            this._newText = data.note.text;
-        }
-        else
-        {
-            this._newText = "";
-        }
-       
-
-        this.setState({note:data.note});
-    }
 
     public render() 
     {
@@ -103,7 +102,7 @@ class NoteViewPanel extends UIComponent<any, NoteViewData>
         if(this.state.note != null)
         {
             Debug.logVar(this.state.note);
-            if(this.state.editorMode)
+            if(this.state.editing)
             {
                 currentPanel = <NoteViewContentEditor code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)}/>
             }
