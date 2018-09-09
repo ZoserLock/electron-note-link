@@ -1,24 +1,9 @@
-// Node.js
-import {dialog}         from "electron"; 
-
-import * as uuid        from "uuid/v4";
-import * as Path        from "path";
-
-// Tools
-import Debug            from "tools/debug";
-
 // Presenter
-import Presenter        from "presenter/presenter";
-import MessageChannel   from "presenter/messageChannel"
+import Presenter             from "presenter/presenter";
+import MessageChannel        from "presenter/messageChannel"
 
-import NavigationPanelParser from "presenter/parsers/navigationItemParser";
+import NavigationPanelParser from "../parsers/navigationPanelParser";
 import CoreStatusParser      from "presenter/parsers/coreStatusParser";
-
-// Core
-import DataManager      from "core/dataManager";
-import Core             from "core/core";
-import Storage          from "core/data/storage";
-import Notebook         from "core/data/notebook";
 
 export default class NavigationPresenter extends Presenter
 {
@@ -42,7 +27,7 @@ export default class NavigationPresenter extends Presenter
 
         let data =
         {
-            storages: NavigationPanelParser.createNavigationData(storages),
+            storages: NavigationPanelParser.createListData(storages),
             editorStatus: CoreStatusParser.createCoreStatus(this._core)
         }
 
@@ -59,14 +44,14 @@ export default class NavigationPresenter extends Presenter
 
     private actionRemoveStorage(data:any):void
     {
-        let storageId:string  = data.storage;
+        let storageId:string  = data.storageId;
 
         this._core.storageController.removeStorage(storageId);
     }
 
     private actionDeleteStorage(data:any):void
     {
-        let storageId:string = data.storage;
+        let storageId:string = data.storageId;
 
         this._core.storageController.deleteStorage(storageId);
     }
@@ -76,7 +61,7 @@ export default class NavigationPresenter extends Presenter
      
     private actionNewNotebook(data:any):void
     {
-        let storageId = data.storage;
+        let storageId = data.storageId;
         
         this._core.notebookController.createNewNotebook(storageId);
     }
@@ -85,8 +70,18 @@ export default class NavigationPresenter extends Presenter
     {
         let notebookId = data.notebookId;
         
-        this._core.notebookController.actionDeleteNotebook(notebookId);
+        this._core.notebookController.deleteNotebook(notebookId);
     }
+
+    private actionUpdateNotebook(data:any)
+    {
+        let updateData:NotebookUpdateData = data as NotebookUpdateData;
+    
+        this._core.notebookController.updateNotebook(updateData);
+    };
+
+    ///////////////////////////////
+    // Editor and Mode selection 
 
     private actionSetNoteListMode(data:any):void
     {
@@ -98,21 +93,4 @@ export default class NavigationPresenter extends Presenter
         this._core.selectNotebook(data.notebookId);
     };
     
-    private actionChangeNotebookName(data:any)
-    {
-        let notebookId = data.notebookId;
-        let newName    = data.name;
-
-        let notebook:Notebook = this._core.dataManager.getNotebook(notebookId);
-
-        if(notebook != null)
-        {
-            this._core.dataManager.saveNotebook(notebook);
-            this.update();
-        }
-        else
-        {
-            Debug.logError("actionChangeNotebookName: Notebook does not exist.");
-        }
-    };
 }

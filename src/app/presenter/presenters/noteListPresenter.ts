@@ -1,18 +1,17 @@
 // Node
 import * as uuid from "uuid/v4";
 import * as Path from "path";
+import * as Fuse from "fuse.js";
 
 // Core
 import MessageChannel from "presenter/messageChannel"
-import DataManager from "core/dataManager";
-import Core from "core/core";
 
 // Notes
 import Note from "core/data/note";
 
-import Presenter from "../presenter";
-import Debug from "tools/debug"; 
-import * as Fuse from "fuse.js";
+// Presenter
+import Presenter from "presenter/presenter";
+import NoteViewPanelParser from "presenter/parsers/noteViewPanelParser";
 
 export default class NoteListPresenter extends Presenter
 {
@@ -30,8 +29,6 @@ export default class NoteListPresenter extends Presenter
 
     public onUpdateRequested():void
     {
-        Debug.log("updateNoteList()");
-   
         let mode:number = this._core.noteListMode;
 
         let selectedNote:string = "";
@@ -70,7 +67,7 @@ export default class NoteListPresenter extends Presenter
 
             noteData = notes.map((note:Note)=>
             {
-                return note.GetDataObject();
+                return NoteViewPanelParser.createFullNoteData(note);
             });
 
             var fuse = new Fuse(noteData, options);
@@ -88,7 +85,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return note.GetDataObject();
+                return NoteViewPanelParser.createFullNoteData(note);
             });
             title = "All Notes"
         }
@@ -100,7 +97,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return note.GetDataObject();
+                return NoteViewPanelParser.createFullNoteData(note);
             });
             title = "Trash";
         }
@@ -123,7 +120,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return note.GetDataObject();
+                return NoteViewPanelParser.createFullNoteData(note);
             });
             title = this._core.selectedNotebook.name;
         }
@@ -135,7 +132,7 @@ export default class NoteListPresenter extends Presenter
             });
             noteData = notes.map((note:Note)=>
             {
-                return note.GetDataObject();
+                return NoteViewPanelParser.createFullNoteData(note);
             });
             title = "Started Notes";
         }

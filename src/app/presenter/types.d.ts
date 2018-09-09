@@ -7,26 +7,35 @@ declare const enum PendingUpdate
 }
 
 
-// Parsers
-
-// CoreStatus Data
-declare interface CoreStatusData
+// Interfaces to send data from presenter to views.
+declare interface ViewCoreData
 {
     readonly selectedNotebook:string;
     readonly selectedNote:string;
     readonly noteListMode:number;
 }
 
-// Navigation Panel Item Data
-declare interface NavStorageItemData
+declare interface ViewStorageItemData
 {
     readonly id:string;
     readonly name:string;
-    readonly notebooks:NavNotebookItemData[];
+    readonly notebooks:ViewNotebookItemData[];
 }
 
-declare interface NavNotebookItemData
+declare interface ViewNotebookItemData
 {
     readonly id:string;
     readonly name:string;
+}
+
+declare interface ViewNoteItemData
+{
+    id:string, 
+    title:string, 
+    text:string,
+    trashed:boolean,
+    started:boolean,
+    created:number,
+    updated:number,
+    notebookName:string,
 }

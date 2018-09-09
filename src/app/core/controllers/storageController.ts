@@ -102,7 +102,7 @@ export default class StorageController
 
         if(storage != null)
         {
-            // TODO Move this logic to core. something like this._core.checkSelectedNotebook.
+            // TODO Move this logic to core. something like this._core.checkSelectedNotebook();
             if(this._core.selectedNotebook != null && this._core.selectedNotebook.storage == storage)
             {
                 Debug.log("Unselect notebook");
@@ -115,9 +115,9 @@ export default class StorageController
                 this._core.unselectNote();
             }
 
-            this._core.dataManager.removeStorage(storage);
+            this._dataManager.removeStorage(storage);
 
-            this._core.updateAllPanels();
+            this._presentation.updatePresentation();
             return true;
         }
         else
@@ -145,9 +145,9 @@ export default class StorageController
                 this._core.unselectNote();
             }
 
-            this._core.dataManager.deleteStorage(storage);
-
-            this._core.updateAllPanels();
+            this._dataManager.deleteStorage(storage);
+            
+            this._presentation.updatePresentation();
 
             return true;
         }

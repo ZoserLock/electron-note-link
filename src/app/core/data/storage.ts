@@ -1,9 +1,9 @@
 
-// Node.js
+// Node Modules
 import * as Path from "path";
 
-// Core Package
-import Notebook from "core/data/notebook"
+// Core
+import Notebook  from "core/data/notebook";
 
 export default class Storage
 {

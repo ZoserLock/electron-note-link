@@ -15,6 +15,7 @@ import Note             from "core/data/note";
 import PopupController    from "core/controllers/popupController";
 import StorageController  from "core/controllers/storageController";
 import NotebookController from "core/controllers/notebookController";
+import NoteController     from "core/controllers/noteController";
 
 // Presenter
 import MessageChannel   from "presenter/messageChannel";
@@ -33,6 +34,7 @@ export default class Core
     private _popupController:PopupController;
     private _storageController:StorageController;
     private _notebookController:NotebookController;
+    private _noteController:NoteController;
 
     // NoteController
     // NotebookController;
@@ -88,6 +90,11 @@ export default class Core
     {
         return this._notebookController;
     }
+
+    get noteController():NoteController
+    {
+        return this._noteController;
+    }
     //#endregion
 
     // Member Functions
@@ -101,7 +108,7 @@ export default class Core
         this._popupController    = new PopupController(this,this._platform, this._presentation,this._dataManager);
         this._storageController  = new StorageController(this,this._platform, this._presentation,this._dataManager);
         this._notebookController = new NotebookController(this,this._platform, this._presentation,this._dataManager);
-        
+        this._noteController     = new NoteController(this,this._platform, this._presentation,this._dataManager);
     }
 
     public initialize():void
@@ -119,7 +126,7 @@ export default class Core
 
         this.initializeEditorStatus();
 
-        this.updateAllPanels();
+        this._presentation.updatePresentation();
        
     }
 
@@ -175,14 +182,6 @@ export default class Core
     ////////////////////
     // Update Actions //
     ////////////////////
-    
-    public updateAllPanels():void
-    {
-        this.updateNavigationPanel();
-        this.updateNoteList();
-        this.updateNoteView();
-    }
-
     public updateNavigationPanel():void
     {
         this._presentation.updateNavigationPanel();

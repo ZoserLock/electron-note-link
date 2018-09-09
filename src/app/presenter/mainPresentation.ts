@@ -80,6 +80,13 @@ export default class MainPresentation implements Presentation
     }
 
     // Update Functions
+    public updatePresentation():void
+    {
+        this.updateNavigationPanel();
+        this.updateNoteListPanel();
+        this.updateNoteViewPanel();
+    }
+
     public updateNavigationPanel():void
     {
         this._pendingUpdate |= PendingUpdate.NavigationPanel;

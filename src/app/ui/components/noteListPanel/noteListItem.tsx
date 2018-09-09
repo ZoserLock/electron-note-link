@@ -38,7 +38,7 @@ export default class NoteListItem extends UIComponent<any, any>
 
     public editFinished(text:string):void
     {
-        let data = 
+        let data:NoteUpdateData = 
         {
             id:this.props.note.id,
             title:text

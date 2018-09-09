@@ -1,27 +1,20 @@
-// Node.js
-import {ipcMain} from "electron"; 
-import * as uuid from "uuid/v4";
-import * as Path from "path";
-
 // Tools
 import Debug from "tools/debug";
 
 // Core
-import DataManager  from "core/dataManager";
-import Core         from "core/core";
 import Note         from "core/data/note";
-import PopupManager from "core/controllers/popupController";
 
 // Presenter
-import Presenter      from "presenter/presenter";
-import MessageChannel from "presenter/messageChannel"
+import Presenter            from "presenter/presenter";
+import MessageChannel       from "presenter/messageChannel"
+import NoteViewPanelParser  from "presenter/parsers/noteViewPanelParser";
 
 export default class NoteViewPresenter extends Presenter
 {
     protected onRegisterListeners():void
     {
         this.registerUIListener(MessageChannel.updateNoteViewPanel  ,(data:any) => this.update());
-        this.registerUIListener(MessageChannel.updateNote           ,(data:any) => this.updateNote(data));
+        this.registerUIListener(MessageChannel.updateNote           ,(data:any) => this.actionUpdateNote(data));
 
         this.registerUIListener(MessageChannel.testPopup            ,(data:any) => this.testPopup());
     }
@@ -33,54 +26,22 @@ export default class NoteViewPresenter extends Presenter
 
     public onUpdateRequested():void
     {
-        Debug.log("updateNoteView()");
-
         let selectedNote = this._core.selectedNote;
+
+        let noteData = null;
 
         if(selectedNote != null)
         {
-            this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:selectedNote.GetDataObject()});
+            let noteData = NoteViewPanelParser.createFullNoteData(selectedNote);
         }
-        else
-        {
-            this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:null});
-        }
+        
+        this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:noteData});
     }
 
-    public updateNote(data:any):void
+    public actionUpdateNote(data:any):void
     {
-        if(!data.hasOwnProperty("id"))
-        {
-            return;
-        }
+        let updateData:NoteUpdateData = data as NoteUpdateData;
 
-        let note:Note = this._core.dataManager.getNote(data.id);
-
-        if(note != null)
-        {
-            if(data.hasOwnProperty("text"))
-            {
-                note.text = data.text;
-            }
-
-            if(data.hasOwnProperty("title"))
-            {
-                note.title = data.title;
-            }
-
-            if(data.hasOwnProperty("started"))
-            {
-                note.started = data.started;
-            }
-            
-            this._core.dataManager.saveNote(note);
-
-            this._core.updateNoteList();
-
-            if(note == this._core.selectedNote)
-            {
-                this._core.updateNoteView();
-            }
-        }
+        this._core.noteController.updateNote(updateData)
     }
 }

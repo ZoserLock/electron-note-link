@@ -1,17 +1,17 @@
 
-// Node
+// Node Modules
 import { app, ipcMain,BrowserWindow} from "electron";
 import * as Path from "path";
 import * as fs from "fs-extra";
 
-// Utils
-import Debug from "../tools/debug";
-import FileTools from "../tools/fileTools";
+// Tools
+import Debug     from "tools/debug";
+import FileTools from "tools/fileTools";
 
 // Core
-import Storage from "../core/data/storage";
-import Notebook from "../core/data/notebook";
-import Note from "../core/data/note";
+import Storage  from "core/data/storage";
+import Notebook from "core/data/notebook";
+import Note     from "core/data/note";
 
 export default class DataManager
 {

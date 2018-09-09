@@ -57,7 +57,14 @@ class NoteViewPanel extends UIComponent<any, NoteViewData>
         if(this.state.editorMode)
         {
             this.setState({editorMode:false});
-            this.sendMainMessage(MessageChannel.updateNote,{id:this.state.note.id,text:this._newText})
+
+            let data:NoteUpdateData =
+            {
+                id:this.state.note.id,
+                text:this._newText
+            }
+
+            this.sendMainMessage(MessageChannel.updateNote,data);
             event.stopImmediatePropagation();
         }
     }

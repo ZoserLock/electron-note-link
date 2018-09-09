@@ -14,8 +14,8 @@ import NavigationNotebookItem from "ui/components/navigationPanel/navigationNote
 
 interface NavigationStorageItemProps
 {
-    storage:NavStorageItemData;
-    editorStatus:CoreStatusData;
+    readonly storage:ViewStorageItemData;
+    readonly status:ViewCoreData;
 }
 
 export default class NavigationStorageItem extends UIComponent<NavigationStorageItemProps, any>
@@ -26,7 +26,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
     {
         let data =
         {
-            storage:this.props.storage.id
+            storageId:this.props.storage.id
         }
 
         this.sendMainMessage(MessageChannel.createNotebook, data);
@@ -44,7 +44,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
     {
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
-            let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.noteListMode == NoteListMode.Notebook;
+            let selected:boolean = this.props.status.selectedNotebook == notebook.id && this.props.status.noteListMode == NoteListMode.Notebook;
 
             return  (
             <ContextMenuTrigger id={this.sNotebookContextMenuId} key = {notebook.id} attributes={{id:notebook.id}}>

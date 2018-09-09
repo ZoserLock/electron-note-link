@@ -5,7 +5,7 @@ import Core from "core/core";
 
 export default class CoreStatusParser
 {
-    public static createCoreStatus(core:Core):CoreStatusData
+    public static createCoreStatus(core:Core):ViewCoreData
     {
         return {
             selectedNote:(core.selectedNote != null)?core.selectedNote.id:"",

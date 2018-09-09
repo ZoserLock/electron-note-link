@@ -6,11 +6,11 @@ import Notebook from "core/data/notebook";
 
 export default class NavigationPanelParser
 {
-    public static createNavigationData(storages:Storage[]):NavStorageItemData[]
+    public static createListData(storages:Storage[]):ViewStorageItemData[]
     {
-        let storagesData:NavStorageItemData[] = storages.map((storage:Storage) =>
+        let storagesData:ViewStorageItemData[] = storages.map((storage:Storage) =>
         {
-            let notebooks:NavNotebookItemData[] = storage.notebooks.map((notebook:Notebook) =>
+            let notebooks:ViewNotebookItemData[] = storage.notebooks.map((notebook:Notebook) =>
             {
                 return{
                     id:notebook.id, 
@@ -26,10 +26,5 @@ export default class NavigationPanelParser
         });
 
         return storagesData;
-    }
-
-    public static parseNavigationData(storages:any[]):NavStorageItemData[]
-    {
-        return storages as NavStorageItemData[];
     }
 }

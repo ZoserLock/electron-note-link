@@ -1,11 +1,14 @@
+
+// Core
+import Core     from "core/core";
 import Platform from "core/platform";
-import Core from "core/core";
 
 export default interface Presentation
 {
     initialize(core:Core, platform:Platform):void;
 
     // 
+    updatePresentation():void;
     updateNavigationPanel():void;
     updateNoteListPanel():void;
     updateNoteViewPanel():void;

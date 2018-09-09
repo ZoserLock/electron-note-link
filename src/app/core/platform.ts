@@ -1,3 +1,4 @@
+// Core
 import Core from "core/core";
 
 export default interface Platform

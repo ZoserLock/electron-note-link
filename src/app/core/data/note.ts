@@ -1,6 +1,11 @@
+// Node Modules
 import * as Path from "path";
-import Notebook from "./notebook";
-import Debug from "../../tools/debug";
+
+// Tools
+import Debug from "tools/debug";
+
+// Core
+import Notebook from "core/data/notebook";
 
 export default class Note
 {
@@ -33,7 +38,8 @@ export default class Note
     private _started:boolean;
     private _trash:boolean;
 
-    // Get/Set
+    //#region Get/Set
+
     get id(): string
     {
         return this._id;
@@ -49,29 +55,24 @@ export default class Note
         return this._title;
     }
 
-    set title(value:string)
-    {
-        this._title = value;
-    }
-
     get text(): string
     {
         return this._text;
     }
 
-    set text(value:string)
+    get updated():number
     {
-        this._text = value;
+        return this._updated;
     }
-    
+
+    get created():number
+    {
+        return this._created;
+    }
+
     get trashed(): boolean
     {
         return this._trash;
-    }
-
-    set trashed(value:boolean)
-    {
-        this._trash = value;
     }
 
     get started(): boolean
@@ -104,6 +105,7 @@ export default class Note
     {
         return this._notebook;
     }
+    //#endregion
 
     // Member functions
     constructor()
@@ -207,22 +209,6 @@ export default class Note
         this._updated = Date.now();
     }
 
-    public GetDataObject():any
-    {
-        let dataObject = {
-            id:this._id, 
-            title:this._title, 
-            text:this._text,
-            trashed:this._trash,
-            started:this._started,
-            created:this._created,
-            updated:this._updated,
-            notebook:this._notebook.name
-        };
-
-        return dataObject
-    }
-
     public getSaveObject():any
     {
         let saveObject:any = {
@@ -242,5 +228,37 @@ export default class Note
 
         return saveObject
     }
+
+    public applyUpdateData(updateData:NoteUpdateData):boolean
+    {
+        let dataUpdated = false;
+        if(updateData.title)
+        {
+            this._title = updateData.title;
+            dataUpdated = true;
+        }
+
+        if(updateData.text)
+        {
+            this._text = updateData.text;
+            dataUpdated = true;
+        }
+
+        if(updateData.started)
+        {
+            this._started = updateData.started;
+            dataUpdated = true;
+        }
+        
+        if(updateData.trash)
+        {
+            this._trash = updateData.trash;
+            dataUpdated = true;
+        }
+
+        return dataUpdated;
+    }
+    
+
 
 }

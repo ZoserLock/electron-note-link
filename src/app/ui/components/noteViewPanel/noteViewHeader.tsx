@@ -17,7 +17,7 @@ export default class NoteViewHeader extends UIComponent<any, any>
 
     private OnStartedClick()
     {
-        let data =
+        let data:NoteUpdateData =
         {
             id:this.props.note.id,
             started:!this.props.note.started,

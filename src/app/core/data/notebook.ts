@@ -1,21 +1,26 @@
+// Node Modules
 import * as Path from "path";
 
-import Note from "./note";
-import NotebookStorage from "./storage";
+// Core
+import Note     from "core/data/note";
+import Storage  from "core/data/storage";
 
 export default class Notebook
 {
-    private _storage:NotebookStorage;
+    private _storage:Storage;
     private _id:string;
     private _orderIndex:number;
     private _folderPath:string;
     private _name:string;
     private _notes:Note[];
 
+    private _created:number;
+    private _updated:number;
+
     private _selected:boolean;
     
     //#region Get/Set
-    get storage(): NotebookStorage
+    get storage(): Storage
     {
         return this._storage;
     }
@@ -119,7 +124,7 @@ export default class Notebook
     }
 
 
-    public setParent(storage:NotebookStorage):void
+    public setParent(storage:Storage):void
     {
         this._storage = storage;
     }
@@ -170,6 +175,18 @@ export default class Notebook
         let saveObject = {id:this._id, name:this._name};
 
         return saveObject
+    }
+
+    public applyUpdateData(updateData:NotebookUpdateData):boolean
+    {
+        let dataUpdated = false;
+        if(updateData.name)
+        {
+            this._name = updateData.name;
+            dataUpdated = true;
+        }
+
+        return dataUpdated;
     }
 
 

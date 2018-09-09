@@ -52,12 +52,12 @@ export default class NotebookController
         }
         else
         {
-            Debug.logError("[Notebook Controller] Storage Id does not exist");
+            Debug.logError("[Notebook Controller] Create new Notebook: Parent Storage Id does not exist");
             return false;
         }
     }
 
-    public actionDeleteNotebook(notebookId:string):void // TODO Add callback?
+    public deleteNotebook(notebookId:string):void // TODO Add callback?
     {
         let notebook:Notebook = this._core.dataManager.getNotebook(notebookId);
 
@@ -68,7 +68,7 @@ export default class NotebookController
                 let isSelectedNotebook = (this._core.selectedNotebook == notebook);
                 let hasSelectedNote = (this._core.selectedNote.parent == notebook);
                 
-                this._core.dataManager.deleteNotebook(notebook);
+                this._dataManager.deleteNotebook(notebook);
 
                 this._presentation.updateNavigationPanel();
     
@@ -89,7 +89,27 @@ export default class NotebookController
         }
         else
         {
-            Debug.logError("actionRemoveStorage: Storage does not exist.");
+            Debug.logError("[Notebook Controller] Delete Notebook: Notebook does not exist.");
         }
+    }
+
+    public updateNotebook(notebookUpdate:NotebookUpdateData):boolean
+    {
+        let notebook:Notebook = this._dataManager.getNotebook(notebookUpdate.id);
+
+        if(notebook != null)
+        {
+            if(notebook.applyUpdateData(notebookUpdate))
+            {
+                this._dataManager.saveNotebook(notebook);
+                this._presentation.updateNavigationPanel();
+                return true;
+            }
+        }
+        else
+        {
+            Debug.logError("[Notebook Controller] UpdateNotebook: Notebook does not exist.");
+        }
+        return false;
     }
 }

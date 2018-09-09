@@ -15,8 +15,8 @@ import UIComponent from "../generic/uiComponent";
 
 interface NavigationPanelState
 {
-    storages:NavStorageItemData[];
-    editorStatus:CoreStatusData;
+    storages:ViewStorageItemData[];
+    status:ViewCoreData;
 }
 
 export default class NavigationPanel extends UIComponent<any, NavigationPanelState>
@@ -40,7 +40,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
         this.state =
         {
             storages:[],
-            editorStatus:
+            status:
             {
                 noteListMode:NoteListMode.Notebook,
                 selectedNotebook:"",
@@ -65,12 +65,12 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
     {
         Debug.log("[UI] NavigationPanel Update Requested");
 
-        let storages:NavStorageItemData[] = data.storages;
-        let editorStatus:CoreStatusData      = data.editorStatus;
+        let storages:ViewStorageItemData[] = data.storages;
+        let editorStatus:ViewCoreData      = data.editorStatus;
 
         this.setState({
             storages:storages,
-            editorStatus:data.editorStatus
+            status:data.editorStatus
         });
     }
 
@@ -119,7 +119,9 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
 
     private CreateNotebook(storageId:string)
     {
-        let data = {storage:storageId}
+        let data = {
+            storageId:storageId
+        }
 
         this.sendMainMessage(MessageChannel.createNotebook, data);
     }
@@ -128,7 +130,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
     {
         let data =
         {
-            storage:storageId
+            storageId:storageId
         }
 
         this.sendMainMessage(MessageChannel.removeStorage, data);
@@ -137,13 +139,13 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
 
     public render() 
     {
-        let mode:number = this.state.editorStatus.noteListMode;
+        let mode:number = this.state.status.noteListMode;
 
         let storageList = this.state.storages.map((storage:any) =>
         {
             return (
             <ContextMenuTrigger id={this.sStorageContextMenuId} key = {storage.id} attributes={{id:storage.id}}>
-                <NavigationStorageItem key = {storage.id} storage = {storage} editorStatus = {this.state.editorStatus}/>
+                <NavigationStorageItem key = {storage.id} storage = {storage} status = {this.state.status}/>
             </ContextMenuTrigger>
             )
         });
