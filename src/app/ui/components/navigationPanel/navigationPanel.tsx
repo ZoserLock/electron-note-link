@@ -13,7 +13,13 @@ import NavigationStorageItem from "ui/components/navigationPanel/navigationStora
 import NavigationItem        from "ui/components/navigationPanel/navigationItem"
 import UIComponent from "../generic/uiComponent";
 
-export default class NavigationPanel extends UIComponent<any,any>
+interface NavigationPanelState
+{
+    storages:NavStorageItemData[];
+    editorStatus:CoreStatusData;
+}
+
+export default class NavigationPanel extends UIComponent<any, NavigationPanelState>
 {
     // Context Menu Id
     readonly sStorageContextMenuId:string = "StorageItem";
@@ -36,7 +42,7 @@ export default class NavigationPanel extends UIComponent<any,any>
             storages:[],
             editorStatus:
             {
-                mode:NoteListMode.Notebook,
+                noteListMode:NoteListMode.Notebook,
                 selectedNotebook:"",
                 selectedNote:""
             }
@@ -58,18 +64,14 @@ export default class NavigationPanel extends UIComponent<any,any>
     public updateRequested(data:any):void
     {
         Debug.log("[UI] NavigationPanel Update Requested");
-        Debug.logVar(data);
 
-        let storages = data.storages.map((storage:any) =>
-        {
-            return (
-            <ContextMenuTrigger id={this.sStorageContextMenuId} key = {storage.id} attributes={{id:storage.id}}>
-                <NavigationStorageItem key = {storage.id} storage = {storage} editorStatus = {data.editorStatus}/>
-            </ContextMenuTrigger>
-            )
+        let storages:NavStorageItemData[] = data.storages;
+        let editorStatus:CoreStatusData      = data.editorStatus;
+
+        this.setState({
+            storages:storages,
+            editorStatus:data.editorStatus
         });
-
-        this.setState({storages:storages,editorStatus:data.editorStatus});
     }
 
     //#region Navigation Item Handle Functions.
@@ -135,7 +137,16 @@ export default class NavigationPanel extends UIComponent<any,any>
 
     public render() 
     {
-        let mode:number = this.state.editorStatus.mode;
+        let mode:number = this.state.editorStatus.noteListMode;
+
+        let storageList = this.state.storages.map((storage:any) =>
+        {
+            return (
+            <ContextMenuTrigger id={this.sStorageContextMenuId} key = {storage.id} attributes={{id:storage.id}}>
+                <NavigationStorageItem key = {storage.id} storage = {storage} editorStatus = {this.state.editorStatus}/>
+            </ContextMenuTrigger>
+            )
+        });
 
         return (
             <div className = "ui-sidebar">
@@ -146,7 +157,7 @@ export default class NavigationPanel extends UIComponent<any,any>
                     <div className="ui-sidebar-header-list-separator" />
                 </ul>
                 <div className = "ui-sidebar-list">
-                    {this.state.storages}
+                    {storageList}
                 </div>
                 <ContextMenu id = {this.sStorageContextMenuId}>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuNewNotebook }}>Add Notebook</MenuItem> 

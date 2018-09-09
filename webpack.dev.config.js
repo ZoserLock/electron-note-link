@@ -42,6 +42,11 @@ const rendererConfig =
     [
       new webpack.DefinePlugin({ "global.GENTLY": false }),
       new webpack.SourceMapDevToolPlugin({ filename: 'renderer.js.map' }),
+      new webpack.DefinePlugin({ 
+        'process.env': {
+            "DEBUG":"true"
+        } 
+      })
     ],
     node: 
     {

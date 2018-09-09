@@ -12,7 +12,13 @@ import MessageChannel from "presenter/messageChannel";
 import UIComponent            from "ui/components/generic/uiComponent";
 import NavigationNotebookItem from "ui/components/navigationPanel/navigationNotebookItem";
 
-export default class NavigationStorageItem extends UIComponent<any,any>
+interface NavigationStorageItemProps
+{
+    storage:NavStorageItemData;
+    editorStatus:CoreStatusData;
+}
+
+export default class NavigationStorageItem extends UIComponent<NavigationStorageItemProps, any>
 {
     readonly sNotebookContextMenuId:string = "NotebookItem";
 
@@ -36,11 +42,9 @@ export default class NavigationStorageItem extends UIComponent<any,any>
 
     public render() 
     {
-        Debug.logVar(this.props.storage);
-
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
-            let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.mode == NoteListMode.Notebook;
+            let selected:boolean = this.props.editorStatus.selectedNotebook == notebook.id && this.props.editorStatus.noteListMode == NoteListMode.Notebook;
 
             return  (
             <ContextMenuTrigger id={this.sNotebookContextMenuId} key = {notebook.id} attributes={{id:notebook.id}}>
@@ -49,11 +53,11 @@ export default class NavigationStorageItem extends UIComponent<any,any>
             )
         });
 
-        let notebooks;
+        let notebookList;
 
         if(notebookContent.length > 0)
         {
-            notebooks = 
+            notebookList = 
             (  
                 <ul className="ui-sidebar-storage-item-notebooks">
                     {notebookContent}
@@ -69,7 +73,7 @@ export default class NavigationStorageItem extends UIComponent<any,any>
                         <button className="ui-sidebar-storage-item-button" onClick={()=>this.onAddButtonClick()}></button>
                     </div>
                 </div>
-                {notebooks}    
+                {notebookList}    
                 <ContextMenu id={this.sNotebookContextMenuId}>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Add Note' }}>Add Note</MenuItem> 
                     <MenuItem divider /> 
