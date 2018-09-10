@@ -4,9 +4,9 @@
 import Storage from "core/data/storage";
 import Notebook from "core/data/notebook";
 
-export default class NavigationPanelParser
+export default class StorageDataParser
 {
-    public static createListData(storages:Storage[]):ViewStorageItemData[]
+    public static createStorageListData(storages:Storage[]):ViewStorageItemData[]
     {
         let storagesData:ViewStorageItemData[] = storages.map((storage:Storage) =>
         {

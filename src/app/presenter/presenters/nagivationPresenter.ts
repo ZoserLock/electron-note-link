@@ -2,8 +2,8 @@
 import Presenter             from "presenter/presenter";
 import MessageChannel        from "presenter/messageChannel"
 
-import NavigationPanelParser from "../parsers/navigationPanelParser";
-import CoreStatusParser      from "presenter/parsers/coreStatusParser";
+import StorageDataParser  from "presenter/parsers/storageDataParser";
+import CoreStatusParser   from "presenter/parsers/coreStatusParser";
 
 export default class NavigationPresenter extends Presenter
 {
@@ -27,7 +27,7 @@ export default class NavigationPresenter extends Presenter
 
         let data =
         {
-            storages: NavigationPanelParser.createListData(storages),
+            storages: StorageDataParser.createStorageListData(storages),
             status: CoreStatusParser.createCoreStatus(this._core)
         }
 
