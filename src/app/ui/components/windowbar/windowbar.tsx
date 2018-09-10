@@ -10,11 +10,7 @@ import WindowbarItem from "ui/components/windowbar/windowbarItem";
 
 export default class WindowBar extends UIComponent<any, any> 
 {
-    constructor(props: any)
-    {
-        super(props);
-    }
-
+    //#region event Handling
     private onMinimize():void
     {
         this.sendMainMessage(MessageChannel.windowMinimize);
@@ -29,6 +25,7 @@ export default class WindowBar extends UIComponent<any, any>
     {
         this.sendMainMessage(MessageChannel.windowClose);
     }
+    //#endregion
 
     public render() 
     {

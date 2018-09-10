@@ -12,10 +12,11 @@ import Platform         from "core/platform";
 import Notebook         from "core/data/notebook";
 import Note             from "core/data/note";
 
-import PopupController    from "core/controllers/popupController";
-import StorageController  from "core/controllers/storageController";
-import NotebookController from "core/controllers/notebookController";
-import NoteController     from "core/controllers/noteController";
+import PopupController          from "core/controllers/popupController";
+import StorageController        from "core/controllers/storageController";
+import NotebookController       from "core/controllers/notebookController";
+import NoteController           from "core/controllers/noteController";
+import ApplicationController    from "core/controllers/applicationController";
 
 // Presenter
 import MessageChannel   from "presenter/messageChannel";
@@ -35,6 +36,7 @@ export default class Core
     private _storageController:StorageController;
     private _notebookController:NotebookController;
     private _noteController:NoteController;
+    private _applicationController:ApplicationController;
 
     // NoteController
     // NotebookController;
@@ -95,6 +97,12 @@ export default class Core
     {
         return this._noteController;
     }
+
+    get applicationController():ApplicationController
+    {
+        return this._applicationController;
+    }
+
     //#endregion
 
     // Member Functions
@@ -105,10 +113,11 @@ export default class Core
 
         this._dataManager        = new DataManager();
 
-        this._popupController    = new PopupController(this,this._platform, this._presentation,this._dataManager);
-        this._storageController  = new StorageController(this,this._platform, this._presentation,this._dataManager);
-        this._notebookController = new NotebookController(this,this._platform, this._presentation,this._dataManager);
-        this._noteController     = new NoteController(this,this._platform, this._presentation,this._dataManager);
+        this._popupController       = new PopupController(this,this._platform, this._presentation,this._dataManager);
+        this._storageController     = new StorageController(this,this._platform, this._presentation,this._dataManager);
+        this._notebookController    = new NotebookController(this,this._platform, this._presentation,this._dataManager);
+        this._noteController        = new NoteController(this,this._platform, this._presentation,this._dataManager);
+        this._applicationController = new ApplicationController(this,this._platform, this._presentation,this._dataManager);
     }
 
     public initialize():void
@@ -164,31 +173,13 @@ export default class Core
     public updateSearch(search:string):void
     {
         this._searchPhrase = search;
-        this.updateNoteList();
+        this._presentation.updateNoteListPanel();
     }
 
     public cancelSearch(search:string):void
     {
         this._searchPhrase = "";
         this.setNoteListMode(NoteListMode.Notebook);
-    }
-
-    ////////////////////
-    // Update Actions //
-    ////////////////////
-    public updateNavigationPanel():void
-    {
-        this._presentation.updateNavigationPanel();
-    }
-
-    public updateNoteList():void
-    {
-        this._presentation.updateNoteListPanel();
-    }
-
-    public updateNoteView():void
-    {
-        this._presentation.updateNoteViewPanel();
     }
 
     /////////////
@@ -204,12 +195,12 @@ export default class Core
             this._selectedNotebook.SetAsUnselected();
             this._selectedNotebook = null;
 
-            this.updateNavigationPanel();
-            this.updateNoteList();
+            this._presentation.updateNavigationPanel();
+            this._presentation.updateNoteListPanel();
 
             if(shouldUpdateNoteView)
             {
-                this.updateNoteView();
+                this._presentation.updateNoteViewPanel();
             }
         }
     }
@@ -236,8 +227,8 @@ export default class Core
                 this.selectNote(note.id);
             }
 
-            this.updateNavigationPanel();
-            this.updateNoteList();
+            this._presentation.updateNavigationPanel();
+            this._presentation.updateNoteListPanel();
         }
 
         this.setNoteListMode(NoteListMode.Notebook);
@@ -250,8 +241,8 @@ export default class Core
             Debug.log("setNoteListMode: "+mode);
             this._noteListMode = mode;
 
-            this.updateNavigationPanel();
-            this.updateNoteList();
+            this._presentation.updateNavigationPanel();
+            this._presentation.updateNoteListPanel();
         }
     }
 
@@ -262,8 +253,8 @@ export default class Core
             this._selectedNote.SetAsUnselected();
             this._selectedNote = null;
 
-            this.updateNoteList();
-            this.updateNoteView();
+            this._presentation.updateNoteListPanel();
+            this._presentation.updateNoteViewPanel();
         }
     }
 
@@ -287,8 +278,9 @@ export default class Core
             this._selectedNote = note;
             this._selectedNote.SetAsSelected();
 
-            this.updateNoteView();
-            this.updateNoteList();
+            this._presentation.updateNoteListPanel();
+            this._presentation.updateNoteViewPanel();
+
             return true;
         }
         return false;

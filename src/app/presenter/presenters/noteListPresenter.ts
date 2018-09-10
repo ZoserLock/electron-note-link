@@ -10,8 +10,9 @@ import MessageChannel from "presenter/messageChannel"
 import Note from "core/data/note";
 
 // Presenter
-import Presenter from "presenter/presenter";
-import NoteViewPanelParser from "presenter/parsers/noteViewPanelParser"; 
+import Presenter        from "presenter/presenter";
+import NoteDataParser   from "presenter/parsers/noteDataParser";
+import CoreStatusParser from "presenter/parsers/coreStatusParser";
 
 export default class NoteListPresenter extends Presenter
 {
@@ -21,227 +22,104 @@ export default class NoteListPresenter extends Presenter
         
         this.registerUIListener(MessageChannel.createNote          , (data:any) => this.actionNewNote());
         this.registerUIListener(MessageChannel.selectNote          , (data:any) => this.actionSelectNote(data));
-        this.registerUIListener(MessageChannel.removeNote          , (data:any) => this.actionRemoveNote(data));
+        this.registerUIListener(MessageChannel.deleteNote          , (data:any) => this.actionRemoveNote(data));
 
         this.registerUIListener(MessageChannel.searchUpdated       , (data:any) => this.actionSearchUpdated(data));
-        this.registerUIListener(MessageChannel.searchBegin         , (data:any) => this.beginQuickSearch(data));
     }
 
     public onUpdateRequested():void
     {
-        let mode:number = this._core.noteListMode;
-
-        let selectedNote:string = "";
-
-        if(this._core.selectedNote != null)
-        {
-            selectedNote = this._core.selectedNote.id;
-        }
-      
+        let editorMode:number = this._core.noteListMode;
         let notes:Note[] = [];
+        let validFilter:boolean = true;
+    
+        let options:any = {};
 
-        let searchData:string="";
-
-        let title:string = "";
-
-        // HERE WE CAN IMPLEMENT A GENERIC FILTER.
-        // Like current filter.filter(notes)
-        let noteData:ViewNoteFullItemData[] = [];
-
-        if(mode == NoteListMode.Search)
+        // Get selected note list.
+        if(editorMode == NoteListMode.Search)
         {
-            var options = 
+            notes = this._core.applicationController.getCurrentSearchResult();
+            
+            options = {
+                title:"Search results for: "+this._core.searchPhrase,
+            } 
+        }
+        else if(editorMode == NoteListMode.All)
+        {
+            notes = this._core.applicationController.getAllNotes();
+
+            options = {
+                title:"All Notes"
+            } 
+        }
+        else if(editorMode == NoteListMode.Trash)
+        {
+            notes = this._core.applicationController.getTrashNotes();
+
+            options = {
+                title:"Trash"
+            } 
+        }
+        else if(editorMode == NoteListMode.Started)
+        {
+            notes = this._core.applicationController.getStartedNotes();
+
+            options = {
+                title:"Started Notes"
+            } 
+        }
+        else if(editorMode == NoteListMode.Notebook)
+        {
+            if(this._core.selectedNotebook != null)
             {
-                keys: ['title'],
-                threshold: 0.4,
-                minMatchCharLength: 3,
+                notes = this._core.applicationController.getCurrentNotebookNotes();
+
+                options = {
+                    title:this._core.selectedNotebook.name
+                } 
             }
-
-            // Process special keyworlds and cache them until the special keywords disapear.
-         
-            // Cache this list as something like current Searchable notes.
-            notes = this._core.dataManager.notes.filter((note:Note)=>
+            else
             {
-                return (!note.trashed);
-            });
-
-            noteData = notes.map((note:Note)=>
-            {
-                return NoteViewPanelParser.createNoteData(note);
-            });
-
-            var fuse = new Fuse(noteData, options);
-
-            noteData = fuse.search(this._core.searchPhrase);
-            title = "Search results for: "+this._core.searchPhrase;
-
-            // Avoid send if the data have not changed.
-        }
-        else if(mode == NoteListMode.All)
-        {
-            notes = this._core.dataManager.notes.filter((note:Note)=>
-            {
-                return (!note.trashed);
-            });
-            noteData = notes.map((note:Note)=>
-            {
-                return NoteViewPanelParser.createNoteData(note);
-            });
-            title = "All Notes"
-        }
-        else if(mode == NoteListMode.Trash)
-        {
-            notes = this._core.dataManager.notes.filter((note:Note)=>
-            {
-                return note.trashed;
-            });
-            noteData = notes.map((note:Note)=>
-            {
-                return NoteViewPanelParser.createNoteData(note);
-            });
-            title = "Trash";
-        }
-        else if(mode == NoteListMode.Notebook)
-        {
-            if(this._core.selectedNotebook == null || this._core.dataManager.notes.length == 0)
-            {
-                let data =
-                {
-                    mode:NoteListMode.Disabled,
-                }
-        
-                this._platform.sendUIMessage(MessageChannel.updateNoteListPanel, data);
-                return;
+                validFilter = false;
             }
-
-            notes = this._core.selectedNotebook.notes.filter((note:Note)=>
-            {
-                return (!note.trashed);
-            });
-            noteData = notes.map((note:Note)=>
-            {
-                return NoteViewPanelParser.createNoteData(note);
-            });
-            title = this._core.selectedNotebook.name;
         }
-        else if(mode == NoteListMode.Started)
-        {
-            notes = this._core.dataManager.notes.filter((note:Note)=>
-            {
-                return note.started;
-            });
-            noteData = notes.map((note:Note)=>
-            {
-                return NoteViewPanelParser.createNoteData(note);
-            });
-            title = "Started Notes";
-        }
-        
 
-        // Send filtered data
+        let noteData:ViewNoteItemData[] = NoteDataParser.createNoteListData(notes);
 
         let forceUpdate:boolean = true;
 
         let data =
         {
-            title:title,
-            notes:noteData,
-            mode:mode,
-            selectedNote:selectedNote,
-            search:searchData,
+            options: options,
+            notes: noteData,
+            status: CoreStatusParser.createCoreStatus(this._core),
+            validFilter: validFilter,
             forceUpdate:(forceUpdate)?Math.random():0
         }
-
-        /*
-        let data =
-        {
-            listData:
-            notes:
-            status:
-            forceUpdate:(forceUpdate)?Math.random():0
-        }
-        */
-
-
-
+        
         this._platform.sendUIMessage(MessageChannel.updateNoteListPanel, data);
-    }
-
-    private beginQuickSearch(data:any):void
-    {
-        this._platform.sendUIMessage(MessageChannel.searchBegin);
     }
 
     private actionSearchUpdated(data:any):void
     {
-        let mode:number = this._core.noteListMode;
-
-        if(mode == NoteListMode.Search)
-        {
-            if(data == "")
-            {
-                this._core.cancelSearch(data);
-            }
-            else
-            {
-                this._core.updateSearch(data);
-            }
-        }
-        else
-        {
-            if(data != "")
-            {
-                this._core.beginSearch(data);
-            }
-        }
+        // TODO Sanitize data
+        this._core.applicationController.updateSearch(data);
     }
 
     private actionNewNote():void
     {
-        let selectedNotebook = this._core.selectedNotebook;
-
-        if(selectedNotebook != null)
-        {
-            let note:Note = Note.create(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
-            
-            if(this._core.dataManager.addNote(note))
-            {
-                this._core.dataManager.saveNote(note);
-                selectedNotebook.addNote(note);
-                this._core.selectNote(note.id);
-                this.update();
-            }
-        }
+        this._core.noteController.createNewNote();
     }
 
     private actionRemoveNote(data:any):void
     {
-        let note:Note = this._core.dataManager.getNote(data.noteId);
-
-        if(note != null)
-        {
-            if(this._core.selectedNote == note)
-            {
-                this._core.unselectNotebook();
-            }
-
-            if(note.trashed)
-            {
-                this._core.dataManager.deleteNote(note);
-            }
-            else
-            {
-                note.setTrashed(true);
-                this._core.dataManager.saveNote(note);
-            }
-            
-            this._core.updateNoteList();
-            this._core.updateNoteView();
-        }
+        // TODO Sanitize data
+        this._core.noteController.deleteNote(data.noteId);
     }
 
     private actionSelectNote(data:any):void
     {
+         // TODO Sanitize data
         this._core.selectNote(data.noteId);
     }
 }

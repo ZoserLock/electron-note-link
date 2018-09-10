@@ -9,7 +9,7 @@ import ApplicationPresenter from "presenter/presenters/applicationPresenter";
 import Platform from "core/platform";
 import Core     from "core/core";
 import NoteViewPresenter from "./presenters/noteViewPresenter";
-import NoteListPresenter from "./presenters/NoteListPresenter";
+import NoteListPresenter from "./presenters/noteListPresenter";
 import PopupPresenter from "./presenters/popupPresenter";
 
 export default class MainPresentation implements Presentation

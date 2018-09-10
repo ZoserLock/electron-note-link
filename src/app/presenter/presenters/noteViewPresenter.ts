@@ -7,7 +7,8 @@ import Note         from "core/data/note";
 // Presenter
 import Presenter            from "presenter/presenter";
 import MessageChannel       from "presenter/messageChannel"
-import NoteViewPanelParser  from "presenter/parsers/noteViewPanelParser";
+
+import NoteDataParser       from "presenter/parsers/noteDataParser";
 
 export default class NoteViewPresenter extends Presenter
 {
@@ -32,7 +33,7 @@ export default class NoteViewPresenter extends Presenter
 
         if(selectedNote != null)
         {
-            noteData = NoteViewPanelParser.createNoteData(selectedNote);
+            noteData = NoteDataParser.createNoteFullData(selectedNote);
         }
         
         this.sendUIMessage(MessageChannel.updateNoteViewPanel,{note:noteData});

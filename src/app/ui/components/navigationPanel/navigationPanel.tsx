@@ -37,11 +37,9 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
     {
         super(props);
 
-        this.state =
-        {
+        this.state ={
             storages:[],
-            status:
-            {
+            status:{
                 noteListMode:NoteListMode.Notebook,
                 selectedNotebook:"",
                 selectedNote:"",

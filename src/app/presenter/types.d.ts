@@ -47,4 +47,5 @@ declare interface ViewNoteItemData
     readonly title:string, 
     readonly created:number,
     readonly updated:number,
+    readonly notebookName:string,
 }

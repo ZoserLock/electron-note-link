@@ -9,7 +9,17 @@ import UIComponent     from "ui/components/generic/uiComponent";
 import NoteListHeader  from "ui/components/noteListPanel/noteListHeader"; 
 import NoteListContent from "ui/components/noteListPanel/noteListContent"; 
 
-export default class NoteListPanel extends UIComponent<any, any> 
+
+interface NoteListPanelState
+{
+    options:any;
+    notes:ViewNoteItemData[];
+    status:ViewCoreData;
+    validFilter:boolean;
+    forceUpdate:boolean;
+}
+
+export default class NoteListPanel extends UIComponent<any, NoteListPanelState> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
 
@@ -17,17 +27,20 @@ export default class NoteListPanel extends UIComponent<any, any>
     {
         super(props);
 
-        this.state =
-        {
-            title:"",
+        this.state ={
+            options:{},
             notes:[],
-            mode: NoteListMode.Notebook,
-            selectedNote:"",
+            status: {
+                noteListMode:NoteListMode.Notebook,
+                selectedNotebook:"",
+                selectedNote:"",
+                searchPhrase:""
+            },
+            validFilter:false,
             forceUpdate:true,
         }
 
         this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
-
     }
     
     public componentDidMount() 
@@ -40,26 +53,21 @@ export default class NoteListPanel extends UIComponent<any, any>
         this.unregisterMainListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
     }
 
-    public updateSearchRequested(data:any):void
-    {
-        this.setState({search:data.search});
-    }
-
     public updateRequested(data:any):void
     {
         // Change force update with ref ref={(ref) => this.list = ref}
         this.setState({
-            title:data.title,
+            options:data.options,
             notes:data.notes,
-            mode:data.mode,
-            selectedNote:data.selectedNote, 
+            status:data.status,
+            validFilter: data.validFilter,
             forceUpdate:data.forceUpdate
         });
     }
 
     public render() 
     {
-        if(this.state.mode == NoteListMode.Disabled)
+        if(!this.state.validFilter)
         {
             return (
                 <div className="ui-note-list">
@@ -72,10 +80,15 @@ export default class NoteListPanel extends UIComponent<any, any>
 
         return (
             <div className="ui-note-list">
-                <NoteListHeader title = {this.state.title} mode = {this.state.mode}/>
-                <NoteListContent mode = {this.state.mode} notes = {this.state.notes} selectedNote = {this.state.selectedNote} search={this.state.search} forceUpdate = {this.state.forceUpdate}/>
+                <NoteListHeader title = {this.state.options.title} mode = {this.state.status.noteListMode}/>
+                <NoteListContent 
+                    mode = {this.state.status.noteListMode} 
+                    notes = {this.state.notes} 
+                    selectedNote = {this.state.status.selectedNote} 
+                    search = {this.state.status.searchPhrase} 
+                    forceUpdate = {this.state.forceUpdate}
+                />
             </div>
         );
     }
-
 }

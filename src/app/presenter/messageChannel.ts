@@ -10,23 +10,21 @@ export default class MessageChannel
     public static readonly searchUpdated:string     = "action:SearchUpdated";
     public static readonly searchCancelled:string   = "action:SearchCancelled";
 
-    public static readonly createStorage:string     = "action:NewNotebookStorage";
+    public static readonly createStorage:string     = "action:NewStorage";
     public static readonly createNotebook:string    = "action:NewNotebook";
     public static readonly createNote:string        = "action:NewNote";
     
-    public static readonly removeStorage:string     = "action:RemoveNotebookStorage";
-    public static readonly deleteStorage:string     = "action:deleteNotebookStorage";
-    public static readonly removeNotebook:string    = "action:RemoveNotebook";
-    public static readonly removeNote:string        = "action:RemoveNote";
+    public static readonly removeStorage:string     = "action:RemoveStorage";
+    public static readonly deleteStorage:string     = "action:DeleteStorage";
+    public static readonly deleteNotebook:string    = "action:DeleteNotebook";
+    public static readonly deleteNote:string        = "action:DeleteNote";
 
 
     public static readonly selectNotebook:string    = "action:SelectNotebook";
     public static readonly selectNote:string        = "action:SelectNote";
     public static readonly setNoteListMode:string   = "action:SetNoteListMode";
 
-
     public static readonly updateNote:string        = "action:UpdateNote";
-
 
     // Popup Related
     public static readonly showPopup:string       = "action:popup:ShowPopup";

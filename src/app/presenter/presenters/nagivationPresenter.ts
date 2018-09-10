@@ -14,7 +14,7 @@ export default class NavigationPresenter extends Presenter
         this.registerUIListener(MessageChannel.removeStorage      ,(data:any) => this.actionRemoveStorage(data));
         this.registerUIListener(MessageChannel.deleteStorage      ,(data:any) => this.actionDeleteStorage(data));
 
-        this.registerUIListener(MessageChannel.removeNotebook     ,(data:any) => this.actionRemoveNotebook(data));
+        this.registerUIListener(MessageChannel.deleteNotebook     ,(data:any) => this.actionRemoveNotebook(data));
         this.registerUIListener(MessageChannel.createNotebook     ,(data:any) => this.actionNewNotebook(data));
         this.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
 

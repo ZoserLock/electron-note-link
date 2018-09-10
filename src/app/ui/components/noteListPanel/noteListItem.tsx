@@ -33,7 +33,7 @@ export default class NoteListItem extends UIComponent<any, any>
     {
         let data ={noteId:this.props.note.id}
 
-        this.sendMainMessage(MessageChannel.removeNote,data);
+        this.sendMainMessage(MessageChannel.deleteNote,data);
     }
 
     public editFinished(text:string):void
