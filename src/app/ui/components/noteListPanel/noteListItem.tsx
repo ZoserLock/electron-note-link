@@ -64,9 +64,10 @@ export default class NoteListItem extends UIComponent<any, any>
             <li className="ui-note-list-item" onClick={()=>this.onItemClick()} >
                 <div className = {"ui-note-list-item-content" + addClass}>
                     <div className = "ui-note-list-item-header" >
-                        <span className ="ui-note-list-item-badge">
-                        </span><span>{this.props.note.notebookName}</span>
-                        <span className="ui-inline-spacer"/><span>{date}</span>
+                        <span className ="badge"></span>
+                        <span className ="text">{this.props.note.notebookName}</span>
+                        <span className ="spacer"/>
+                        <span className ="date"> {date}</span>
                     </div>
                     <div className="ui-note-list-item-title-container" >
                         <EditableText 

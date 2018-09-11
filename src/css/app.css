@@ -652,13 +652,6 @@ body
     background: var(--note-list-item-color-hover);
 }
 
-.ui-note-list-item-badge
-{
-    width: 10px;
-    height: 10px;
-    margin: 0px 5px 0px 0px;
-    background:var(--accent-bg-orange);
-}
 
 
 .ui-note-list-item-header
@@ -669,6 +662,34 @@ body
     font-weight: 400; 
     height: 20px;
     color: var( --note-list-item-header-color);
+}
+
+.ui-note-list-item-header .badge
+{
+    min-width: 10px;
+    width: 10px;
+    height: 10px;
+    margin: 0px 5px 0px 0px;
+    background:var(--accent-bg-orange);
+}
+
+.ui-note-list-item-header .text
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ui-note-list-item-header .date
+{
+   flex-shrink: 0;
+}
+
+.ui-note-list-item-header .spacer
+{
+   flex-grow: 1;
+   margin: auto;
+   min-width: 20px;
 }
 
 .ui-note-list-item-title-container
