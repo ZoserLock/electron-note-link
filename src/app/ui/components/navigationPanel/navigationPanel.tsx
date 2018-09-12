@@ -103,19 +103,27 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
 
         switch(data.action)
         {
-            case "AddNotebook":
+            case this.sContextMenuNewNotebook:
                 this.CreateNotebook(storageId);
             break;
-            case "Remove":
+            case this.sContextMenuRemove:
                 this.RemoveStorage(storageId);
             break;
+            case this.sContextMenuDelete:
+                this.DeleteStorage(storageId);
+            break;
+            case this.sContextMenuRename:
+                this.RenameStorage(storageId);
+            break;
+            
         }
     }
 
 
     private CreateNotebook(storageId:string)
     {
-        let data = {
+        let data = 
+        {
             storageId:storageId
         }
 
@@ -131,6 +139,27 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
 
         this.sendMainMessage(MessageChannel.removeStorage, data);
     }
+
+    private DeleteStorage(storageId:string)
+    {
+        let data =
+        {
+            storageId:storageId
+        }
+
+        this.sendMainMessage(MessageChannel.deleteStorage, data);
+    }
+
+    private RenameStorage(storageId:string)
+    {
+        let data =
+        {
+            storageId:storageId
+        }
+
+        this.sendMainMessage(MessageChannel.removeStorage, data);
+    }
+
     //#endregion
 
     public render() 

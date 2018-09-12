@@ -12,7 +12,4 @@ export default interface Presentation
     updateNavigationPanel():void;
     updateNoteListPanel():void;
     updateNoteViewPanel():void;
-
-    // Popups
-    // showConfirmationPopup():void;
 }

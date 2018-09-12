@@ -28,7 +28,7 @@ export default class FileTools
     }
 
 
-    public static deleteJsonFileAtPath(path:string):boolean
+    public static deleteJsonFile(path:string):boolean
     {
         try 
         {
@@ -45,6 +45,28 @@ export default class FileTools
         catch(e)
         {
             Debug.logError("Delete File Failed: "+e);
+        }
+        
+        return false;
+    }
+
+    public static deleteFolder(path:string):boolean
+    {
+        try 
+        {
+            if(fs.lstatSync(path).isDirectory())
+            {
+                fs.rmdirSync(path);
+                return true;
+            }
+            else
+            {
+                Debug.logError("Trying to delete the wrong directory");
+            }
+        }
+        catch(e)
+        {
+            Debug.logError("Delete Folder Failed: "+e);
         }
         
         return false;

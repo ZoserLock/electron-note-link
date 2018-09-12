@@ -450,19 +450,29 @@ export default class DataManager
         if(this._storages[storage.id] != undefined)
         {
             let path = storage.getFullPath();
-            if(!FileTools.deleteJsonFileAtPath(path))
+            if(!FileTools.deleteJsonFile(path))
             {
+                Debug.logError("[Data Manager] deleteStorage: Unable to delete Storage Json File. Aborting.");
                 return false;
             }
 
             this.unregisterStorage(storage);
+            let notebooks = storage.notebooks.slice();
+            Debug.log("[Data Manager] deleteStorage: Deleting  "+storage.notebooks.length+" Notebooks");
 
-            for(let a = 0;a < storage.notebooks.length ;++a)
+            for(let a = 0;a < notebooks.length ;++a)
             {
-                this.deleteNotebook(storage.notebooks[a]);
+                Debug.log("[Data Manager] deleteStorage: Deleting Related Notebook: "+notebooks[a].name);
+                this.deleteNotebook(notebooks[a]);
             }
+
+            FileTools.deleteFolder(storage.getNotebooksFolderPath());
             
             return true;
+        }
+        else
+        {
+            Debug.logError("[Data Manager] deleteStorage: Trying to delete an unexistent storage.");
         }
         return false;
     }
@@ -574,20 +584,32 @@ export default class DataManager
         {
             let path = notebook.getFullPath();
             
-            if(!FileTools.deleteJsonFileAtPath(path))
+            if(!FileTools.deleteJsonFile(path))
             {
+                Debug.logError("[Data Manager] deleteNotebook: Unable to delete Notebook Json File. Aborting.");
                 return false;
             }
 
-            for(let a = 0;a < notebook.notes.length ;++a)
+            let notes = notebook.notes.slice();
+            Debug.log("[Data Manager] deleteNotebook: Deleting  "+notebook.notes.length+" Notes");
+
+            for(let a = 0; a < notes.length ;++a)
             {
-                this.deleteNote(notebook.notes[a]);
+                Debug.log("[Data Manager] deleteNotebook: Deleting Related Note: "+notes[a].title);
+                this.deleteNote(notes[a]);
             }
 
             notebook.removeFromParent();
+
+            FileTools.deleteFolder(notebook.getNotesFolderPath());
+
             this.unregisterNotebook(notebook);
             
             return true;
+        }
+        else
+        {
+            Debug.logError("[Data Manager] deleteNotebook: Trying to delete an unexistent notebook.");
         }
         return false;
     }
@@ -655,7 +677,7 @@ export default class DataManager
         {
             let path = note.getFullPath();
             
-            if(!FileTools.deleteJsonFileAtPath(path))
+            if(!FileTools.deleteJsonFile(path))
             {
                 return false;
             }
