@@ -71,7 +71,8 @@ export default class NoteListItem extends UIComponent<any, any>
                     </div>
                     <div className="ui-note-list-item-title-container" >
                         <EditableText 
-                            normalClass = {"ui-note-list-item-title"+ addClass}
+                            allowDoubleClick = {true}
+                            isSelected ={this.props.isSelected}
                             editContClass = "ui-note-list-item-title-edit-container"
                             editClass ="ui-note-list-item-title-edit"
                             value = {value} 

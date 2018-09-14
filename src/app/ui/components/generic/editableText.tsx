@@ -1,6 +1,7 @@
 // Node Modules
 import * as React from "react";
 import applyOnClickOutside from 'react-onclickoutside'
+import Debug from "tools/debug";
 
 class EditableText extends React.Component<any, any> 
 {
@@ -15,17 +16,26 @@ class EditableText extends React.Component<any, any>
         }
     }
     
-    public edit()
+    public edit():void
     {
         this.setState({editingText: this.props.value, editing: true})
     }
 
-    private editTextChanged(event:any)
+    private handleDoubleClick():void
+    {
+        if(this.props.allowDoubleClick)
+        {
+            this.edit();
+        }
+    }
+
+    //#region Event Handling Functions
+    private handleEditChanged(event:any)
     {
         this.setState({editingText: event.target.value})
     }
 
-    private editFinished():void
+    private handleEditFinished():void
     {
         this.setState({ editing: false });
         this.props.onEditFinished(this.state.editingText)
@@ -35,41 +45,45 @@ class EditableText extends React.Component<any, any>
     {
         if(this.state.editing)   
         {
-            this.editFinished();
+            this.handleEditFinished();
         }
     }
 
-    public editKeyPress(event:any):void 
+    public handleKeyPress(event:any):void 
     {
         if (event.key === "Enter") 
         {
-            this.editFinished();
+            this.handleEditFinished();
         }
     }
+    //#endregion
 
     public render() 
     {
+/*        editContClass = "ui-note-list-item-title-edit-container"
+                            editClass ="ui-note-list-item-title-edit"*/
+
         if(this.state.editing)   
         {
             return (
-                <div className ={this.props.editContClass}>
+                <div className ={"editor"}>
                     <input 
-                        className ={this.props.editClass}
                         autoFocus
                         defaultValue={this.props.value}  
-                        onChange={(event:any)=>this.editTextChanged(event)}
+                        onChange={(event:any)=>this.handleEditChanged(event)}
                         onFocus={(event:any)=>event.target.select()}
-                        onKeyPress={(event:any)=>this.editKeyPress(event)}
+                        onKeyPress={(event:any)=>this.handleKeyPress(event)}
                     />
                 </div>
             );
         }   
         else
         {
+            let normalClass:string = "normal " + ((this.props.isSelected)?"selected":"");
             return (
-                <div className ={this.props.normalClass} onClick={this.props.onClick} onDoubleClick={()=>this.edit()}>
+                <div className ={normalClass} onClick={this.props.onClick} onDoubleClick={()=>this.handleDoubleClick()}>
                     {this.props.value}
-                 </div>
+                </div>
             );
         }                          
     }

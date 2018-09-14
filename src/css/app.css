@@ -700,7 +700,10 @@ body
     flex-grow: 1;
 }
 
-.ui-note-list-item-title
+
+
+
+.ui-note-list-item-title-container .normal
 {
     font-size: 15px;
     font-weight: 400; 
@@ -710,22 +713,21 @@ body
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-
 }
 
-.ui-note-list-item-title.selected
+.ui-note-list-item-title-container .normal.selected
 {
     color: var( --note-list-item-title-color-selected);
 }
 
-.ui-note-list-item-title-edit-container
+.ui-note-list-item-title-container .editor
 {
     display: flex;
     height: 20px;
     flex-grow: 1;
 }
 
-.ui-note-list-item-title-edit
+.ui-note-list-item-title-container .editor input
 {
     font-size: 15px;
     font-weight: 400; 
@@ -736,12 +738,12 @@ body
     color: var( --note-list-item-title-color);
 }
 
-.ui-note-list-item-title-edit::selection
+.ui-note-list-item-title-container .editor input::selection
 {
     background: #AAA;
 }
 
-.ui-note-list-item-title-edit:focus
+.ui-note-list-item-title-container .editor input:focus
 {
     outline: none;
 }

@@ -96,35 +96,43 @@ export default class StorageController
         return false;
     }
 
-    public removeStorage(storageId:string):boolean
+    public removeStorage(storageId:string):void
     {
-        let storage:Storage = this._core.dataManager.getStorage(storageId);
-
-        if(storage != null)
+        this._core.popupController.showConfirmationPanel("Remove selected Storage?","Storage Name",
+        "Are you sure want to remove the storage? \n All data within storage folder will be still be available in the file explorer",
+        "Remove","Cancel",
+        ()=>
         {
-            // TODO Move this logic to core. something like this._core.checkSelectedNotebook();
-            if(this._core.selectedNotebook != null && this._core.selectedNotebook.storage == storage)
-            {
-                Debug.log("Unselect notebook");
-                this._core.unselectNotebook();
-            }
+                let storage:Storage = this._core.dataManager.getStorage(storageId);
 
-            if(this._core.selectedNote != null && this._core.selectedNote.parent.storage == storage)
-            {
-                Debug.log("Unselect note");
-                this._core.unselectNote();
-            }
+                if(storage != null)
+                {
+                    // TODO Move this logic to core. something like this._core.checkSelectedNotebook();
+                    if(this._core.selectedNotebook != null && this._core.selectedNotebook.storage == storage)
+                    {
+                        Debug.log("Unselect notebook");
+                        this._core.unselectNotebook();
+                    }
 
-            this._dataManager.removeStorage(storage);
+                    if(this._core.selectedNote != null && this._core.selectedNote.parent.storage == storage)
+                    {
+                        Debug.log("Unselect note");
+                        this._core.unselectNote();
+                    }
 
-            this._presentation.updatePresentation();
-            return true;
-        }
-        else
+                    this._dataManager.removeStorage(storage);
+
+                    this._presentation.updatePresentation();
+                }
+                else
+                {
+                    Debug.logError("[Storage Controller] removeStorage: Storage does not exist.");
+                }
+        },
+        ()=>
         {
-            Debug.logError("[Storage Controller] removeStorage: Storage does not exist.");
-            return false;
-        }
+            Debug.logError("[Storage Controller] removeStorage: Cancelled By User");
+        });
     }
 
     public deleteStorage(storageId:string):void
