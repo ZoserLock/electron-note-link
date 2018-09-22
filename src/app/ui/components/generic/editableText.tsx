@@ -60,8 +60,6 @@ class EditableText extends React.Component<any, any>
 
     public render() 
     {
-/*        editContClass = "ui-note-list-item-title-edit-container"
-                            editClass ="ui-note-list-item-title-edit"*/
 
         if(this.state.editing)   
         {

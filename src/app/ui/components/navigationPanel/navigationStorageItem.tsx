@@ -10,6 +10,7 @@ import MessageChannel from "presenter/messageChannel";
 
 // UI
 import UIComponent            from "ui/components/generic/uiComponent";
+import EditableText           from "ui/components/generic/editableText";
 import NavigationNotebookItem from "ui/components/navigationPanel/navigationNotebookItem";
 
 interface NavigationStorageItemProps
@@ -39,6 +40,16 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
         Debug.log(":: "+target.getAttribute("id"));
     }
 
+    private handleStorageNameEdit(newText:string):void
+    {
+        let data:StorageUpdateData =
+        {
+            id:this.props.storage.id,
+            name:newText
+        }
+
+        this.sendMainMessage(MessageChannel.updateStorage, data);
+    }
 
     public render() 
     {
@@ -68,7 +79,14 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
         return (
             <div>
                 <div className="ui-sidebar-storage-item"> 
-                    <span>{this.props.storage.name}</span> 
+                    <div className="ui-sidebar-storage-item-container"> 
+                        <EditableText 
+                            allowDoubleClick = {true}
+                            isSelected ={true}
+                            value = {this.props.storage.name} 
+                            onEditFinished={(text:string)=>this.handleStorageNameEdit(text)}
+                        />
+                    </div>
                     <div className="ui-sidebar-storage-item-button-container">
                         <button className="ui-sidebar-storage-item-button" onClick={()=>this.onAddButtonClick()}></button>
                     </div>

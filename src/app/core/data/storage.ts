@@ -123,4 +123,17 @@ export default class Storage
 
         return saveObject
     }
+
+    public applyUpdateData(updateData:StorageUpdateData):boolean
+    {
+        let dataUpdated = false;
+        if(updateData.name)
+        {
+            this._name = updateData.name;
+            dataUpdated = true;
+        }
+        
+        return dataUpdated;
+    }
+
 }

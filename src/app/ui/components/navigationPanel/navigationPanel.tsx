@@ -26,7 +26,6 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
 
     // Context menu options
     private readonly sContextMenuNewNotebook:string = "AddNotebook"; 
-    private readonly sContextMenuRename:string      = "Rename"; 
     private readonly sContextMenuRemove:string      = "Remove"; 
     private readonly sContextMenuDelete:string      = "Delete"; 
     
@@ -111,11 +110,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
             break;
             case this.sContextMenuDelete:
                 this.DeleteStorage(storageId);
-            break;
-            case this.sContextMenuRename:
-                this.RenameStorage(storageId);
-            break;
-            
+            break; 
         }
     }
 
@@ -150,16 +145,6 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
         this.sendMainMessage(MessageChannel.deleteStorage, data);
     }
 
-    private RenameStorage(storageId:string)
-    {
-        let data =
-        {
-            storageId:storageId
-        }
-
-        this.sendMainMessage(MessageChannel.removeStorage, data);
-    }
-
     //#endregion
 
     public render() 
@@ -189,7 +174,6 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
                 <ContextMenu id = {this.sStorageContextMenuId}>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuNewNotebook }}>Add Notebook</MenuItem> 
                     <MenuItem divider /> 
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Storage</MenuItem>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRemove }}>Remove Storage</MenuItem>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuDelete }}>Delete Storage</MenuItem> 
                 </ContextMenu>

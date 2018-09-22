@@ -38,7 +38,7 @@ export default class NoteController
 
         if(selectedNotebook != null)
         {
-            let note:Note = Note.create(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
+            let note:Note = Note.createNew(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
             
             if(this._dataManager.addNote(note))
             {

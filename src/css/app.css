@@ -52,8 +52,6 @@
     --note-list-item-color-hover: #3A3D45;
     --note-list-item-color-selected: #3A3D45;
     --note-list-item-header-color: #848c94;
-    --note-list-item-title-color: #c0c4c8;
-    --note-list-item-title-color-selected: #fff;
 
     /* Note View*/
     --note-view-header-bg: #24262D;
@@ -395,6 +393,7 @@ body
 .ui-sidebar-storage-item
 {
     display: flex;
+    width: 180px;
     background-color: var(--sidebar-storage-item-bg);
     padding: 0px;
     height: 35px;
@@ -405,14 +404,12 @@ body
     cursor:default;
 }
 
-.ui-sidebar-storage-item span
-{
-    margin-right: auto;
-}
 
 .ui-sidebar-storage-item-button-container
 {
     background: none;
+    min-width: 35px;
+    flex-grow: 0px;
 }
 
 .ui-sidebar-storage-item-button-container:hover
@@ -440,6 +437,59 @@ body
 }
 
 .ui-sidebar-storage-item-button:focus
+{
+    outline: none;
+}
+
+/*Edit Text Button*/
+
+.ui-sidebar-storage-item-container
+{
+    margin-right: auto;
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.ui-sidebar-storage-item-container .normal
+{
+    font-size: 15px;
+    font-weight: 400; 
+    color: var(--font-normal-color);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ui-sidebar-storage-item-container .normal.selected
+{
+    color: var(--font-brighter-color);
+}
+
+.ui-sidebar-storage-item-container .editor
+{
+    display: flex;
+    height: 20px;
+    padding: 6px 0px;
+}
+
+.ui-sidebar-storage-item-container .editor input
+{
+    font-size: 15px;
+    font-weight: 400; 
+    margin:auto;
+    width: 100%;
+    border:solid 1px #c0c4c8;
+    background:none;
+    color: var( --font-normal-color);
+}
+
+.ui-sidebar-storage-item-container .editor input::selection
+{
+    background: #AAA;
+}
+
+.ui-sidebar-storage-item-container .editor input:focus
 {
     outline: none;
 }
@@ -692,6 +742,8 @@ body
    min-width: 20px;
 }
 
+/********************************/
+/* Note List item Editable Text */
 .ui-note-list-item-title-container
 {
     padding: 6px 10px;
@@ -700,15 +752,12 @@ body
     flex-grow: 1;
 }
 
-
-
-
 .ui-note-list-item-title-container .normal
 {
     font-size: 15px;
     font-weight: 400; 
 
-    color: var( --note-list-item-title-color);
+    color: var(--font-normal-color);
 
     white-space: nowrap;
     overflow: hidden;
@@ -717,7 +766,7 @@ body
 
 .ui-note-list-item-title-container .normal.selected
 {
-    color: var( --note-list-item-title-color-selected);
+    color: var(--font-brighter-color);
 }
 
 .ui-note-list-item-title-container .editor
@@ -735,7 +784,7 @@ body
     margin:auto;
     border:solid 1px #c0c4c8;
     background:none;
-    color: var( --note-list-item-title-color);
+    color: var( --font-normal-color);
 }
 
 .ui-note-list-item-title-container .editor input::selection

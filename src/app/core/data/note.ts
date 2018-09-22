@@ -32,7 +32,6 @@ export default class Note
 
     private _selected:boolean;
 
-    private _dirty:boolean;
     private _loaded:boolean;
 
     private _started:boolean;
@@ -96,11 +95,6 @@ export default class Note
         return this._loaded;
     }
 
-    get isDirty(): boolean
-    {
-        return this._dirty;
-    }
-
     get parent():Notebook
     {
         return this._notebook;
@@ -116,10 +110,9 @@ export default class Note
 
         this._selected = false;
         this._loaded = false;
-        this._dirty  = false;
     }
 
-    public static create(id:string, path:string):Note
+    public static createNew(id:string, path:string):Note
     {
         let note:Note = new Note();
         note._created = Date.now();
@@ -139,7 +132,7 @@ export default class Note
         return note;
     }
 
-    public static createUnloadedNote(path:string):Note
+    public static createFromIndex(path:string):Note
     {
         let note:Note = new Note();
         note._created = -1;
@@ -177,11 +170,6 @@ export default class Note
             this._notebook.removeNote(this); 
             this._notebook = null;
         }
-    }
-
-    public setDirty(dirty:boolean):void
-    {
-        this._dirty = dirty;
     }
 
     public setTrashed(trashed:boolean):void

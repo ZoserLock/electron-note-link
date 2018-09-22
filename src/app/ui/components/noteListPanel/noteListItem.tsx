@@ -73,8 +73,6 @@ export default class NoteListItem extends UIComponent<any, any>
                         <EditableText 
                             allowDoubleClick = {true}
                             isSelected ={this.props.isSelected}
-                            editContClass = "ui-note-list-item-title-edit-container"
-                            editClass ="ui-note-list-item-title-edit"
                             value = {value} 
                             onEditFinished={(text:string)=>this.editFinished(text)}
                         />

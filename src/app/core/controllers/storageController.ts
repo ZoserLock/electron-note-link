@@ -96,6 +96,28 @@ export default class StorageController
         return false;
     }
 
+    public updateStorage(storageUpdate:StorageUpdateData):boolean
+    {
+        let storage:Storage = this._dataManager.getStorage(storageUpdate.id);
+
+        if(storage != null)
+        {
+            if(storage.applyUpdateData(storageUpdate))
+            {
+                this._dataManager.saveStorage(storage);
+
+                this._presentation.updateNavigationPanel();
+    
+                return true;
+            }
+        }
+        else
+        {
+            Debug.logError("[Note Controller] Update Note: Note does not exist.");
+        }
+        return false;
+    }
+
     public removeStorage(storageId:string):void
     {
         this._core.popupController.showConfirmationPanel("Remove selected Storage?","Storage Name",
