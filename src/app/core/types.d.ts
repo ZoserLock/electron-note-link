@@ -13,6 +13,14 @@ type Action1<T>     = (param:T) => void| null;
 type Action2<T,U>   = (param1:T,param2:U) => void| null;
 type Action3<T,U,V> = (param1:T,param2:U,param3:V) => void| null;
 
+
+// Interfaces used in applicationData/Index
+declare interface ApplicationData
+{
+    readonly version:number;
+    readonly storagePaths:string[];
+}
+
 // Interfaces used to mnodify data of an object 
 declare interface NotebookUpdateData
 {

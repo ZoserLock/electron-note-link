@@ -156,6 +156,7 @@ export default class Core
                 if(this._selectedNotebook.notes.length>0)
                 {
                     this._selectedNote = this._selectedNotebook.notes[0];
+                    this._dataManager.ensureNoteLoaded(this._selectedNote);
                     this._selectedNote.SetAsSelected();
                 }
             }

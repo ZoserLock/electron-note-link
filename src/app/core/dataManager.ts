@@ -12,6 +12,8 @@ import FileTools from "tools/fileTools";
 import Storage  from "core/data/storage";
 import Notebook from "core/data/notebook";
 import Note     from "core/data/note";
+import DataIndex from "./index/dataIndex";
+import NoteIndexData from "./index/noteIndexData";
 
 export default class DataManager
 {
@@ -20,7 +22,8 @@ export default class DataManager
     private sVersion:number = 1;
 
     // Member Variables
-    private _savePath:string;
+    private _appDataPath:string;
+    private _appDataFolderPath:string;
 
     private _storageList: Array<Storage>    = new Array<Storage>();
     private _notebookList: Array<Notebook>  = new Array<Notebook>();
@@ -31,8 +34,8 @@ export default class DataManager
     private _notebooks: Dictionary<Notebook> = {};
     private _notes: Dictionary<Note>         = {};
 
-    // Cache
-    private _cacheWindow:BrowserWindow;
+    // Index
+    private _noteIndex:DataIndex;
 
     // Get/Set
     
@@ -55,9 +58,12 @@ export default class DataManager
     public constructor()
     {
         this._storageList = new Array<Storage>();
-        this._savePath = Path.join(app.getPath("userData"),this.sSaveFileName);
-        
-        Debug.log("[DataManager] Save File Location: "+this._savePath);
+        this._appDataFolderPath = app.getPath("userData");
+        this._appDataPath = Path.join(this._appDataFolderPath,this.sSaveFileName);
+                
+        this._noteIndex = new DataIndex(this._appDataFolderPath);
+
+        Debug.log("[DataManager] Save File Location: "+this._appDataPath);
     }
 
     // data Management
@@ -136,49 +142,51 @@ export default class DataManager
         }
     }
     
+    // [TODO] Check the utility of this function
     private createApplicationData():void
     {
         this._storageList  = new Array<Storage>();
-        this._notebookList = new  Array<Notebook>();
+        this._notebookList = new Array<Notebook>();
+        this._noteList     = new Array<Note>();
     }
 
     private clearApplicationData():boolean
     {
         try 
         {
-            fs.removeSync(this._savePath);
+            fs.removeSync(this._appDataPath);
             return true;
         }
         catch(e)
         {
-            Debug.logError("Clear Storage Failed: "+e);
+            Debug.logError("[Data Manager] Clear Storage Failed: "+e);
             return false;
         }
     }
 
     private saveApplicationData():boolean
     {
-        let storageInfo:any[] = [];
-        
-        for(let a = 0;a < this._storageList.length; ++a)
-        {
-            storageInfo.push(this._storageList[a].getFullPath());
+        let applicationData:ApplicationData = {
+            version:this.sVersion,
+            storagePaths:[]
         }
 
-        let saveFile:any =
+        // Save Storage Paths
+        for(let a = 0;a < this._storageList.length; ++a)
         {
-            version: this.sVersion,
-            storages:storageInfo,
+            applicationData.storagePaths.push(this._storageList[a].getFullPath());
         }
 
         try 
         {
-            fs.writeJsonSync(this._savePath,saveFile,{spaces:4});
+            console.time("[Benchmark] saveApplicationData");
+            fs.writeJsonSync(this._appDataPath,applicationData);
+            console.timeEnd("[Benchmark] saveApplicationData");
             return true;
         }
         catch(e)
         {
-            Debug.logError("Save Storage Failed: "+e);
+            Debug.logError("[Data Manager] Save Storage Failed: "+e);
         }
 
         return false;
@@ -186,28 +194,33 @@ export default class DataManager
 
     private loadApplicationData():boolean
     {
-        console.time("load App Data");
-        let dataRaw = FileTools.readJsonSync(this._savePath);
 
-        if(dataRaw == null)
+        console.time("[Benchmark] Load Index Data");
+        this._noteIndex.load();
+        console.timeEnd("[Benchmark] Load Index Data");
+
+        console.time("[Benchmark] Load App Data");
+        let applicationData = FileTools.readJsonSync(this._appDataPath) as ApplicationData;
+
+        if(applicationData == null)
         {
-            Debug.logError("Failed To load Application Data");
+            Debug.logError("[Data Manager] Failed To load Application Data");
             return false;
         }
 
-        if(!this.validateApplicationData(dataRaw))
+        if(!this.validateApplicationData(applicationData))
         {
-            Debug.logError("Application Data is invalid");
+            Debug.logError("[Data Manager] Application Data is invalid");
             return false;
         }
 
-        let converted = this.updateApplicationData(dataRaw);
+        let converted = this.updateApplicationData(applicationData);
 
         let notesLoaded:number = 0;
 
-        for(var a = 0;a < dataRaw.storages.length; ++a)
+        for(var a = 0;a < applicationData.storagePaths.length; ++a)
         {
-            let storagePath = dataRaw.storages[a];
+            let storagePath = applicationData.storagePaths[a];
             let loadedStorage = this.loadStorage(storagePath);
 
             if(loadedStorage != null)
@@ -219,6 +232,10 @@ export default class DataManager
 
         this.saveApplicationData();
 
+        console.time("[Benchmark] Clean Index Data");
+        this._noteIndex.clearUnusedEntries();
+        console.timeEnd("[Benchmark] Clean Index Data");
+
        /* for(var a = 0;a < this._storageList.length; ++a)
         {
             for(var b = 0;b< this._storageList[a].notebooks.length; ++b)
@@ -227,8 +244,8 @@ export default class DataManager
             }
         }*/
 
-        Debug.log("Notes Loaded: "+notesLoaded);
-        console.timeEnd("load App Data");
+        Debug.log("[Data Manager] Notes Loaded: "+notesLoaded);
+        console.timeEnd("[Benchmark] Load App Data");
         return true;
     }
 
@@ -555,7 +572,7 @@ export default class DataManager
         }
         catch(e)
         {
-            Debug.logError("Save Note Failed: "+e);
+            Debug.logError("Save Notebook Failed: "+e);
             return false;
         }
 
@@ -631,6 +648,13 @@ export default class DataManager
     {
         if(this._notes[id] != undefined)
         {
+            let note = this._notes[id];
+
+            if(!note.isLoaded)
+            {
+                this.ensureNoteLoaded(note);
+            }
+
             return this._notes[id];
         }
         return null;
@@ -643,6 +667,8 @@ export default class DataManager
         {
             fs.ensureDirSync(note.folderPath);
             fs.writeJsonSync(note.getFullPath(), note.getSaveObject(),{spaces:4});
+
+            this._noteIndex.updateNoteIndexData(note);
             return true;
         }
         catch(e)
@@ -654,11 +680,31 @@ export default class DataManager
 
     public loadNote(path:string):Note
     {
-        let noteDataRaw:any = FileTools.readJsonSync(path);
+        let noteIndex:NoteIndexData = this._noteIndex.getNoteIndexData(path);
+        let note:Note = null;
 
-        let note:Note = Note.createFromSavedData(noteDataRaw, Path.dirname(path));
-        
+        if(noteIndex != null)
+        {
+            note = Note.createFromIndexData(noteIndex, Path.dirname(path));
+        }
+        else
+        {
+            let noteDataRaw:any = FileTools.readJsonSync(path);
+
+            note = Note.createFromSavedData(noteDataRaw, Path.dirname(path));
+        }
+
+        this._noteIndex.updateNoteIndexData(note);
+
         return note; 
+    }
+
+    // Function used to load all the data of a note in the case that only the index data is loaded.
+    public ensureNoteLoaded(note:Note):void
+    {
+        let noteDataRaw:any = FileTools.readJsonSync(note.getFullPath());
+        note.setData(noteDataRaw);
+        note.setLoaded();
     }
 
     private removeNote(note:Note):boolean

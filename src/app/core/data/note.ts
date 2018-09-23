@@ -6,6 +6,7 @@ import Debug from "tools/debug";
 
 // Core
 import Notebook from "core/data/notebook";
+import NoteIndexData from "../index/noteIndexData";
 
 export default class Note
 {
@@ -90,7 +91,7 @@ export default class Note
         return this._selected;
     }
 
-    get loaded(): boolean
+    get isLoaded(): boolean
     {
         return this._loaded;
     }
@@ -122,26 +123,24 @@ export default class Note
         note._loaded = true;
         return note;
     }
-
+    public static createFromIndexData(data:NoteIndexData, path:string):Note
+    {
+        let note:Note = new Note();
+        note._created = -1;
+        note._updated = -1;
+        note._id = data.id;
+        note._title = data.title;
+        note._text = "";
+        note._folderPath = path;
+        note._loaded = false;
+        return note;
+    }
     public static createFromSavedData(data:any, path:string):Note
     {
         let note:Note = new Note();
         note.setData(data);
         note._folderPath = path;
         note._loaded = true;
-        return note;
-    }
-
-    public static createFromIndex(path:string):Note
-    {
-        let note:Note = new Note();
-        note._created = -1;
-        note._updated = -1;
-        note._id = "";
-        note._title = "Unloaded...";
-        note._text = "Loading";
-        note._folderPath = path;
-        note._loaded = false;
         return note;
     }
 
@@ -163,6 +162,11 @@ export default class Note
         this._notebook = notebook;
     }
 
+    public setLoaded():void
+    {
+        this._loaded = true;
+    }
+    
     public removeFromParent()
     {
         if(this._notebook != null)

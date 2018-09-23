@@ -18,6 +18,8 @@ export default class Notebook
     private _updated:number;
 
     private _selected:boolean;
+
+    private _indexDirty:boolean;
     
     //#region Get/Set
     get storage(): Storage
@@ -54,6 +56,11 @@ export default class Notebook
     {
         return this._selected;
     }
+
+    get isIndexDirty():boolean
+    {
+        return this._indexDirty;
+    }
     //#endregion
   
     // Member Functions
@@ -63,6 +70,7 @@ export default class Notebook
         this._name = "Unammed Notebook";
         this._id   = "";
         this._folderPath = "";
+        this._indexDirty = true;
     }
 
     public static create(id:string, path:string):Notebook
@@ -103,6 +111,7 @@ export default class Notebook
     {
         note.setParent(this);
         this.notes.push(note);
+        this._indexDirty = true;
     }
 
     public removeNote(note:Note):void
@@ -116,11 +125,13 @@ export default class Notebook
                 break;
             }
         }
+        this._indexDirty = true;
     }
 
     public removeAllNotes():void
     {
         this._notes = [];
+        this._indexDirty = true;
     }
 
 
@@ -156,6 +167,11 @@ export default class Notebook
     public setName(name:string):void
     {
         this._name = name;
+    }
+
+    public setIndexSaved():void
+    {
+        this._indexDirty = false;
     }
 
     // Save Stuff
