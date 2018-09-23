@@ -62,7 +62,6 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
     private CreateNote(notebookId:string)
     {
-        Debug.log("Creating notebook on: "+notebookId);
         let data = 
         {
             notebookId:notebookId
@@ -73,22 +72,24 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
     private RenameNotebook(notebookId:string)
     {
-        let data =
+        Debug.logError("Implement Me!");
+        /*let data =
         {
             notebookId:notebookId
         }
 
-        this.sendMainMessage(MessageChannel.removeStorage, data);
+        this.sendMainMessage(MessageChannel.removeStorage, data);*/
     }
 
     private ExportNotebook(notebookId:string)
     {
-        let data =
+        Debug.logError("Implement Me!");
+        /*let data =
         {
             notebookId:notebookId
         }
 
-        this.sendMainMessage(MessageChannel.deleteStorage, data);
+        this.sendMainMessage(MessageChannel.removeStorage, data);*/
     }
 
     private DeleteNotebook(notebookId:string)
@@ -98,7 +99,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
             notebookId:notebookId
         }
 
-        this.sendMainMessage(MessageChannel.deleteStorage, data);
+        this.sendMainMessage(MessageChannel.deleteNotebook, data);
     }
 
 

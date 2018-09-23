@@ -73,9 +73,11 @@
     --font-dark-color: #848c94;
 
     /* Backgrounds */
+    --bg-color-darker: #101018;
     --bg-color-dark: #1D1F24;
     --bg-color-normal: #24262D;
     --bg-color-light: #2D3038;
+    --bg-color-lighter: #44464D;
 
     /* Borders */
     --border-color-dark: #1D1F24;
@@ -404,6 +406,10 @@ body
     cursor:default;
 }
 
+.ui-sidebar-storage-item:hover
+{
+    background-color: var(--bg-color-darker);
+}
 
 .ui-sidebar-storage-item-button-container
 {
@@ -414,12 +420,12 @@ body
 
 .ui-sidebar-storage-item-button-container:hover
 {
-    background: var(--sidebar-item-bg-hover);
+    background: var(--bg-color-light);
 }
 
 .ui-sidebar-storage-item-button-container:active
 {
-    background: var(--sidebar-item-bg-active);
+    background: var(--bg-color-dark);
 }
 
 .ui-sidebar-storage-item-button 
