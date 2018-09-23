@@ -25,6 +25,8 @@ export default class Note
 
     private _id:string;
     private _folderPath:string;
+    private _fileName:string;
+    private _fullPath:string;
     private _title:string;
     private _text:string;
 
@@ -49,7 +51,17 @@ export default class Note
     {
         return this._folderPath;
     }
-    
+
+    get fileName(): string
+    {
+        return this._fileName;
+    }
+
+    get fullPath(): string
+    {
+        return this._fullPath;
+    }
+
     get title(): string
     {
         return this._title;
@@ -120,18 +132,24 @@ export default class Note
         note._updated = Date.now();
         note._id   = id;
         note._folderPath = path;
+        note._fileName = note.id + ".json";
+        note._fullPath = Path.join(note._folderPath, note._fileName);
         note._loaded = true;
         return note;
     }
     public static createFromIndexData(data:NoteIndexData, path:string):Note
     {
         let note:Note = new Note();
-        note._created = -1;
+        note._created = data.created;
         note._updated = -1;
         note._id = data.id;
         note._title = data.title;
         note._text = "";
+        note._trash =data.trashed;
+        note._started=data.started;
         note._folderPath = path;
+        note._fileName = note.id + ".json";
+        note._fullPath = Path.join(note._folderPath, note._fileName);
         note._loaded = false;
         return note;
     }
@@ -140,6 +158,8 @@ export default class Note
         let note:Note = new Note();
         note.setData(data);
         note._folderPath = path;
+        note._fileName = note.id + ".json";
+        note._fullPath = Path.join(note._folderPath, note._fileName);
         note._loaded = true;
         return note;
     }
@@ -191,11 +211,6 @@ export default class Note
         this._selected = false;
     }
 
-    public getFullPath():string
-    {
-        return Path.join(this.folderPath,this.id + ".json");
-    }
-    
     public updateDates():void
     {
         this._updated = Date.now();
@@ -212,11 +227,6 @@ export default class Note
             created:this._created,
             updated:this._updated
         };
-
-        Debug.logVar(saveObject);
-        Debug.log(this._trash+"");
-        Debug.log(this._updated+"");
-        Debug.log(this._created+"");
 
         return saveObject
     }

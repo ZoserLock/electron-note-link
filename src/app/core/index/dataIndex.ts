@@ -69,21 +69,21 @@ export default class DataIndex
 
     private addNoteIndexData(note:any):void
     {
-        let noteData = NoteIndexData.createFromSaveData(note);
+        let noteData = NoteIndexData.createFromIndexData(note);
 
         this._noteList.push(noteData);
-        this._noteIndex[note._path] = noteData;
+        this._noteIndex[note.id] = noteData;
     }
 
     public updateNoteIndexData(note:Note):void
     {
-        let noteData:NoteIndexData = this.getNoteIndexData(note.getFullPath());
+        let noteData:NoteIndexData = this.getNoteIndexData(note.id);
 
         if(noteData == null)
         {
             noteData = NoteIndexData.createFromNote(note);
             this._noteList.push(noteData);
-            this._noteIndex[note.getFullPath()] = noteData;
+            this._noteIndex[noteData.id] = noteData;
             this._dirty = true;
             this.requestSave();
         }

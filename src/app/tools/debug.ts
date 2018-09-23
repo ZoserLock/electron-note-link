@@ -24,4 +24,20 @@ export default class Debug
             console.log(" -> [ERROR] "+text); 
         }
     }
+
+    public static time(name:string):void
+    {
+        if(process.env.DEBUG)
+        {
+            console.time(" -> "+name);
+        }
+    }
+
+    public static timeEnd(name:string):void
+    {
+        if(process.env.DEBUG)
+        {
+            console.timeEnd(" -> "+name);
+        }
+    }
 }

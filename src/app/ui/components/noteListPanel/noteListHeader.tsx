@@ -11,7 +11,9 @@ export default class NoteListHeader extends UIComponent<any, any>
 {
     private handleAddNoteClick()
     {
-        this.sendMainMessage(MessageChannel.createNote);
+        let data = {}
+
+        this.sendMainMessage(MessageChannel.createNote, data);
     }
 
     public render() 

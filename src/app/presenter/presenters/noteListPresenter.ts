@@ -20,7 +20,7 @@ export default class NoteListPresenter extends Presenter
     {
         this.registerUIListener(MessageChannel.updateNoteListPanel , (data:any) => this.update());
         
-        this.registerUIListener(MessageChannel.createNote          , (data:any) => this.actionNewNote());
+        this.registerUIListener(MessageChannel.createNote          , (data:any) => this.actionNewNote(data));
         this.registerUIListener(MessageChannel.selectNote          , (data:any) => this.actionSelectNote(data));
         this.registerUIListener(MessageChannel.deleteNote          , (data:any) => this.actionRemoveNote(data));
 
@@ -106,9 +106,16 @@ export default class NoteListPresenter extends Presenter
         this._core.applicationController.updateSearch(data);
     }
 
-    private actionNewNote():void
+    private actionNewNote(data:any):void
     {
-        this._core.noteController.createNewNote();
+        if(data.notebookId == undefined)
+        {
+            this._core.noteController.createNewNote(this._core.selectedNotebook.id);
+        }
+        else
+        {
+            this._core.noteController.createNewNote(data.notebookId);
+        }
     }
 
     private actionRemoveNote(data:any):void

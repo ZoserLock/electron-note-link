@@ -16,7 +16,7 @@ export default class FileTools
         }
         catch(e)
         {
-            Debug.logError("Load Storage Failed: "+e);
+            Debug.logError("Load File Failed: "+e);
             return null;
         }
         return jsonData;

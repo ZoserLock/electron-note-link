@@ -1,29 +1,15 @@
+// Core
 import Note from "core/data/note";
-import Debug from "tools/debug";
 
 export default class NoteIndexData
 {
-    private _id:string;
-    private _path:string;
-    private _title:string;
+    public id:string;
+    public title:string;
 
-    //#region Get/Set
-    get id(): string
-    {
-        return this._id;
-    }
+    public started:boolean;
+    public trashed:boolean;
 
-    get path(): string
-    {
-        return this._path;
-    }
-
-    get title(): string
-    {
-        return this._title;
-    }
-
-    //#endregion
+    public created:number;
 
     constructor()
     {
@@ -32,44 +18,58 @@ export default class NoteIndexData
 
     public static createFromNote(note:Note):NoteIndexData
     {
-        let noteData= new NoteIndexData();
+        let noteData = new NoteIndexData();
         noteData.setNoteData(note);
         return noteData;
     }
 
-    public static createFromSaveData(note:any):NoteIndexData
+    public static createFromIndexData(note:any):NoteIndexData
     {
         let noteData= new NoteIndexData();
-        noteData.setSaveData(note);
+        noteData.setIndexData(note);
         return noteData;
     }
 
-    private setSaveData(note:any):void
+    private setIndexData(note:any):void
     {
-        this._id    = note._id;
-        this._path  = note._path;
-        this._title = note._title;
+        this.id      = note.id;
+        this.title   = note.title;
+        this.created = note.created;
+        this.started = note.started;
+        this.trashed = note.trashed;
     }
 
     public setNoteData(note:Note):boolean
     {
         let changed:boolean=false;
 
-        if(this._id != note.id)
+        if(this.id != note.id)
         {
-            this._id = note.id;
+            this.id = note.id;
             changed = true;
         }
 
-        if(this._path != note.getFullPath())
+        if(this.title != note.title)
         {
-            this._path = note.getFullPath();
+            this.title = note.title;
             changed = true;
         }
 
-        if(this._title != note.title)
+        if(this.started != note.started)
         {
-            this._title = note.title;
+            this.started = note.started;
+            changed = true;
+        }
+
+        if(this.trashed != note.trashed)
+        {
+            this.trashed = note.trashed;
+            changed = true;
+        }
+
+        if(this.created != note.created)
+        {
+            this.created = note.created;
             changed = true;
         }
 

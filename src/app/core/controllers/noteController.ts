@@ -32,18 +32,18 @@ export default class NoteController
         this._dataManager  = dataManager;
     }
 
-    public createNewNote():void
+    public createNewNote(parentId:string):void
     {
-        let selectedNotebook:Notebook = this._core.selectedNotebook;
+        let notebook:Notebook = this._dataManager.getNotebook(parentId);
 
-        if(selectedNotebook != null)
+        if(notebook != null)
         {
-            let note:Note = Note.createNew(uuid(), Path.join(selectedNotebook.folderPath,selectedNotebook.id));
+            let note:Note = Note.createNew(uuid(), Path.join(notebook.folderPath,notebook.id));
             
             if(this._dataManager.addNote(note))
             {
                 this._dataManager.saveNote(note);
-                selectedNotebook.addNote(note);
+                notebook.addNote(note);
 
                 this._core.selectNote(note.id);
 
@@ -52,7 +52,7 @@ export default class NoteController
         }
         else
         {
-            Debug.logError("[Note Controller] Trying to create a note without a notebook selected.");
+            Debug.logError("[Note Controller] Trying to create a note in an invalid notebook");
         }
     }
     

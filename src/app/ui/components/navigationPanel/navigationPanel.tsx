@@ -22,7 +22,7 @@ interface NavigationPanelState
 export default class NavigationPanel extends UIComponent<any, NavigationPanelState>
 {
     // Context Menu Id
-    readonly sStorageContextMenuId:string = "StorageItem";
+    readonly sStorageContextMenuId:string = "StorageItemContextMenu";
 
     // Context menu options
     private readonly sContextMenuNewNotebook:string = "AddNotebook"; 
@@ -150,12 +150,13 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
     public render() 
     {
         let mode:number = this.state.status.noteListMode;
+        let contextMenuId = this.sStorageContextMenuId;
 
         let storageList = this.state.storages.map((storage:any) =>
         {
             return (
-            <ContextMenuTrigger id={this.sStorageContextMenuId} key = {storage.id} attributes={{id:storage.id}}>
-                <NavigationStorageItem key = {storage.id} storage = {storage} status = {this.state.status}/>
+            <ContextMenuTrigger id={contextMenuId} key = {storage.id} attributes={{id:storage.id}}>
+                <NavigationStorageItem storage = {storage} status = {this.state.status}/>
             </ContextMenuTrigger>
             )
         });

@@ -179,9 +179,9 @@ export default class DataManager
 
         try 
         {
-            console.time("[Benchmark] saveApplicationData");
+            console.time(" -> [Benchmark] saveApplicationData");
             fs.writeJsonSync(this._appDataPath,applicationData);
-            console.timeEnd("[Benchmark] saveApplicationData");
+            console.timeEnd(" -> [Benchmark] saveApplicationData");
             return true;
         }
         catch(e)
@@ -195,11 +195,11 @@ export default class DataManager
     private loadApplicationData():boolean
     {
 
-        console.time("[Benchmark] Load Index Data");
+        Debug.time("[Benchmark] Load Index Data");
         this._noteIndex.load();
-        console.timeEnd("[Benchmark] Load Index Data");
+        Debug.timeEnd("[Benchmark] Load Index Data");
 
-        console.time("[Benchmark] Load App Data");
+        Debug.time("[Benchmark] Load App Data");
         let applicationData = FileTools.readJsonSync(this._appDataPath) as ApplicationData;
 
         if(applicationData == null)
@@ -232,20 +232,12 @@ export default class DataManager
 
         this.saveApplicationData();
 
-        console.time("[Benchmark] Clean Index Data");
+        Debug.time("[Benchmark] Clean Index Data");
         this._noteIndex.clearUnusedEntries();
-        console.timeEnd("[Benchmark] Clean Index Data");
-
-       /* for(var a = 0;a < this._storageList.length; ++a)
-        {
-            for(var b = 0;b< this._storageList[a].notebooks.length; ++b)
-            {
-                this.saveNotebook(this._storageList[a].notebooks[b]);
-            }
-        }*/
+        Debug.timeEnd("[Benchmark] Clean Index Data");
 
         Debug.log("[Data Manager] Notes Loaded: "+notesLoaded);
-        console.timeEnd("[Benchmark] Load App Data");
+        Debug.timeEnd("[Benchmark] Load App Data");
         return true;
     }
 
@@ -363,8 +355,6 @@ export default class DataManager
                     this.addNotebook(storage.notebooks[a]);
                 }
             }
-
-            this.saveApplicationData();
         }
         else
         {
@@ -666,7 +656,7 @@ export default class DataManager
         try 
         {
             fs.ensureDirSync(note.folderPath);
-            fs.writeJsonSync(note.getFullPath(), note.getSaveObject(),{spaces:4});
+            fs.writeJsonSync(note.fullPath, note.getSaveObject(),{spaces:4});
 
             this._noteIndex.updateNoteIndexData(note);
             return true;
@@ -680,7 +670,7 @@ export default class DataManager
 
     public loadNote(path:string):Note
     {
-        let noteIndex:NoteIndexData = this._noteIndex.getNoteIndexData(path);
+        let noteIndex:NoteIndexData = this._noteIndex.getNoteIndexData(Path.basename(path));
         let note:Note = null;
 
         if(noteIndex != null)
@@ -702,7 +692,7 @@ export default class DataManager
     // Function used to load all the data of a note in the case that only the index data is loaded.
     public ensureNoteLoaded(note:Note):void
     {
-        let noteDataRaw:any = FileTools.readJsonSync(note.getFullPath());
+        let noteDataRaw:any = FileTools.readJsonSync(note.fullPath);
         note.setData(noteDataRaw);
         note.setLoaded();
     }
@@ -721,9 +711,7 @@ export default class DataManager
     {
         if(this._notes[note.id] != undefined)
         {
-            let path = note.getFullPath();
-            
-            if(!FileTools.deleteJsonFile(path))
+            if(!FileTools.deleteJsonFile(note.fullPath))
             {
                 return false;
             }

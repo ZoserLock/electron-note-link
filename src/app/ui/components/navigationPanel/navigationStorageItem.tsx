@@ -3,7 +3,7 @@ import * as React from "react";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 // Tools
-import Debug          from "tools/debug";
+import Debug from "tools/debug";
 
 // Presenter
 import MessageChannel from "presenter/messageChannel";
@@ -21,7 +21,11 @@ interface NavigationStorageItemProps
 
 export default class NavigationStorageItem extends UIComponent<NavigationStorageItemProps, any>
 {
-    readonly sNotebookContextMenuId:string = "NotebookItem";
+    // Notebook Context menu options
+    private readonly sContextMenuNewNote:string = "AddNote"; 
+    private readonly sContextMenuRename:string  = "Rename"; 
+    private readonly sContextMenuExport:string  = "Export"; 
+    private readonly sContextMenuDelete:string  = "Delete"; 
 
     private onAddButtonClick() 
     {
@@ -35,10 +39,68 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
     private handleNotebookContextMenu(e:any, data:any, target:any):void
     {
-        Debug.logVar(data);
-        
-        Debug.log(":: "+target.getAttribute("id"));
+        Debug.log("Handle Notebook Context Menu X");
+        let notebookId = target.getAttribute("id");
+        Debug.log("Handle Notebook Context Menu: "+notebookId);
+
+        switch(data.action)
+        {
+            case this.sContextMenuNewNote:
+                this.CreateNote(notebookId);
+            break;
+            case this.sContextMenuRename:
+                this.RenameNotebook(notebookId);
+            break;
+            case this.sContextMenuExport:
+                this.ExportNotebook(notebookId);
+            break; 
+            case this.sContextMenuDelete:
+                this.DeleteNotebook(notebookId);
+            break; 
+        }
     }
+
+    private CreateNote(notebookId:string)
+    {
+        Debug.log("Creating notebook on: "+notebookId);
+        let data = 
+        {
+            notebookId:notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.createNote, data);
+    }
+
+    private RenameNotebook(notebookId:string)
+    {
+        let data =
+        {
+            notebookId:notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.removeStorage, data);
+    }
+
+    private ExportNotebook(notebookId:string)
+    {
+        let data =
+        {
+            notebookId:notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.deleteStorage, data);
+    }
+
+    private DeleteNotebook(notebookId:string)
+    {
+        let data =
+        {
+            notebookId:notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.deleteStorage, data);
+    }
+
 
     private handleStorageNameEdit(newText:string):void
     {
@@ -53,12 +115,16 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
     public render() 
     {
+        let contextMenuId    = this.props.storage.id;
+        let selectedNotebook = this.props.status.selectedNotebook;
+        let noteListMode     = this.props.status.noteListMode;
+
         let notebookContent = this.props.storage.notebooks.map((notebook:any) =>
         {
-            let selected:boolean = this.props.status.selectedNotebook == notebook.id && this.props.status.noteListMode == NoteListMode.Notebook;
+            let selected:boolean =  selectedNotebook == notebook.id && noteListMode == NoteListMode.Notebook;
 
             return  (
-            <ContextMenuTrigger id={this.sNotebookContextMenuId} key = {notebook.id} attributes={{id:notebook.id}}>
+            <ContextMenuTrigger id={contextMenuId} key = {notebook.id} attributes={{id:notebook.id}}>
                 <NavigationNotebookItem  notebook={notebook} isSelected={selected} />
             </ContextMenuTrigger>
             )
@@ -92,12 +158,12 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
                     </div>
                 </div>
                 {notebookList}    
-                <ContextMenu id={this.sNotebookContextMenuId}>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Add Note' }}>Add Note</MenuItem> 
+                <ContextMenu id={this.props.storage.id}>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuNewNote }}>Add Note</MenuItem> 
                     <MenuItem divider /> 
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Rename' }}>Rename Notebook</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Export' }}>Export Notebook</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: 'Delete' }}>Delete Notebook</MenuItem> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Notebook</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuExport }}>Export Notebook</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuDelete }}>Delete Notebook</MenuItem> 
                 </ContextMenu>
             </div>
 
