@@ -15,7 +15,7 @@ export default class NavigationPresenter extends Presenter
         this.registerUIListener(MessageChannel.deleteStorage      ,(data:any) => this.actionDeleteStorage(data));
         this.registerUIListener(MessageChannel.updateStorage      ,(data:any) => this.actionUpdateStorage(data));
 
-        this.registerUIListener(MessageChannel.deleteNotebook     ,(data:any) => this.actionRemoveNotebook(data));
+        this.registerUIListener(MessageChannel.deleteNotebook     ,(data:any) => this.actionDeleteNotebook(data));
         this.registerUIListener(MessageChannel.createNotebook     ,(data:any) => this.actionNewNotebook(data));
         this.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
 
@@ -73,7 +73,7 @@ export default class NavigationPresenter extends Presenter
         this._core.notebookController.createNewNotebook(storageId);
     }
 
-    private actionRemoveNotebook(data:any):void
+    private actionDeleteNotebook(data:any):void
     {
         let notebookId = data.notebookId;
         

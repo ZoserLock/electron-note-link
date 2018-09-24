@@ -28,9 +28,13 @@ export default class MessageChannel
     public static readonly updateStorage:string     = "action:UpdateStorage";
 
     // Popup Related
-    public static readonly showPopup:string       = "action:popup:ShowPopup";
-    public static readonly hidePopup:string       = "action:popup:HidePopup";
-    public static readonly popupResult:string     = "action:popup:Result";
+    public static readonly showPopup:string         = "action:popup:ShowPopup";
+    public static readonly hidePopup:string         = "action:popup:HidePopup";
+    public static readonly popupResult:string       = "action:popup:Result";
+
+    // Loading Panel
+    public static readonly showLoading:string       = "action:ShowLoading";
+    public static readonly hideLoading:string       = "action:HideLoading";
 
     // Windows Related
     public static readonly windowMinimize:string    = "action:window:Minimize";

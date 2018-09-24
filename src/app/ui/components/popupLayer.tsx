@@ -33,8 +33,8 @@ export default class PopupLayer extends UIComponent<any, any>
 
     public componentWillUnmount():void
     {
-        this.registerMainListener(MessageChannel.showPopup,this._showPopupEvent);
-        this.registerMainListener(MessageChannel.hidePopup,this._hidePopupEvent);
+        this.unregisterMainListener(MessageChannel.showPopup,this._showPopupEvent);
+        this.unregisterMainListener(MessageChannel.hidePopup,this._hidePopupEvent);
     }
 
     private showPopup(data:any):void

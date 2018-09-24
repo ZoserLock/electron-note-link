@@ -10,6 +10,7 @@ import WindowBar        from "ui/components/windowbar/windowbar";
 import Toolbar          from "ui/components/toolbar/toolbar";
 import StatusBar        from "ui/components/statusBar";
 import PopupLayer       from "ui/components/popupLayer";
+import LoadingLayer     from "ui/components/loadingLayer";
 
 export default class ApplicationWindow extends React.PureComponent<any, any> 
 {
@@ -26,6 +27,7 @@ export default class ApplicationWindow extends React.PureComponent<any, any>
                 </div>
                 <StatusBar/>
                 <PopupLayer/>
+                <LoadingLayer/>
             </div>
         );
     }

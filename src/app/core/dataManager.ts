@@ -194,7 +194,6 @@ export default class DataManager
 
     private loadApplicationData():boolean
     {
-
         Debug.time("[Benchmark] Load Index Data");
         this._noteIndex.load();
         Debug.timeEnd("[Benchmark] Load Index Data");

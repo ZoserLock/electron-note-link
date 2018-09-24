@@ -64,9 +64,13 @@ export default class Application implements Platform
         Debug.log("[Application] Main Window Loaded");
         
         this._mainWindow.show();
-        this._core.mainWindowLoaded();
 
-        //PopupManager.instance.setWindow(this._mainWindow);
+        // Timeout needed to allow one render of the main window.
+        setTimeout(() => 
+        {
+            this._core.mainWindowLoaded();
+            this.sendUIMessage(MessageChannel.hideLoading);
+        }, 100);
     }
 
     // Window Event
