@@ -221,25 +221,25 @@ export default class Note
     public applyUpdateData(updateData:NoteUpdateData):boolean
     {
         let dataUpdated = false;
-        if(updateData.title)
+        if(updateData.title !== undefined)
         {
             this._title = updateData.title;
             dataUpdated = true;
         }
 
-        if(updateData.text)
+        if(updateData.text !== undefined)
         {
             this._text = updateData.text;
             dataUpdated = true;
         }
 
-        if(updateData.started)
+        if(updateData.started !== undefined)
         {
             this._started = updateData.started;
             dataUpdated = true;
         }
         
-        if(updateData.trash)
+        if(updateData.trash !== undefined)
         {
             this._trash = updateData.trash;
             dataUpdated = true;

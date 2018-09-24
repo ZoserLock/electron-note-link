@@ -853,14 +853,54 @@ body
 
 .ui-note-view-header-title
 {
+    display: flex;
+    flex-basis: 100%;
+    min-width: 0px;
+    
     margin: 13px 0px 7px 0px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow:ellipsis;
 
     height: 25px;
     line-height:25px;
     font-size: 20px;
+}
+
+.ui-note-view-header-title .normal
+{ 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ui-note-view-header-title .normal.selected
+{
+    color: var(--font-brighter-color);
+}
+
+.ui-note-view-header-title .editor
+{
+    display: flex;
+    height: 25px;
+    line-height:25px;
+    flex-grow: 1;
+}
+
+.ui-note-view-header-title .editor input
+{
+    flex-grow: 1;
+    margin:auto;
+    border:none;
+    background:none;
+    color: var( --font-brighter-color);
+}
+
+.ui-note-view-header-title .editor input::selection
+{
+    background: #AAA;
+}
+
+.ui-note-view-header-title .editor input:focus
+{
+    outline: none;
 }
 
 .ui-note-view-header-separator
