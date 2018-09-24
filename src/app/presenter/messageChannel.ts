@@ -27,6 +27,10 @@ export default class MessageChannel
     public static readonly updateNote:string        = "action:UpdateNote";
     public static readonly updateStorage:string     = "action:UpdateStorage";
 
+
+    public static readonly viewNotebookSource:string = "action:ViewNotebookSource";
+    public static readonly viewNoteSource:string     = "action:ViewNoteSource";
+
     // Popup Related
     public static readonly showPopup:string         = "action:popup:ShowPopup";
     public static readonly hidePopup:string         = "action:popup:HidePopup";

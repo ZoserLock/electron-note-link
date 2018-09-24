@@ -20,4 +20,6 @@ export default interface Platform
 
     // System Popups
     showOpenDirectoryDialog(title:string):string;
+
+    showOnExplorer(path:string):void;
 }

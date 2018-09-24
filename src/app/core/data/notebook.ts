@@ -32,6 +32,16 @@ export default class Notebook
         return this._id;
     }
 
+    get updated():number
+    {
+        return this._updated;
+    }
+
+    get created():number
+    {
+        return this._created;
+    }
+
     get orderIndex(): Number
     {
         return this._orderIndex;
@@ -69,6 +79,8 @@ export default class Notebook
         this._notes = new Array<Note>();
         this._name = "Unammed Notebook";
         this._id   = "";
+        this._created = Date.now();
+        this._updated = Date.now();
         this._folderPath = "";
         this._indexDirty = true;
     }
@@ -76,7 +88,9 @@ export default class Notebook
     public static create(id:string, path:string):Notebook
     {
         let notebook:Notebook = new Notebook();
-        notebook._id   = id;
+        notebook._id      = id;
+        notebook._created = Date.now();
+        notebook._updated = Date.now();
         notebook._folderPath = path;
         return notebook;
     }
@@ -84,31 +98,18 @@ export default class Notebook
     public static createFromSavedData(data:any, path:string):Notebook
     {
         let notebook:Notebook = new Notebook();
-        notebook._id   = data.id;
-        notebook._name = data.name;
+        notebook._id      = data.id;
+        notebook._name    = data.name;
+        notebook._created = data.created;
+        notebook._updated = data.updated;
         notebook._folderPath = path;
         return notebook;
     }
 
-    public GetDataObject():any
-    {
-        let notes:any[] = this._notes.map((note:Note) =>
-        {
-            return note.id;
-        });
-
-        let dataObject = {
-            id:this._id, 
-            name:this._name,
-            notes:notes
-        };
-
-        return dataObject
-    }
-
-
     public addNote(note:Note):void
     {
+        this.setUpdated();
+
         note.setParent(this);
         this.notes.push(note);
         this._indexDirty = true;
@@ -174,6 +175,10 @@ export default class Notebook
         this._indexDirty = false;
     }
 
+    private setUpdated():void
+    {
+        this._updated = Date.now();
+    }
     // Save Stuff
     
     public getFullPath():string
@@ -188,7 +193,12 @@ export default class Notebook
 
     public getSaveObject():any
     {
-        let saveObject = {id:this._id, name:this._name};
+        let saveObject = {
+            id:this._id,
+            name:this._name,
+            created:this._created,
+            updated:this._updated,
+        };
 
         return saveObject
     }
@@ -200,6 +210,11 @@ export default class Notebook
         {
             this._name = updateData.name;
             dataUpdated = true;
+        }
+
+        if(dataUpdated)
+        {
+            this.setUpdated();
         }
 
         return dataUpdated;

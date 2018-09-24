@@ -1,4 +1,5 @@
-import { app, BrowserWindow, ipcMain, dialog } from "electron"
+import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
+import * as Path from "path";
 
 import Debug           from "tools/debug";
 
@@ -127,5 +128,11 @@ export default class Application implements Platform
         {
             return null;
         }
+    }
+
+    // OS
+    public showOnExplorer(path:string):void
+    {
+        shell.showItemInFolder(path);
     }
 }

@@ -1,7 +1,3 @@
-
-// Node Modules
-import {ipcMain} from "electron"; 
-
 // Tools
 import Debug from "tools/debug";
 
@@ -294,6 +290,26 @@ export default class Core
         if(note != null)
         {
             this.selectNotebook(note.parent.id);
+        }
+    }
+
+    public viewNotebookSource(notebookId:string):void
+    {
+        let notebook:Notebook = this._dataManager.getNotebook(notebookId);
+
+        if(notebook != null)
+        {
+            this._platform.showOnExplorer(notebook.getFullPath());
+        }
+    }
+
+    public viewNoteSource(noteId:string):void
+    {
+        let note:Note = this._dataManager.getNote(noteId);
+
+        if(note != null)
+        {
+            this._platform.showOnExplorer(note.fullPath);
         }
     }
 }

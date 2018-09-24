@@ -22,10 +22,11 @@ interface NavigationStorageItemProps
 export default class NavigationStorageItem extends UIComponent<NavigationStorageItemProps, any>
 {
     // Notebook Context menu options
-    private readonly sContextMenuNewNote:string = "AddNote"; 
-    private readonly sContextMenuRename:string  = "Rename"; 
-    private readonly sContextMenuExport:string  = "Export"; 
-    private readonly sContextMenuDelete:string  = "Delete"; 
+    private readonly sContextMenuNewNote:string     = "AddNote"; 
+    private readonly sContextMenuViewSource:string  = "ViewSource"; 
+    private readonly sContextMenuRename:string      = "Rename"; 
+    private readonly sContextMenuExport:string      = "Export"; 
+    private readonly sContextMenuDelete:string      = "Delete"; 
 
     private onAddButtonClick() 
     {
@@ -46,21 +47,24 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
         switch(data.action)
         {
             case this.sContextMenuNewNote:
-                this.CreateNote(notebookId);
+                this.createNote(notebookId);
             break;
+            case this.sContextMenuViewSource:
+                this.viewSource(notebookId);
+        break;
             case this.sContextMenuRename:
-                this.RenameNotebook(notebookId);
+                this.renameNotebook(notebookId);
             break;
             case this.sContextMenuExport:
-                this.ExportNotebook(notebookId);
+                this.exportNotebook(notebookId);
             break; 
             case this.sContextMenuDelete:
-                this.DeleteNotebook(notebookId);
+                this.deleteNotebook(notebookId);
             break; 
         }
     }
 
-    private CreateNote(notebookId:string)
+    private createNote(notebookId:string)
     {
         let data = 
         {
@@ -70,7 +74,17 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
         this.sendMainMessage(MessageChannel.createNote, data);
     }
 
-    private RenameNotebook(notebookId:string)
+    private viewSource(notebookId:string)
+    {
+        let data = 
+        {
+            notebookId:notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.viewNotebookSource, data);
+    }
+
+    private renameNotebook(notebookId:string)
     {
         Debug.logError("Implement Me!");
         /*let data =
@@ -81,7 +95,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
         this.sendMainMessage(MessageChannel.removeStorage, data);*/
     }
 
-    private ExportNotebook(notebookId:string)
+    private exportNotebook(notebookId:string)
     {
         Debug.logError("Implement Me!");
         /*let data =
@@ -92,7 +106,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
         this.sendMainMessage(MessageChannel.removeStorage, data);*/
     }
 
-    private DeleteNotebook(notebookId:string)
+    private deleteNotebook(notebookId:string)
     {
         let data =
         {
@@ -161,6 +175,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
                 {notebookList}    
                 <ContextMenu id={this.props.storage.id}>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuNewNote }}>Add Note</MenuItem> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuViewSource }}>View Source</MenuItem>
                     <MenuItem divider /> 
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Notebook</MenuItem>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuExport }}>Export Notebook</MenuItem>

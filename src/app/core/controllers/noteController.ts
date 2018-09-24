@@ -44,6 +44,7 @@ export default class NoteController
             {
                 this._dataManager.saveNote(note);
                 notebook.addNote(note);
+                this._dataManager.saveNotebook(notebook);
 
                 this._core.selectNote(note.id);
 
