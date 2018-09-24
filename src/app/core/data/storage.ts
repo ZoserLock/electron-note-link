@@ -15,6 +15,8 @@ export default class Storage
     private _folderPath:string;
     private _notebooks:Notebook[];
 
+    private _needSorting:boolean = true;
+
     // Get/Set
     get id(): string
     {
@@ -33,6 +35,12 @@ export default class Storage
 
     get notebooks(): Notebook[]
     {
+        if(this._needSorting)
+        {
+            this.sortNotebooks();
+            this._needSorting = false;
+        }
+
         return this._notebooks;
     }
 
@@ -42,15 +50,19 @@ export default class Storage
     {
         this._notebooks = new Array<Notebook>();
 
-        this._name = "Unammed Storage";
+        this._name = "";
         this._id   = "";
         this._folderPath = "";
+
+        this._needSorting = true;
     }
     
     public static create(id:string, path:string):Storage
     {
         let storage:Storage = new Storage();
         storage._id   = id;
+        storage._name = "Unnamed Storage";
+        
         storage._folderPath = path;
         return storage;
     }
@@ -59,14 +71,32 @@ export default class Storage
     {
         let storage:Storage = new Storage();
         storage._id   = data.id;
-        storage._name = data.name;
+        storage._name = data.name || "Unnamed Storage";
         
         storage._folderPath = path;
         return storage;
     }
 
+    private sortNotebooks():void
+    {
+        this._notebooks.sort((a,b)=>
+        {
+            if (a.name > b.name) 
+            {
+                return 1;
+            }
+            if (a.name < b.name) 
+            {
+                return -1;
+            }
+
+            return 0;
+        });
+    }
+
     public addNotebook(notebook:Notebook):void
     {
+        this._needSorting = true;
         notebook.setParent(this);
         this._notebooks.push(notebook);
     }

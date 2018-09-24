@@ -9,7 +9,6 @@ export default class Notebook
 {
     private _storage:Storage;
     private _id:string;
-    private _orderIndex:number;
     private _folderPath:string;
     private _name:string;
     private _notes:Note[];
@@ -19,8 +18,6 @@ export default class Notebook
 
     private _selected:boolean;
 
-    private _indexDirty:boolean;
-    
     //#region Get/Set
     get storage(): Storage
     {
@@ -40,11 +37,6 @@ export default class Notebook
     get created():number
     {
         return this._created;
-    }
-
-    get orderIndex(): Number
-    {
-        return this._orderIndex;
     }
 
     get folderPath(): string
@@ -67,28 +59,24 @@ export default class Notebook
         return this._selected;
     }
 
-    get isIndexDirty():boolean
-    {
-        return this._indexDirty;
-    }
     //#endregion
   
     // Member Functions
     constructor()
     {
         this._notes = new Array<Note>();
-        this._name = "Unammed Notebook";
+        this._name = "";
         this._id   = "";
-        this._created = Date.now();
-        this._updated = Date.now();
+        this._created = -1;
+        this._updated = -1;
         this._folderPath = "";
-        this._indexDirty = true;
     }
 
     public static create(id:string, path:string):Notebook
     {
         let notebook:Notebook = new Notebook();
         notebook._id      = id;
+        notebook._name    = "Unnamed Notebook";
         notebook._created = Date.now();
         notebook._updated = Date.now();
         notebook._folderPath = path;
@@ -99,9 +87,9 @@ export default class Notebook
     {
         let notebook:Notebook = new Notebook();
         notebook._id      = data.id;
-        notebook._name    = data.name;
-        notebook._created = data.created;
-        notebook._updated = data.updated;
+        notebook._name    = data.name    || "";
+        notebook._created = data.created || Date.now();
+        notebook._updated = data.updated || Date.now();
         notebook._folderPath = path;
         return notebook;
     }
@@ -112,7 +100,6 @@ export default class Notebook
 
         note.setParent(this);
         this.notes.push(note);
-        this._indexDirty = true;
     }
 
     public removeNote(note:Note):void
@@ -126,15 +113,12 @@ export default class Notebook
                 break;
             }
         }
-        this._indexDirty = true;
     }
 
     public removeAllNotes():void
     {
         this._notes = [];
-        this._indexDirty = true;
     }
-
 
     public setParent(storage:Storage):void
     {
@@ -168,11 +152,6 @@ export default class Notebook
     public setName(name:string):void
     {
         this._name = name;
-    }
-
-    public setIndexSaved():void
-    {
-        this._indexDirty = false;
     }
 
     private setUpdated():void

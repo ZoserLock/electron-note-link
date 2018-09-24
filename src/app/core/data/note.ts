@@ -10,17 +10,6 @@ import NoteIndexData from "../index/noteIndexData";
 
 export default class Note
 {
-    private static sDefaultNote =
-    {
-        id:"",
-        title:"Unnamed Note",
-        text:"",
-        trashed:false,
-        started:false,
-        created:Date.now(),
-        updated:Date.now(),
-    }
-
     private _notebook:Notebook;
 
     private _id:string;
@@ -166,15 +155,13 @@ export default class Note
 
     public setData(data:any):void
     {
-        data = Object.assign(Note.sDefaultNote,data);
-
         this._id      = data.id;
-        this._title   = data.title;
-        this._text    = data.text;
-        this._trash   = data.trashed;
-        this._started = data.started;
-        this._created = data.created;
-        this._updated = data.updated;
+        this._title   = data.title   || "";
+        this._text    = data.text    || "";
+        this._trash   = data.trashed || false;
+        this._started = data.started || false;
+        this._created = data.created || Date.now();
+        this._updated = data.updated || Date.now();
     }
 
     public setParent(notebook:Notebook):void
