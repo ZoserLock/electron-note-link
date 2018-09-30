@@ -4,47 +4,10 @@
 :root 
 {
     /* Window Colors */
-    --window-border: #3A3D45;
-    --window-bar-bg: #1D1F24;
     --window-bar-item-hover-bg: #5cbf2a;
     --window-bar-item-active-bg: #5c1f2a;
 
-    /* Toolbar Colors */
-    --toolbar-bg: #24262D;
-    --toolbar-separator: #3A3D45;
-    --toolbar-item-color: #c0c4c8;
-    --toolbar-item-color-hover: #ffffff;
-    --toolbar-item-color-active: #ffffff;
-
-    /* Sidebar */
-    --sidebar-bg: #24262D;
-    /* Item Background*/
-    --sidebar-item-bg-hover: #3A3D45;
-    --sidebar-item-bg-active: #848c94;
-    --sidebar-item-bg-selected: #2A2D35;
-    --sidebar-item-bg-selected-hover: #3A3D45;
-    /* Item Text Color*/
-    --sidebar-item-color: #c0c4c8;
-    --sidebar-item-color-hover: #ffffff;
-    --sidebar-item-color-selected: #ffffff;
-    --sidebar-item-color-selected-hover: #c0c4c8;
-
-    /* Sidebar Storage Item*/
-    --sidebar-storage-item-bg:#1D1F24;
-    --sidebar-storage-item-color: #c0c4c8;
-
-    /* Contet Menu */
-    --context-menu-background:#24262D;
-    --context-menu-border:#44464D;
-    --context-menu-item-color:#848c94;
-    --context-menu-item-color-hover:#3A3D45;
-    
     /* Note List*/
-    --note-list-header-bg: #2A2D35;
-    --note-list-header-color: #fff;
-    --note-list-content-bg: #2D3038;
-
-    --note-list-header-button-bg: none;
     --note-list-header-button-bg-hover: #c0c4c8;
     --note-list-header-button-bg-active: #848c94;
 
@@ -54,9 +17,7 @@
     --note-list-item-header-color: #848c94;
 
     /* Note View*/
-    --note-view-header-bg: #24262D;
     --note-view-header-color: #c0c4c8;
-    --note-view-content-bg: #24262D;
     --note-view-content-color: #d0d4d8;
 
     /* ************** */
@@ -76,8 +37,11 @@
     --bg-color-darker: #101018;
     --bg-color-dark: #1D1F24;
     --bg-color-normal: #24262D;
+    --bg-color-normal-2: #2A2D35;
     --bg-color-light: #2D3038;
-    --bg-color-lighter: #44464D;
+    --bg-color-lighter:#3A3D45;
+    --bg-color-lightest: #44464D;
+    
 
     /* Borders */
     --border-color-dark: #1D1F24;
@@ -101,10 +65,45 @@
 
 }
 
+/* FONTS */
 @font-face 
 {
     font-family: 'DroidSansMono';
     src: url("../fonts/droid_sans_mono.ttf"); 
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Material Icons'),
+      local('MaterialIcons-Regular'),
+      url("../fonts/MaterialIcons-Regular.woff2") format('woff2'),
+      url("../fonts/MaterialIcons-Regular.woff") format('woff'),
+      url("../fonts/MaterialIcons-Regular.ttf") format('truetype');
+}
+
+/* Material Icons */
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;  /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+  
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: antialiased;
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+  
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* Custom ScrollBar */
@@ -156,7 +155,6 @@ body
     background: var(--icon-all-notes) no-repeat;
 }
 
-
 /* WINDOW */
 
 .ui-window
@@ -164,7 +162,7 @@ body
     display: flex;
     flex-flow: column;
     height: 100vh; 
-    border: solid var(--window-border) 1px;
+    border: solid var(--border-color-normal) 1px;
     box-sizing: border-box;
 }
 
@@ -177,14 +175,14 @@ body
     z-index:6;
 
     display: flex;
-    background-color: var(--window-bar-bg);
+    background-color: var(--bg-color-dark);
     height: 32px;
 }
 
 .ui-windowbar-item
 {
     -webkit-app-region: no-drag;
-    background-color:var(--window-bar-bg);
+    background-color:var(-bg-color-dark);
     color:#ffffff;
     display:inline-block;
     font-size:17px;
@@ -250,7 +248,7 @@ body
 
     display: flex;
     height: 40px;
-    background-color: var(--toolbar-bg);
+    background-color: var(--bg-color-normal);
     box-shadow: 0px 0px 21px #161616;
 }
 
@@ -265,18 +263,21 @@ body
     border-radius: 0px;
     cursor: pointer;
     font-size: 14px;
-    color: var(--toolbar-item-color);
+    color: var(--font-normal-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }
 
 .ui-toolbar-item:hover 
 {
-    color: var(--toolbar-item-color-hover);
+    color: var(--font-brighter-color);
 }
 
 .ui-toolbar-item:active 
 {
-    color: var(--toolbar-item-color-active);
+    color: var(--font-brighter-color);
 }
 
 .ui-toolbar-item:focus
@@ -288,7 +289,13 @@ body
 {
     margin: 6px;
     min-width: 1px;
-    border-left: 1px solid var( --toolbar-separator);
+    border-left: 1px solid var( --border-color-normal);
+}
+
+.ui-toolbar-separator-hidden
+{
+    margin: 6px;
+    min-width: 1px;
 }
 
 .ui-toolbar-search
@@ -313,7 +320,7 @@ body
 /* Side Bar */
 .ui-sidebar
 {
-    background-color: var( --sidebar-bg);
+    background-color: var(--bg-color-normal);
     flex: 0 0 200px;
     margin: 0px;
     padding-top: 10px;
@@ -326,7 +333,7 @@ body
     padding: 5px 0px 5px 20px;
     margin: 0px;
     font-size: 14px;
-    color: var(--toolbar-item-color-hover);
+    color: var(--font-brighter-color);
 }
 
 .ui-sidebar-header-list
@@ -344,7 +351,7 @@ body
     margin: 0px;
     line-height: 35px;
     text-decoration: none;
-    color: var(--sidebar-item-color);
+    color: var(--font-normal-color);
 
     font-size: 14px;
 }
@@ -352,19 +359,19 @@ body
 
 .ui-sidebar-header-list-item:hover
 {
-    background: var(--sidebar-item-bg-hover);
-    color: var(--sidebar-item-color-hover);
+    background: var(--bg-color-lighter);
+    color: var(--font-brighter-color);
 }
 
 .ui-sidebar-header-list-item.selected
 {
-    background: var(--sidebar-item-bg-selected);
-    color: var(--sidebar-item-color-selected);
+    background: var(--bg-color-normal);
+    color: var(--font-brighter-color);
 }
 
 .ui-sidebar-header-list-item.selected:hover
 {
-    background: var(--sidebar-item-bg-selected-hover);
+    background: var(--bg-color-lighter);
 }
 
 .ui-sidebar-header-list-item span
@@ -382,7 +389,7 @@ body
 
 .ui-sidebar-header-list-separator
 {
-    border-bottom: 1px solid var(--context-menu-border);
+    border-bottom: 1px solid var(--border-color-light);
     margin: 3px 10px 3px 10px;
 }
 
@@ -396,13 +403,13 @@ body
 {
     display: flex;
     width: 180px;
-    background-color: var(--sidebar-storage-item-bg);
+    background-color: var(--bg-color-dark);
     padding: 0px;
     height: 35px;
     line-height: 35px;
     padding-left: 20px;
     font-size: 14px;
-    color: var(--sidebar-storage-item-color);
+    color: var(--font-normal-color);
     cursor:default;
 }
 
@@ -520,7 +527,7 @@ body
     line-height: 30px;
     height: 30px;
     text-decoration: none;
-    color: var(--sidebar-item-color);
+    color: var(--font-normal-color);
     font-size: 14px;
 }
 
@@ -533,14 +540,14 @@ body
 
 .ui-sidebar-notebook-item:hover
 {
-    background: var(--sidebar-item-bg-hover);
-    color: var(--sidebar-item-color-hover);
+    background: var(--bg-color-lighter);
+    color: var(--font-brighter-color);
 }
 
 .ui-sidebar-notebook-item.selected
 {
-    background: var(--sidebar-item-bg-selected);
-    color: var(--sidebar-item-color-selected);
+    background: var(--bg-color-light);
+    color: var(--font-brighter-color);
 }
 
 .ui-sidebar-notebook-item span
@@ -573,8 +580,8 @@ body
 {
     display: flex;
     flex-direction: column;
-    background: var(--note-list-header-bg);
-    color: var(--note-list-header-color);
+    background: var(--bg-color-normal-2);
+    color: var(--font-brighter-color);
 }
 
 .ui-note-list-header
@@ -610,7 +617,7 @@ body
 
 .ui-note-list-header-button-container
 {
-    background:var(--note-list-header-button-bg);
+    background:none;
 }
 
 .ui-note-list-header-button-container:hover
@@ -644,7 +651,7 @@ body
 
 .ui-note-list-header-list-separator
 {
-    border-bottom: 1px solid var(--context-menu-border);
+    border-bottom: 1px solid var(--border-color-light);
     margin: 0px 10px 3px 10px;
 }
 
@@ -657,7 +664,7 @@ body
 {
     flex: 1;
     display:flex;
-    background: var(--note-list-content-bg);
+    background: var(--bg-color-light);
 
 }
 
@@ -694,7 +701,7 @@ body
 
 .ui-note-list-item-list-separator
 {
-    border-bottom: 1px solid var(--context-menu-border);
+    border-bottom: 1px solid var(--border-color-light);
     margin: 3px 10px 3px 10px;
 }
 
@@ -820,11 +827,45 @@ body
     color: var(--font-dark-color);
 }
 
+.ui-note-view-header-item
+{
+    margin: 6px;
+    min-width: 10px;
+    max-width: 100px;
+
+    border: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--font-normal-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.ui-note-view-header-item:hover 
+{
+    color: var(--font-brighter-color);
+}
+
+.ui-note-view-header-item:active 
+{
+    color: var(--font-brighter-color);
+}
+
+.ui-note-view-header-item:focus
+{
+    outline: none;
+}
+
 .ui-note-view-header-content
 {
     display: flex;
     flex-direction: column;
-    background: var(--note-view-header-bg);
+    background: var(--bg-color-normal);
     color:var(--note-view-header-color);
     height: 45px;
 }
@@ -834,6 +875,8 @@ body
     flex-grow: 1;
     display: flex;
     padding-left: 20px;
+    line-height: 45px;
+    vertical-align: middle
     
 }
 
@@ -847,7 +890,6 @@ body
     font-size: 14px;
     margin: 13px 0px 7px 0px;
     cursor:pointer;
-    
 }
 
 
@@ -867,7 +909,7 @@ body
 .ui-note-view-header-title .normal
 { 
     white-space: nowrap;
-    overflow: hidden; 
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
@@ -905,7 +947,7 @@ body
 
 .ui-note-view-header-separator
 {
-    border-bottom: 1px solid var(--context-menu-border);
+    border-bottom: 1px solid var(--border-color-light);
     margin: 0px 10px 3px 10px;
 }
 
@@ -914,7 +956,7 @@ body
 {
     user-select: text; 
     padding: 0 20px 0 20px;
-    background: var(--note-view-content-bg);
+    background: var(--bg-color-normal);
     color: var(--note-view-content-color);
     font-weight:normal;
     flex: 1;
@@ -985,6 +1027,12 @@ body
 {
     margin-left: auto;
     flex-grow: 1;
+}
+
+.valign-center {
+    display: inline-flex;
+    vertical-align: middle;
+    align-items: center;
 }
 
 /*Popups*/
@@ -1097,11 +1145,11 @@ body
 /****************/
 /* Context Menu */
 .react-contextmenu {
-    background-color: var(--context-menu-background);
+    background-color: var(--bg-color-normal);
     background-clip: padding-box;
-    border: 1px solid var(--context-menu-border);
+    border: 1px solid var(--border-color-light);
     border-radius: 0;
-    color: var(--context-menu-item-color);
+    color: var(--font-dark-color);
     font-size: 16px;
     margin: 2px 0 0;
     min-width: 160px;
@@ -1121,7 +1169,7 @@ body
 .react-contextmenu-item {
     background: 0 0;
     border: 0;
-    color: var(--context-menu-item-color);
+    color: var(--font-dark-color);
 	cursor: pointer;
     font-weight: 400;
     font-size: 14px;
@@ -1136,7 +1184,7 @@ body
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
     color: #fff;
-    background-color: var(--context-menu-item-color-hover);
+    background-color: var(--font-normal-color);
     border-color: #20a0ff;
     text-decoration: none;
 }
@@ -1149,7 +1197,7 @@ body
 }
 
 .react-contextmenu-item--divider {
-    border-bottom: 1px solid var(--context-menu-border);
+    border-bottom: 1px solid var(--border-color-light);
     cursor: inherit;
     margin: 0px 10px 3px 10px ;
     padding: 2px 0;

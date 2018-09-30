@@ -18,7 +18,17 @@ export default class NoteViewHeader extends UIComponent<any, any>
         super(props);
     }
 
-    private onStartedClick()
+    private handleNoteNotebookClick()
+    {
+        let data =
+        {
+            notebookId:this.props.note.notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.selectNotebook, data);
+    }
+
+    private handleStartedClick()
     {
         let data:NoteUpdateData =
         {
@@ -26,8 +36,6 @@ export default class NoteViewHeader extends UIComponent<any, any>
             started:!this.props.note.started,
         }
 
-        Debug.logVar(data);
-        
         this.sendMainMessage(MessageChannel.updateNote, data);
     }
 
@@ -46,7 +54,7 @@ export default class NoteViewHeader extends UIComponent<any, any>
     {
         if(this.props.note)
         {
-            let started = this.props.note.started?"icon-star-fill":"icon-star";
+            let started = this.props.note.started?"star":"star_border";
 
             return (
                 <div className="ui-note-view-header-content"> 
@@ -61,7 +69,18 @@ export default class NoteViewHeader extends UIComponent<any, any>
                                 </div>
 
                             <div className="ui-inline-spacer"></div>
-                            <button className={started} onClick={()=>this.onStartedClick()}></button>
+                            <div className="ui-toolbar-separator"></div>
+                            <div className="valign-center">
+                                <i className="material-icons">library_books</i>
+                                <button className="ui-toolbar-item" onClick={()=>this.handleNoteNotebookClick()}>{this.props.note.notebookName}</button>
+                            </div>
+                            <div className="ui-toolbar-separator"></div>
+                            <div className="valign-center">
+                                <button className="ui-toolbar-item" onClick={()=>this.handleStartedClick()}>    
+                                    <i className="material-icons">{started}</i> 
+                                </button>
+                            </div>
+                            <div className="ui-toolbar-separator-hidden"></div>
                         </div>
                 <div className="ui-note-view-header-separator"/> 
                 </div>

@@ -13,6 +13,7 @@ export default class NodeDataParser
             started:note.started,
             created:note.created,
             updated:note.updated,
+            notebookId:note.parent.id,
             notebookName:note.parent.name,
         };
     }
