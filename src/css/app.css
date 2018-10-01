@@ -1184,7 +1184,7 @@ body
 .react-contextmenu-item.react-contextmenu-item--active,
 .react-contextmenu-item.react-contextmenu-item--selected {
     color: #fff;
-    background-color: var(--font-normal-color);
+    background-color: var(--bg-color-light);
     border-color: #20a0ff;
     text-decoration: none;
 }

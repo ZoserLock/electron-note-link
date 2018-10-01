@@ -40,9 +40,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
     private handleNotebookContextMenu(e:any, data:any, target:any):void
     {
-        Debug.log("Handle Notebook Context Menu X");
         let notebookId = target.getAttribute("id");
-        Debug.log("Handle Notebook Context Menu: "+notebookId);
 
         switch(data.action)
         {

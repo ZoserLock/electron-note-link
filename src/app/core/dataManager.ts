@@ -669,7 +669,7 @@ export default class DataManager
 
     public loadNote(path:string):Note
     {
-        let noteIndex:NoteIndexData = this._noteIndex.getNoteIndexData(Path.basename(path));
+        let noteIndex:NoteIndexData = this._noteIndex.getNoteIndexData(Path.basename(path,".json"));
         let note:Note = null;
 
         if(noteIndex != null)
