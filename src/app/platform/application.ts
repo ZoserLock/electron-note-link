@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from "electron"
+import { app, BrowserWindow, ipcMain, dialog, shell,clipboard } from "electron"
 import * as Path from "path";
 
 import Debug           from "tools/debug";
@@ -15,6 +15,7 @@ import PopupManager    from "core/controllers/popupController";
 
 export default class Application implements Platform
 {
+
     // Dependencies
     private _core:Core;
     
@@ -44,6 +45,7 @@ export default class Application implements Platform
         this._mainWindow = new Window();
 
         this._mainWindow.onHandleWindowClose = (e:Event)=>this.handleWindowClose(e);
+        this._mainWindow.onHandleCommandLink = (command:string,value:string)=>this.handleCommandEvent(command,value);
 
     }
 
@@ -88,6 +90,14 @@ export default class Application implements Platform
         return false;
     }
 
+    private handleCommandEvent(command:string,value:string):void
+    {
+        if(command == "#note")
+        {
+            this._core.selectNote(value);
+        }
+    }
+
     // Window control Function
     public minimizeMainWindow():void
     {
@@ -130,6 +140,10 @@ export default class Application implements Platform
         }
     }
 
+    public setClipboard(text: string): void 
+    {
+        clipboard.writeText(text);
+    }
     // OS
     public showOnExplorer(path:string):void
     {

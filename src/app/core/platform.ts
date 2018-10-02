@@ -22,4 +22,5 @@ export default interface Platform
     showOpenDirectoryDialog(title:string):string;
 
     showOnExplorer(path:string):void;
+    setClipboard(path:string):void;
 }

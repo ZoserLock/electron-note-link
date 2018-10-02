@@ -312,4 +312,16 @@ export default class Core
             this._platform.showOnExplorer(note.fullPath);
         }
     }
+
+    public createNoteLink(noteId:string):void
+    {
+        let note:Note = this._dataManager.getNote(noteId);
+
+        if(note != null)
+        {
+            let noteLink:string="[Note Link](#note:"+note.id+")";
+
+            this._platform.setClipboard(noteLink);
+        }
+    }
 }

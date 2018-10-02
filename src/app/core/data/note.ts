@@ -1,5 +1,6 @@
 // Node Modules
 import * as Path from "path";
+import * as uuid from "uuid/v4";
 
 // Tools
 import Debug from "tools/debug";
@@ -114,18 +115,36 @@ export default class Note
         this._loaded = false;
     }
 
-    public static createNew(id:string, path:string):Note
+    public static createNew(path:string):Note
     {
         let note:Note = new Note();
         note._created = Date.now();
         note._updated = Date.now();
-        note._id   = id;
+        note._id      = uuid();
         note._folderPath = path;
         note._fileName = note.id + ".json";
         note._fullPath = Path.join(note._folderPath, note._fileName);
         note._loaded = true;
         return note;
     }
+    
+    public static clone(original:Note):Note
+    {
+        let note:Note = new Note();
+        note._created = Date.now();
+        note._updated = Date.now();
+        note._id      = uuid()
+        note._text    = original.text;
+        note._started = original.started;
+        note._trash   = original.trashed;
+        note._title   = original.title;
+        note._folderPath = original.folderPath;
+        note._fileName = note.id + ".json";
+        note._fullPath = Path.join(note._folderPath, note._fileName);
+        note._loaded   = true;
+        return note;
+    }
+
     public static createFromIndexData(data:NoteIndexData, path:string):Note
     {
         let note:Note = new Note();

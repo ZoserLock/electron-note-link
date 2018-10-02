@@ -1,5 +1,4 @@
 // Node Modules
-import * as uuid from "uuid/v4";
 import * as Path from "path";
 
 // Tools
@@ -13,6 +12,7 @@ import DataManager      from "core/dataManager";
 
 import Note             from "core/data/Note";
 import Notebook         from "core/data/notebook";
+import NavigationNotebookItem from "ui/components/navigationPanel/navigationNotebookItem";
 
 export default class NoteController
 {
@@ -38,7 +38,7 @@ export default class NoteController
 
         if(notebook != null)
         {
-            let note:Note = Note.createNew(uuid(), Path.join(notebook.folderPath,notebook.id));
+            let note:Note = Note.createNew(Path.join(notebook.folderPath,notebook.id));
             
             if(this._dataManager.addNote(note))
             {
@@ -56,6 +56,32 @@ export default class NoteController
             Debug.logError("[Note Controller] Trying to create a note in an invalid notebook");
         }
     }
+
+    public duplicateNote(id:string):void
+    {
+        let original:Note = this._core.dataManager.getNote(id);
+        let notebook:Notebook = original.parent;
+
+        if(original != null && notebook != null)
+        {
+            let duplicated:Note = Note.clone(original);
+
+            if(this._dataManager.addNote(duplicated))
+            {
+                this._dataManager.saveNote(duplicated);
+                notebook.addNote(duplicated);
+                this._dataManager.saveNotebook(notebook);
+
+                this._core.selectNote(duplicated.id);
+
+                this._presentation.updateNoteListPanel();
+            }
+        }    
+        else
+        {
+            Debug.logError("[Note Controller] Duplicate Note: Note or Note Notebook Does not exist");
+        }
+    }
     
     public deleteNote(id:string):void
     {
@@ -65,7 +91,7 @@ export default class NoteController
         {
             if(this._core.selectedNote == note)
             {
-                this._core.unselectNotebook();
+                this._core.unselectNote();
             }
 
             if(note.trashed)

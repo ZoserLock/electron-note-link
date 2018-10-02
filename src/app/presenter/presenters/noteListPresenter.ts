@@ -24,6 +24,10 @@ export default class NoteListPresenter extends Presenter
         this.registerUIListener(MessageChannel.selectNote          , (data:any) => this.actionSelectNote(data));
         this.registerUIListener(MessageChannel.deleteNote          , (data:any) => this.actionDeleteNote(data));
 
+        this.registerUIListener(MessageChannel.duplicateNote       , (data:any) => this.actionDuplicateNote(data));
+        this.registerUIListener(MessageChannel.viewNoteSource      , (data:any) => this.actionViewNoteSource(data));
+        this.registerUIListener(MessageChannel.createNoteLink      , (data:any) => this.actionCreateNoteLink(data));
+
         this.registerUIListener(MessageChannel.searchUpdated       , (data:any) => this.actionSearchUpdated(data));
     }
 
@@ -122,6 +126,22 @@ export default class NoteListPresenter extends Presenter
     {
         // TODO Sanitize data
         this._core.noteController.deleteNote(data.noteId);
+    }
+
+    private actionDuplicateNote(data:any):void
+    {
+        // TODO Sanitize data
+        this._core.noteController.duplicateNote(data.noteId);
+    }
+
+    private actionViewNoteSource(data:any):void
+    {
+        this._core.viewNoteSource(data.noteId);
+    }
+
+    private actionCreateNoteLink(data:any):void
+    {
+        this._core.createNoteLink(data.noteId);
     }
 
     private actionSelectNote(data:any):void

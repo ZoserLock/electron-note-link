@@ -1,5 +1,6 @@
 import { BrowserWindow } from "electron";
 import Debug from "tools/debug";
+import { debug } from "util";
 
 export default class Window
 {
@@ -7,6 +8,7 @@ export default class Window
 
     // Events
     public onHandleWindowClose:(e:Event)=>boolean;
+    public onHandleCommandLink:(command:string,value:string)=>void;
     
     constructor()
     {
@@ -45,24 +47,21 @@ export default class Window
             }
         });
     
-           /* let core = this._core;
-    
-            wc.on('did-navigate-in-page', function (e:Event, url:String, isMainFrame:boolean) 
+        let window:Window=this;
+
+        wc.on('did-navigate-in-page', function (e:Event, url:String, isMainFrame:boolean) 
+        {
+            var hash = url.substring(url.indexOf('#'));
+            var command = hash.split(":");
+
+            if(command.length == 2)
             {
-                var hash = url.substring(url.indexOf('#'));
-                var command = hash.split(":");
-    
-                if(command.length == 2)
-                {
-                    if(command[0] == "#note")
-                    {
-                        core.selectNote(command[1]);
-                    }
-                }
-    
-                e.preventDefault();
+                window.onHandleCommandLink(command[0],command[1]);
+            }
+
+            e.preventDefault();
             
-            });*/
+        });
     }
 
     // Window command
