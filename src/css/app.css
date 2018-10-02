@@ -1055,9 +1055,9 @@ body
 {
     display: flex;
     flex-direction: column;
-    width: 600px;
-    height: 390px;
-    border: 1px solid var(--border-color-dark);
+    width: 450px;
+    height: 250px;
+    border: 1px solid var(--accent-bg-orange);
 }
 
 .ui-popup-modal header
