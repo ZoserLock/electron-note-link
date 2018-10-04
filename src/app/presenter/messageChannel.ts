@@ -32,6 +32,7 @@ export default class MessageChannel
     public static readonly renameNote:string        = "action:RenameNote";
 
     public static readonly renameNotebook:string    = "action:RenameNotebook";
+    public static readonly renameStorage:string     = "action:RenameStorage";
 
     public static readonly viewNotebookSource:string = "action:ViewNotebookSource";
     public static readonly viewNoteSource:string     = "action:ViewNoteSource";

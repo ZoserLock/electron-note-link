@@ -63,7 +63,7 @@ export default class NotebookController
 
         if(notebook != null)
         {
-            this._core.popupController.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",()=>
+            this._core.popupController.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",(data:any)=>
             {
                 let isSelectedNotebook = (this._core.selectedNotebook == notebook);
                 let hasSelectedNote = (this._core.selectedNote.parent == notebook);
@@ -111,5 +111,24 @@ export default class NotebookController
             Debug.logError("[Notebook Controller] UpdateNotebook: Notebook does not exist.");
         }
         return false;
+    }
+
+    public renameNotebook(id:string):void
+    {
+        let notebook = this._core.dataManager.getNotebook(id);
+
+        if(notebook != null)
+        {
+            this._core.popupController.showInputPanel("Notebook Rename","Type a new name", notebook.name,"Rename","Cancel",(data:any)=>
+            {
+                let updateData:NotebookUpdateData = {
+                    id:notebook.id,
+                    name:data.text
+                }
+
+                this.updateNotebook(updateData);
+                
+            },null);
+        }
     }
 }

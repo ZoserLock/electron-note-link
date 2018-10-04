@@ -9,6 +9,7 @@ declare const enum NoteListMode
 }
 
 type VoidAction     = () => void | null;
+type DataAction     = (data:any) => void | null;
 type Action1<T>     = (param:T) => void| null;
 type Action2<T,U>   = (param1:T,param2:U) => void| null;
 type Action3<T,U,V> = (param1:T,param2:U,param3:V) => void| null;

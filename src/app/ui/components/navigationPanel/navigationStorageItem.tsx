@@ -84,13 +84,12 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
     private renameNotebook(notebookId:string)
     {
-        Debug.logError("Implement Me!");
-        /*let data =
+        let data =
         {
             notebookId:notebookId
         }
 
-        this.sendMainMessage(MessageChannel.removeStorage, data);*/
+        this.sendMainMessage(MessageChannel.renameNotebook, data);
     }
 
     private exportNotebook(notebookId:string)

@@ -1055,9 +1055,25 @@ body
 {
     display: flex;
     flex-direction: column;
+    border: 1px solid var(--accent-bg-orange);
+}
+
+.ui-popup-loading
+{
     width: 450px;
     height: 250px;
-    border: 1px solid var(--accent-bg-orange);
+}
+
+.ui-popup-confirmation
+{
+    width: 450px;
+    height: 250px;
+}
+
+.ui-popup-input
+{
+    width: 450px;
+    height: 250px;
 }
 
 .ui-popup-modal header
@@ -1100,6 +1116,28 @@ body
     color: var(--font-normal-color);
 }
 
+.ui-popup-modal-input
+{
+    display: flex;
+    flex-grow: 1;
+    min-width: 0px;
+    font-size: 16px;
+    color: var(--font-normal-color);
+}
+
+
+.ui-popup-modal-input input
+{
+    margin: auto 20px;
+    padding: 5px;
+    flex: 1;
+    flex-basis: 100%;
+    min-width:0;
+
+    background:none;
+    color: var( --font-normal-color);
+    border:solid 1px var(--border-color-normal);
+}
 
 .ui-popup-modal footer
 {

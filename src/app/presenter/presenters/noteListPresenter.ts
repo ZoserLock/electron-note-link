@@ -27,6 +27,7 @@ export default class NoteListPresenter extends Presenter
         this.registerUIListener(MessageChannel.duplicateNote       , (data:any) => this.actionDuplicateNote(data));
         this.registerUIListener(MessageChannel.viewNoteSource      , (data:any) => this.actionViewNoteSource(data));
         this.registerUIListener(MessageChannel.createNoteLink      , (data:any) => this.actionCreateNoteLink(data));
+        this.registerUIListener(MessageChannel.renameNote          , (data:any) => this.actionRenameNote(data));
 
         this.registerUIListener(MessageChannel.searchUpdated       , (data:any) => this.actionSearchUpdated(data));
     }
@@ -142,6 +143,11 @@ export default class NoteListPresenter extends Presenter
     private actionCreateNoteLink(data:any):void
     {
         this._core.createNoteLink(data.noteId);
+    }
+
+    private actionRenameNote(data:any):void
+    {
+        this._core.noteController.renameNote(data.noteId);
     }
 
     private actionSelectNote(data:any):void

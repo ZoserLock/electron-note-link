@@ -16,9 +16,11 @@ export default class PopupLayer extends UIComponent<any, any>
     {
         super(props);
 
-        this.state=
+        this.state =
         {
-            activePopup:null
+            popupData:null,
+            activePopup:null,
+            inputText:""
         }
 
         this._showPopupEvent = (event:any,data:any)=>this.showPopup(data);
@@ -42,12 +44,12 @@ export default class PopupLayer extends UIComponent<any, any>
         if(data.type == "Confirmation")
         {
             let activePopup:any = this.renderConfirmationPopup(data.title,data.subTitle,data.text,data.okButton,data.cancelButton);
-            this.setState({activePopup:activePopup});
+            this.setState({popupData:data, inputText: data.text, activePopup:activePopup});
         }
         else if(data.type == "Input")
         {
-            let activePopup:any = this.renderConfirmationPopup(data.title,data.subTitle,data.text,data.okButton,data.cancelButton);
-            this.setState({activePopup:activePopup});
+            let activePopup:any = this.renderInputPopup(data.title,data.subTitle,data.text,data.okButton,data.cancelButton);
+            this.setState({popupData:data, inputText: data.text, activePopup:activePopup});
         }
     }
 
@@ -60,7 +62,7 @@ export default class PopupLayer extends UIComponent<any, any>
     private renderConfirmationPopup(title:string, subTitle:string, text:string, okButton:string, cancelButton:string):any
     {
         return(
-            <div className="ui-popup-modal">
+            <div className="ui-popup-modal ui-popup-confirmation">
                 <header> 
                     <h2>{title}</h2>
                     <span>{subTitle}</span>
@@ -88,30 +90,74 @@ export default class PopupLayer extends UIComponent<any, any>
         this.sendMainMessage(MessageChannel.popupResult, data);
         this.hidePopup();
     }
+
+    private inputPopupResult(value:boolean):void
+    {
+        if(value)
+        {
+            if(this.state.popupData.text != this.state.inputText)
+            {
+                let data:any =
+                {
+                    success:true,
+                    text:this.state.inputText
+                }
+
+                this.sendMainMessage(MessageChannel.popupResult, data);
+                this.hidePopup();
+            }
+            else
+            {
+                let data:any =
+                {
+                    success:false,
+                }
+
+                this.sendMainMessage(MessageChannel.popupResult, data);
+                this.hidePopup();
+            }
+        }
+        else
+        {
+            let data:any =
+            {
+                success:value,
+            }
+    
+            this.sendMainMessage(MessageChannel.popupResult, data);
+            this.hidePopup();
+        }
+    }
     //#endregion
 
     //#region Input Popup
     private renderInputPopup(title:string, subTitle:string, text:string, okButton:string, cancelButton:string):any
     {
         return(
-            <div className="ui-popup-modal">
+            <div className="ui-popup-modal ui-popup-input">
                 <header> 
                     <h2>{title}</h2>
                     <span>{subTitle}</span>
                 </header>
                 <article> 
-                    <div className="ui-popup-modal-text">
-                        {text}
+                    <div className="ui-popup-modal-input">
+                        <input  autoFocus defaultValue={text} onChange={(event:any)=>this.handleInputPopupTextChange(event)}/>
                      </div>
                 </article> 
                 <footer>       
                     <div className="ui-inline-spacer"/>
-                    <button onClick={()=>this.confirmationPopupResult(false)}> {cancelButton}  </button>
-                    <button onClick={()=>this.confirmationPopupResult(true)}> {okButton} </button>
+                    <button onClick={()=>this.inputPopupResult(false)}> {cancelButton}  </button>
+                    <button onClick={()=>this.inputPopupResult(true)}> {okButton} </button>
                 </footer>
             </div>
         )
     }
+
+    private handleInputPopupTextChange(event:any):any
+    {
+        this.setState({inputText: event.target.value})
+    }
+
     //#endregion
 
     public render() 

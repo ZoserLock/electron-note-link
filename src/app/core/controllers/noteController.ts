@@ -135,4 +135,23 @@ export default class NoteController
         }
         return false;
     }
+
+    public renameNote(id:string):void
+    {
+        let note:Note = this._core.dataManager.getNote(id);
+
+        if(note != null)
+        {
+            this._core.popupController.showInputPanel("Note Rename","Type a new title", note.title,"Rename","Cancel",(data:any)=>
+            {
+                let updateData:NoteUpdateData = {
+                    id:note.id,
+                    title:data.text
+                }
+
+                this.updateNote(updateData);
+                
+            },null);
+        }
+    }
 }

@@ -195,4 +195,24 @@ export default class StorageController
         });
     }
 
+    
+    public renameStorage(id:string):void
+    {
+        let storage = this._core.dataManager.getStorage(id);
+
+        if(storage != null)
+        {
+            this._core.popupController.showInputPanel("Storage Rename","Type a new name", storage.name,"Rename","Cancel",(data:any)=>
+            {
+                let updateData:StorageUpdateData = {
+                    id:storage.id,
+                    name:data.text
+                }
+
+                this.updateStorage(updateData);
+                
+            },null);
+        }
+    }
+
 }

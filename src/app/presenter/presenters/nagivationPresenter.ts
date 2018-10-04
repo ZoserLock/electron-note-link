@@ -14,10 +14,12 @@ export default class NavigationPresenter extends Presenter
         this.registerUIListener(MessageChannel.removeStorage      ,(data:any) => this.actionRemoveStorage(data));
         this.registerUIListener(MessageChannel.deleteStorage      ,(data:any) => this.actionDeleteStorage(data));
         this.registerUIListener(MessageChannel.updateStorage      ,(data:any) => this.actionUpdateStorage(data));
+        this.registerUIListener(MessageChannel.renameStorage      ,(data:any) => this.actionRenameStorage(data));
 
         this.registerUIListener(MessageChannel.deleteNotebook     ,(data:any) => this.actionDeleteNotebook(data));
         this.registerUIListener(MessageChannel.createNotebook     ,(data:any) => this.actionNewNotebook(data));
         this.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
+        this.registerUIListener(MessageChannel.renameNotebook     ,(data:any) => this.actionRenameNotebook(data));
 
         this.registerUIListener(MessageChannel.setNoteListMode    ,(data:any) => this.actionSetNoteListMode(data));
 
@@ -65,6 +67,14 @@ export default class NavigationPresenter extends Presenter
 
         this._core.storageController.updateStorage(updateData);
     }
+    
+    private actionRenameStorage(data:any)
+    {
+        let storageId = data.storageId;
+        
+        this._core.storageController.renameStorage(storageId);
+    };
+
     ///////////////////////////
     // Notebook
      
@@ -87,6 +97,13 @@ export default class NavigationPresenter extends Presenter
         let updateData:NotebookUpdateData = data as NotebookUpdateData;
     
         this._core.notebookController.updateNotebook(updateData);
+    };
+
+    private actionRenameNotebook(data:any)
+    {
+        let notebookId = data.notebookId;
+        
+        this._core.notebookController.renameNotebook(notebookId);
     };
 
     ///////////////////////////////

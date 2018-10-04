@@ -21,8 +21,8 @@ export default class PopupManager
 
     private _popupShown:boolean = false;
 
-    private _onOkFunction:()     => void;
-    private _onCancelFunction:() => void;
+    private _onOkFunction:(data:any) => void;
+    private _onCancelFunction:()     => void;
 
     constructor(core:Core, platform:Platform, presentation:Presentation, dataManager:DataManager)
     {
@@ -40,7 +40,7 @@ export default class PopupManager
         {
             if(this._onOkFunction != null)
             {
-                this._onOkFunction();
+                this._onOkFunction(data);
             }
         }
         else
@@ -52,7 +52,7 @@ export default class PopupManager
         }
     }
 
-    public showConfirmationPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:VoidAction, onCancel:VoidAction):void
+    public showConfirmationPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:DataAction, onCancel:VoidAction):void
     {
         if(!this._popupShown)
         {
@@ -77,7 +77,7 @@ export default class PopupManager
         }
     }
 
-    public showInputPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:VoidAction, onCancel:VoidAction):void
+    public showInputPanel(title:string, subTitle:string, text:string, okButton:string, cancelButton:string, onOk:DataAction, onCancel:VoidAction):void
     {
         if(!this._popupShown)
         {

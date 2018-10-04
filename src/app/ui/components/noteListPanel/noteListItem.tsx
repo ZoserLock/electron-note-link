@@ -29,13 +29,6 @@ export default class NoteListItem extends UIComponent<any, any>
         this.sendMainMessage(MessageChannel.selectNote,data);
     }
 
-    private onItemDelete()
-    {
-        let data ={noteId:this.props.note.id}
-
-        this.sendMainMessage(MessageChannel.deleteNote,data);
-    }
-
     public editFinished(text:string):void
     {
         let data:NoteUpdateData = 
