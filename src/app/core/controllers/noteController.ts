@@ -46,7 +46,7 @@ export default class NoteController
                 notebook.addNote(note);
                 this._dataManager.saveNotebook(notebook);
 
-                this._core.selectNote(note.id);
+                this._core.selectNote(note.id, true);
 
                 this._presentation.updateNoteListPanel();
             }
@@ -72,7 +72,7 @@ export default class NoteController
                 notebook.addNote(duplicated);
                 this._dataManager.saveNotebook(notebook);
 
-                this._core.selectNote(duplicated.id);
+                this._core.selectNote(duplicated.id, true);
 
                 this._presentation.updateNoteListPanel();
             }

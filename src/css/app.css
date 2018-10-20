@@ -8,9 +8,6 @@
     --window-bar-item-active-bg: #5c1f2a;
 
     /* Note List*/
-    --note-list-header-button-bg-hover: #c0c4c8;
-    --note-list-header-button-bg-active: #848c94;
-
     --note-list-item-color: #3A3D45;
     --note-list-item-color-hover: #3A3D45;
     --note-list-item-color-selected: #3A3D45;
@@ -54,15 +51,6 @@
     --icon-window-minimize: url(../img/icons/icon_minimize.png);
     --icon-window-options: url(../img/icons/icon_options.png);
     --icon-window-add: url(../img/icons/icon_add.png);
-    --icon-window-notebook: url(../img/icons/icon_notebook.png);
-
-    --icon-star-fill: url(../img/icons/icon_star_fill.png);
-    --icon-star : url(../img/icons/icon_star.png);
-    --icon-notebook: url(../img/icons/icon_notebook.png);
-    --icon-all-notes: url(../img/icons/icon_all_notes.png);
-    --icon-trash: url(../img/icons/icon_trash.png);
-    --icon-search: url(../img/icons/icon_search.png);
-
 }
 
 /* FONTS */
@@ -121,38 +109,6 @@ body
     margin: 0;
     user-select: none; 
     font-family: 'Roboto', sans-serif;
-}
-
-/* ICONS */
-
-.icon-star-fill
-{
-    background: var(--icon-star-fill) no-repeat;
-}
-
-.icon-star
-{
-    background: var(--icon-star) no-repeat;
-}
-
-.icon-notebook
-{
-    background: var(--icon-notebook) no-repeat;
-}
-
-.icon-search
-{
-    background: var(--icon-search) no-repeat;
-}
-
-.icon-trash
-{
-    background: var(--icon-trash) no-repeat;
-}
-
-.icon-all-notes
-{
-    background: var(--icon-all-notes) no-repeat;
 }
 
 /* WINDOW */
@@ -594,13 +550,7 @@ body
 
 .ui-note-list-header-icon
 {
-    display: block;
-    background-size: 30px;
-    background-position: center; 
-    padding: 5px 0px 5px 5px;
-    height: 35px;
-    width: 35px;
-    min-width: 45px;
+    margin: 0px 10px;
 }
 
 .ui-note-list-header-title
@@ -622,12 +572,12 @@ body
 
 .ui-note-list-header-button-container:hover
 {
-    background:var(--note-list-header-button-bg-hover);
+    background:var(--bg-color-dark);
 }
 
 .ui-note-list-header-button-container:active
 {
-    background:var(--note-list-header-button-bg-active);
+    background:var(--bg-color-normal);
 }
 
 .ui-note-list-header-button
@@ -867,7 +817,7 @@ body
     flex-direction: column;
     background: var(--bg-color-normal);
     color:var(--note-view-header-color);
-    height: 45px;
+    height: 49px;
 }
 
 .ui-note-view-header-container

@@ -153,6 +153,6 @@ export default class NoteListPresenter extends Presenter
     private actionSelectNote(data:any):void
     {
          // TODO Sanitize data
-        this._core.selectNote(data.noteId);
+        this._core.selectNote(data.noteId, true);
     }
 }

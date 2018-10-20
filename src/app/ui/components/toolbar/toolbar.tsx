@@ -37,7 +37,7 @@ export default class Toolbar extends UIComponent<any, any>
     }
 
     //#region Handle UI Events
-    private HandleCreateNewStorage():void
+    private handleCreateNewStorage():void
     {
         this.sendMainMessage(MessageChannel.createStorage);
     }
@@ -46,18 +46,33 @@ export default class Toolbar extends UIComponent<any, any>
     {
         this.sendMainMessage(MessageChannel.createStorage);
     }
-    
+
+    private handlePrevState():void
+    {
+        this.sendMainMessage(MessageChannel.showPrevState);
+    }
+
+    private handleNextState():void
+    {
+        this.sendMainMessage(MessageChannel.showNextState);
+    }
+
     private testPopup():void
     {
         this.sendMainMessage(MessageChannel.testPopup);
     }
+
+
     //#endregion
 
     public render() 
     {
         return (
             <header className="ui-toolbar">
-                <ToolbarItem name="Add Storage" onClick={()=>this.HandleCreateNewStorage()}/>
+                <ToolbarItem name="Prev" onClick={()=>this.handlePrevState()}/>
+                <ToolbarItem name="Next" onClick={()=>this.handleNextState()}/>
+                <ToolbarSeparator/>
+                <ToolbarItem name="Add Storage" onClick={()=>this.handleCreateNewStorage()}/>
                 <ToolbarItem name="Add Note" onClick={()=>this.handleCreateNewNote()}/>
                 <ToolbarSeparator/>
                 <ToolbarSearchBar ref={(ref) => this._searchBar = ref}/>

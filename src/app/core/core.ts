@@ -5,6 +5,7 @@ import Debug from "tools/debug";
 import DataManager      from "core/dataManager";
 import Presentation     from "core/presentation";
 import Platform         from "core/platform";
+import Storage          from "core/data/storage";
 import Notebook         from "core/data/notebook";
 import Note             from "core/data/note";
 
@@ -13,12 +14,6 @@ import StorageController        from "core/controllers/storageController";
 import NotebookController       from "core/controllers/notebookController";
 import NoteController           from "core/controllers/noteController";
 import ApplicationController    from "core/controllers/applicationController";
-
-// Presenter
-import MessageChannel   from "presenter/messageChannel";
-
-
-
 
 export default class Core
 {
@@ -34,15 +29,16 @@ export default class Core
     private _noteController:NoteController;
     private _applicationController:ApplicationController;
 
-    // NoteController
-    // NotebookController;
-
     // Editor Status
     private _noteListMode:NoteListMode;
 
     private _selectedNotebook:Notebook;
 
     private _selectedNote:Note;
+
+    // Selection History
+    private _selectionHistoryBack:Array<string>  = [];
+    private _selectionHistoryFront:Array<string> = [];
 
     // Search Data
     private _searchPhrase = "";
@@ -108,6 +104,9 @@ export default class Core
         this._presentation = presentation;
 
         this._dataManager        = new DataManager();
+
+        this._dataManager.onNoteRegistered   = (note:Note)=>{ this.onNoteRegistered(note);}
+        this._dataManager.onNoteUnregistered = (note:Note)=>{ this.onNoteUnregistered(note);}
 
         this._popupController       = new PopupController(this,this._platform, this._presentation,this._dataManager);
         this._storageController     = new StorageController(this,this._platform, this._presentation,this._dataManager);
@@ -221,7 +220,7 @@ export default class Core
             if(this._selectedNotebook.notes.length > 0)
             {
                 let note = this._selectedNotebook.notes[0];
-                this.selectNote(note.id);
+                this.selectNote(note.id, true);
             }
 
             this._presentation.updateNavigationPanel();
@@ -255,11 +254,16 @@ export default class Core
         }
     }
 
-    public selectNote(noteId:string):boolean
+    public selectNote(noteId:string, updateHistory:boolean):boolean
     {
         if(this._selectedNote != null && this._selectedNote.id == noteId)
         {
             return false;
+        }
+
+        if(noteId == "")
+        {
+            this.unselectNote();
         }
 
         let note:Note = this._dataManager.getNote(noteId);
@@ -278,6 +282,13 @@ export default class Core
             this._presentation.updateNoteListPanel();
             this._presentation.updateNoteViewPanel();
 
+            // Update History
+            if(updateHistory)
+            {
+                this._selectionHistoryBack.push(noteId);
+                this._selectionHistoryFront = [];
+            }
+
             return true;
         }
         return false;
@@ -290,6 +301,49 @@ export default class Core
         if(note != null)
         {
             this.selectNotebook(note.parent.id);
+        }
+    }
+
+    public notifyStorageRemoved(storage:Storage)
+    {
+        if(this.selectedNotebook != null && this.selectedNotebook.storage == storage)
+        {
+            Debug.log("Unselect notebook being part of deleted/unliked storage");
+            this.unselectNotebook();
+        }
+
+        if(this.selectedNote != null && this.selectedNote.parent.storage == storage)
+        {
+            Debug.log("Unselect note being part of deleted/unliked storage");
+            this.removeNoteFromHistory(this.selectedNote);
+            this.unselectNote();
+        }
+    }
+
+    public notifyNotebookRemoved(notebook:Notebook)
+    {
+        let isSelectedNotebook = (this.selectedNotebook == notebook);
+        
+        if(this.selectedNotebook!=null && this.selectedNotebook == notebook)
+        {
+            this.unselectNotebook();
+        }
+
+        if(this.selectedNote != null && this.selectedNote.parent == notebook)
+        {
+            Debug.log("Unselect note being part of deleted Notebook");
+            this.removeNoteFromHistory(this.selectedNote);
+            this.unselectNote();
+        }
+
+        // Select some notebook if non is selected
+        if(this.selectedNotebook == null)
+        {
+            if(this.dataManager.notebooks.length > 0)
+            {
+                let next:Notebook = this.dataManager.notebooks[0];
+                this.selectNotebook(next.id);
+            }
         }
     }
 
@@ -323,5 +377,65 @@ export default class Core
 
             this._platform.setClipboard(noteLink);
         }
+    }
+
+    // Note history related
+    private removeNoteFromHistory(note:Note):void
+    {
+        Debug.log("removeNoteFromHistory: "+note.id);
+
+        for(let a = 0; a < this._selectionHistoryBack.length; ++a)
+        {
+            let noteId = this._selectionHistoryBack[a];
+            if(noteId == note.id)
+            {
+                Debug.log("removeNoteFromHistory: Found");
+                this._selectionHistoryBack.splice(a, 1);
+                a--;
+            }
+        }
+
+        for(let a = 0; a < this._selectionHistoryFront.length; ++a)
+        {
+            let noteId = this._selectionHistoryFront[a];
+            if(noteId == note.id)
+            {
+                Debug.log("removeNoteFromHistory: Found");
+                this._selectionHistoryFront.splice(a, 1);
+                a--;
+            }
+        }
+    }
+
+    public showNextHistoryState():void
+    {
+        if(this._selectionHistoryFront.length > 0)
+        {
+            let state = this._selectionHistoryFront.shift(); 
+            this.selectNote(state, false);
+            this._selectionHistoryBack.push(state);
+        }
+    }
+
+    public showPrevHistoryState():void
+    {
+        if(this._selectionHistoryBack.length >= 2)
+        {
+            let state = this._selectionHistoryBack.pop(); 
+            let top = this._selectionHistoryBack[this._selectionHistoryBack.length-1];
+            this.selectNote(top, false);
+            this._selectionHistoryFront.unshift(state);
+        }
+    }
+
+    // Events
+    private onNoteRegistered(note:Note):void
+    {
+        // Do Nothing
+    }
+
+    private onNoteUnregistered(note:Note):void
+    {
+        this.removeNoteFromHistory(note);
     }
 }

@@ -33,7 +33,6 @@ export default class NoteListContent extends UIComponent<any, any>
     //#region Handle Context Menu Functions
     private handleNoteContextMenu(e:any, data:any, target:any):void
     {
-        Debug.log("handleNoteContextMenu");
         let noteId = target.getAttribute("id");
 
         switch(data.action)

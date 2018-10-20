@@ -37,6 +37,9 @@ export default class MessageChannel
     public static readonly viewNotebookSource:string = "action:ViewNotebookSource";
     public static readonly viewNoteSource:string     = "action:ViewNoteSource";
 
+    public static readonly showPrevState:string    = "action:ShowPrevState";
+    public static readonly showNextState:string    = "action:ShowNextState";
+
     // Popup Related
     public static readonly showPopup:string         = "action:popup:ShowPopup";
     public static readonly hidePopup:string         = "action:popup:HidePopup";

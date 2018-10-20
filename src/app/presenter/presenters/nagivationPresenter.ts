@@ -24,6 +24,9 @@ export default class NavigationPresenter extends Presenter
         this.registerUIListener(MessageChannel.setNoteListMode    ,(data:any) => this.actionSetNoteListMode(data));
 
         this.registerUIListener(MessageChannel.viewNotebookSource ,(data:any) => this.actionViewNotebookSource(data));
+
+        this.registerUIListener(MessageChannel.showNextState      ,(data:any) => this.actionShowNextState());
+        this.registerUIListener(MessageChannel.showPrevState      ,(data:any) => this.actionShowPrevState());
     }
 
     public onUpdateRequested():void
@@ -127,4 +130,13 @@ export default class NavigationPresenter extends Presenter
         this._core.viewNotebookSource(data.notebookId);
     }
     
+    private actionShowNextState():void
+    {
+        this._core.showNextHistoryState();
+    }
+
+    private actionShowPrevState():void
+    {
+        this._core.showPrevHistoryState();
+    }
 }

@@ -129,19 +129,8 @@ export default class StorageController
 
                 if(storage != null)
                 {
-                    // TODO Move this logic to core. something like this._core.checkSelectedNotebook();
-                    if(this._core.selectedNotebook != null && this._core.selectedNotebook.storage == storage)
-                    {
-                        Debug.log("Unselect notebook");
-                        this._core.unselectNotebook();
-                    }
-
-                    if(this._core.selectedNote != null && this._core.selectedNote.parent.storage == storage)
-                    {
-                        Debug.log("Unselect note");
-                        this._core.unselectNote();
-                    }
-
+                    this._core.notifyStorageRemoved(storage);
+                    
                     this._dataManager.removeStorage(storage);
 
                     this._presentation.updatePresentation();

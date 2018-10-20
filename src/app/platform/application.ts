@@ -94,7 +94,7 @@ export default class Application implements Platform
     {
         if(command == "#note")
         {
-            this._core.selectNote(value);
+            this._core.selectNote(value, true);
         }
     }
 

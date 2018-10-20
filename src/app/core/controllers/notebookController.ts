@@ -65,25 +65,11 @@ export default class NotebookController
         {
             this._core.popupController.showConfirmationPanel("Delete Notebook?","", "Are you sure you want to delete this notebook. This operation cannot be undone.","Yes","Cancel",(data:any)=>
             {
-                let isSelectedNotebook = (this._core.selectedNotebook == notebook);
-                let hasSelectedNote = (this._core.selectedNote.parent == notebook);
-                
+                this._core.notifyNotebookRemoved(notebook);
                 this._dataManager.deleteNotebook(notebook);
 
                 this._presentation.updateNavigationPanel();
-    
-                if(isSelectedNotebook)
-                {
-                    if(this._core.dataManager.notebooks.length > 0)
-                    {
-                        let next:Notebook = this._core.dataManager.notebooks[0];
-                        this._core.selectNotebook(next.id);
-                    }
-                    else
-                    {
-                        this._core.unselectNotebook();
-                    }
-                }
+
             },null);
 
         }

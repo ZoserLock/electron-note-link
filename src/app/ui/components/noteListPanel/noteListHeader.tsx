@@ -18,12 +18,12 @@ export default class NoteListHeader extends UIComponent<any, any>
 
     public render() 
     {
-        let iconClass:string = "";
+        let iconName:string = "library_books";
         let addButton:any;
 
         if(this.props.mode == NoteListMode.Notebook)
         {
-            iconClass="icon-notebook";
+            iconName="library_books";
             addButton = (
             <div className="ui-note-list-header-button-container">
                 <button className = "ui-note-list-header-button" onClick={()=>this.handleAddNoteClick()}></button>
@@ -31,27 +31,27 @@ export default class NoteListHeader extends UIComponent<any, any>
         }
         else if(this.props.mode == NoteListMode.Search)
         {
-            iconClass="icon-search";
+            iconName = "search";
         }
         else if(this.props.mode == NoteListMode.All)
         {
-            iconClass="icon-all-notes";
+            iconName = "collections_bookmark";
         }
         else if(this.props.mode == NoteListMode.Started)
         {
-            iconClass="icon-star";
+            iconName = "star";
         }  
         else if(this.props.mode == NoteListMode.Trash)
         {
-            iconClass="icon-trash";
+            iconName = "delete";
         }  
-
-        iconClass += " ui-note-list-header-icon";
 
         return (
             <div className="ui-note-list-header-container"> 
                 <div className="ui-note-list-header">
-                    <div className={iconClass}/>
+                    <div className="valign-center ui-note-list-header-icon">
+                        <i className="material-icons">{iconName}</i>
+                    </div>
                     <div className="ui-note-list-header-title"> {this.props.title} </div>
                     {addButton}
                 </div>

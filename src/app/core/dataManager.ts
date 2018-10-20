@@ -37,6 +37,10 @@ export default class DataManager
     // Index
     private _noteIndex:DataIndex;
 
+    // Events
+    public onNoteRegistered:(note:Note)=>void = (note:Note)=>{};
+    public onNoteUnregistered:(note:Note)=>void = (note:Note)=>{};
+
     // Get/Set
     
     get noteStorages(): Array<Storage>  
@@ -109,12 +113,16 @@ export default class DataManager
 
     private registerNote(note:Note):void
     {
+        this.onNoteRegistered(note);
+
         this._notes[note.id] = note;
         this._noteList.push(note);
     }
 
     private unegisterNote(note:Note):void
     {
+        this.onNoteUnregistered(note);
+
         for(let a = 0;a < this._noteList.length ;++a)
         {
             if(this._noteList[a] == note)
@@ -346,7 +354,6 @@ export default class DataManager
 
             this.registerStorage(storage);
 
- 
             if(storage.notebooks.length > 0)
             {
                 for(let a = 0;a < storage.notebooks.length ;++a)
