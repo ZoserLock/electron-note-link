@@ -134,6 +134,7 @@ export default class Core
        
     }
 
+    // TODO use standar functions to setup selected notebook and note.
     public initializeEditorStatus():void
     {
         this._noteListMode = NoteListMode.Notebook; 
@@ -150,9 +151,10 @@ export default class Core
                 
                 if(this._selectedNotebook.notes.length>0)
                 {
-                    this._selectedNote = this._selectedNotebook.notes[0];
-                    this._dataManager.ensureNoteLoaded(this._selectedNote);
-                    this._selectedNote.SetAsSelected();
+                    let note = this._selectedNotebook.notes[0];
+                    this._dataManager.ensureNoteLoaded(note);
+
+                    this.selectNote(note.id, true);
                 }
             }
         }
@@ -419,7 +421,7 @@ export default class Core
 
     public showPrevHistoryState():void
     {
-        if(this._selectionHistoryBack.length >= 2)
+        if(this._selectionHistoryBack.length > 1)
         {
             let state = this._selectionHistoryBack.pop(); 
             let top = this._selectionHistoryBack[this._selectionHistoryBack.length-1];

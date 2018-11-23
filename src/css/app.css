@@ -241,6 +241,33 @@ body
     outline: none;
 }
 
+.ui-toolbar-icon
+{
+    margin: 6px;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0px;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--font-normal-color);
+}
+
+.ui-toolbar-icon:hover 
+{
+    color: var(--font-brighter-color);
+}
+
+.ui-toolbar-icon:active 
+{
+    color: var(--font-brighter-color);
+}
+
+.ui-toolbar-icon:focus
+{
+    outline: none;
+}
+
 .ui-toolbar-separator
 {
     margin: 6px;

@@ -6,6 +6,7 @@ import MessageChannel from "presenter/messageChannel";
 // UI
 import UIComponent      from "ui/components/generic/uiComponent";
 import ToolbarItem      from "ui/components/toolbar/toolbarItem"
+import ToolbarIcon      from "ui/components/toolbar/toolbarIcon"
 import ToolbarSearchBar from "ui/components/toolbar/toolbarSearch"; 
 import ToolbarSeparator from "ui/components/toolbar/toolbarSeparator";
 
@@ -69,8 +70,8 @@ export default class Toolbar extends UIComponent<any, any>
     {
         return (
             <header className="ui-toolbar">
-                <ToolbarItem name="Prev" onClick={()=>this.handlePrevState()}/>
-                <ToolbarItem name="Next" onClick={()=>this.handleNextState()}/>
+                <ToolbarIcon icon="chevron_left" onClick={()=>this.handlePrevState()}/>
+                <ToolbarIcon icon="chevron_right" onClick={()=>this.handleNextState()}/>
                 <ToolbarSeparator/>
                 <ToolbarItem name="Add Storage" onClick={()=>this.handleCreateNewStorage()}/>
                 <ToolbarItem name="Add Note" onClick={()=>this.handleCreateNewNote()}/>
