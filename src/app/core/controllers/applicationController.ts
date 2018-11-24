@@ -73,13 +73,12 @@ export default class ApplicationController
     {
         let notes:Note[] = [];
 
-        var options = 
+        var options:Fuse.FuseOptions<Note> = 
         {
             keys: ['title'],
             threshold: 0.4,
             minMatchCharLength: 3,
         }
-
         // Process special keyworlds and cache them until the special keywords disapear.
      
         // Cache this list as something like current Searchable notes.
