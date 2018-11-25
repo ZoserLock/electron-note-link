@@ -990,6 +990,46 @@ body
     position: relative
 }
 
+.ui-note-view-content-editor-toast
+{
+    position: absolute;
+    right: 0px;
+    z-index: 900;
+}
+
+.ui-note-view-content-editor-toast button
+{
+    margin: auto;
+    border: 1px solid var(--border-color-normal);
+    background: rgba(0,0,0,0.5);
+    
+    box-shadow: none;
+    cursor: pointer;
+    border-radius: 3px;
+    font-size: 14px;
+    line-height: 14px;
+    color: var(--font-normal-color);
+    padding: 10px 30px;
+    margin: 10px 10px;
+}
+
+.ui-note-view-content-editor-toast button:focus
+{
+    outline: none;
+}
+
+.ui-note-view-content-editor-toast button:hover 
+{
+    color: var(--font-brighter-color);
+    background: var(--bg-color-normal);
+    border: 1px solid var(--border-color-light);
+}
+
+.ui-note-view-content-editor-toast button:active 
+{
+    color: var(--font-dark-color);
+}
+
 /*Main Window Status Bar*/
 .ui-statusbar
 {

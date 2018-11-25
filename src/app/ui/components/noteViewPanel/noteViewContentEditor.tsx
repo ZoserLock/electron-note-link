@@ -52,6 +52,10 @@ class NoteViewContentEditor extends React.Component<any, any>
         
         return (
             <div className="ui-note-view-content-editor"> 
+                <div className="ui-note-view-content-editor-toast" >
+                    <button onClick={(event:any)=>this.handleClickOutside(event)}> Save </button>
+                
+                </div>
                 <CodeMirror
                     editorDidMount={(editor) => { this.editorDidMount(editor)}}
                     value={this.state.code} 
