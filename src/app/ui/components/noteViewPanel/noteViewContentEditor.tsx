@@ -1,13 +1,14 @@
 // Node Modules
 import * as React from "react";
 import {UnControlled as CodeMirror} from 'react-codemirror2'
+import applyOnClickOutside from 'react-onclickoutside'
 
 require("codemirror/mode/gfm/gfm");
 require("codemirror/mode/javascript/javascript");
 require("codemirror/mode/clike/clike");
 require("codemirror/keyMap/sublime");
 
-export default class NoteViewContentEditor extends React.Component<any, any> 
+class NoteViewContentEditor extends React.Component<any, any> 
 {
     private _codeMirror:any = null;
 
@@ -27,6 +28,11 @@ export default class NoteViewContentEditor extends React.Component<any, any>
 
         // Hack for now to avoid the bad cursor size on the first render
         setTimeout(()=>{this._codeMirror.refresh()}, 100);
+    }
+
+    private handleClickOutside(event:any)
+    {
+        this.props.onClickOutside(event); 
     }
 
     public render() 
@@ -56,3 +62,5 @@ export default class NoteViewContentEditor extends React.Component<any, any>
         );
     }
 }
+
+export default applyOnClickOutside(NoteViewContentEditor);

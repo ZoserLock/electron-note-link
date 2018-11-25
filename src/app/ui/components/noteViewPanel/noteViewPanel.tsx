@@ -1,7 +1,5 @@
 // Node Modules
 import * as React from "react";
-import applyOnClickOutside from 'react-onclickoutside'
-
 // Local
 import Note from "core/data/note";
 
@@ -23,7 +21,7 @@ interface NavigationPanelState
     editing:boolean;
 }
 
-class NoteViewPanel extends UIComponent<any, NavigationPanelState> 
+export default class NoteViewPanel extends UIComponent<any, NavigationPanelState> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
 
@@ -80,7 +78,6 @@ class NoteViewPanel extends UIComponent<any, NavigationPanelState>
             }
 
             this.sendMainMessage(MessageChannel.updateNote, data);
-            event.stopImmediatePropagation();
         }
     }
 
@@ -104,7 +101,7 @@ class NoteViewPanel extends UIComponent<any, NavigationPanelState>
             Debug.logVar(this.state.note);
             if(this.state.editing)
             {
-                currentPanel = <NoteViewContentEditor code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)}/>
+                currentPanel = <NoteViewContentEditor code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)} onClickOutside={(event:any)=>this.handleClickOutside(event)}/>
             }
             else
             {
@@ -130,5 +127,3 @@ class NoteViewPanel extends UIComponent<any, NavigationPanelState>
         }
     }
 }
-
-export default applyOnClickOutside(NoteViewPanel);
