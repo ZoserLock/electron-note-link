@@ -100,8 +100,11 @@ export default class Application implements Platform
         Debug.log("[Application] Menu Click: "+name);
         switch(name)
         {
+            case "New Note":
+                this._core.newNote(null);
+            break;
             case "Preferences":
-            
+              //  this._core.showPreferences(null);
             break;
             case "Close":
                 this.handleWindowClose(null);

@@ -450,6 +450,22 @@ export default class Core
         }
     }
 
+    // Actions
+    public newNote(data:any):void
+    {
+        if(data == null || data.notebookId == undefined)
+        {
+            if(this.selectedNotebook != null)
+            {
+                this.noteController.createNewNote(this.selectedNotebook.id);
+            }
+        }
+        else
+        {
+            this.noteController.createNewNote(data.notebookId);
+        }
+    }
+
     // Events
     private onNoteRegistered(note:Note):void
     {
@@ -460,4 +476,5 @@ export default class Core
     {
         this.removeNoteFromHistory(note);
     }
+
 }

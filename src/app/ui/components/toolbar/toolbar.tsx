@@ -47,7 +47,7 @@ export default class Toolbar extends UIComponent<any, any>
 
     private handleCreateNewNote():void
     {
-        this.sendMainMessage(MessageChannel.createStorage);
+        this.sendMainMessage(MessageChannel.createNote);
     }
 
     private handlePrevState():void
@@ -76,7 +76,7 @@ export default class Toolbar extends UIComponent<any, any>
                 <ToolbarIcon icon="chevron_right" onClick={()=>this.handleNextState()}/>
                 <ToolbarSeparator/>
                 <ToolbarItem name="Add Storage" onClick={()=>this.handleCreateNewStorage()}/>
-                <ToolbarItem name="Add Note" onClick={()=>this.handleCreateNewNote()}/>
+                <ToolbarItem name="New Note" onClick={()=>this.handleCreateNewNote()}/>
                 <ToolbarSeparator/>
                 <ToolbarSearchBar ref={(ref) => this._searchBar = ref}/>
                 <ToolbarSeparator/>

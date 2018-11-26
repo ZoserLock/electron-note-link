@@ -13,6 +13,7 @@ import Note from "core/data/note";
 import Presenter        from "presenter/presenter";
 import NoteDataParser   from "presenter/parsers/noteDataParser";
 import CoreStatusParser from "presenter/parsers/coreStatusParser";
+import Debug from "tools/debug";
 
 export default class NoteListPresenter extends Presenter
 {
@@ -107,52 +108,79 @@ export default class NoteListPresenter extends Presenter
 
     private actionSearchUpdated(data:any):void
     {
-        // TODO Sanitize data
+        if(data == null)
+        {
+            return;
+        }
+
         this._core.applicationController.updateSearch(data);
     }
 
     private actionNewNote(data:any):void
     {
-        if(data.notebookId == undefined)
-        {
-            this._core.noteController.createNewNote(this._core.selectedNotebook.id);
-        }
-        else
-        {
-            this._core.noteController.createNewNote(data.notebookId);
-        }
+        this._core.newNote(data);
     }
 
     private actionDeleteNote(data:any):void
     {
-        // TODO Sanitize data
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionDeleteNote Failed Invalid data payload");
+            return;
+        }
+       
         this._core.noteController.deleteNote(data.noteId);
     }
 
     private actionDuplicateNote(data:any):void
     {
-        // TODO Sanitize data
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionDuplicateNote Failed Invalid data payload");
+            return;
+        }
+
         this._core.noteController.duplicateNote(data.noteId);
     }
 
     private actionViewNoteSource(data:any):void
     {
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionViewNoteSource Failed Invalid data payload");
+            return;
+        }
+
         this._core.viewNoteSource(data.noteId);
     }
 
     private actionCreateNoteLink(data:any):void
     {
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionCreateNoteLink Failed Invalid data payload");
+            return;
+        }
         this._core.createNoteLink(data.noteId);
     }
 
     private actionRenameNote(data:any):void
     {
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionRenameNote Failed Invalid data payload");
+            return;
+        }
         this._core.noteController.renameNote(data.noteId);
     }
 
     private actionSelectNote(data:any):void
     {
-         // TODO Sanitize data
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionSelectNote Failed Invalid data payload");
+            return;
+        }
         this._core.selectNote(data.noteId, true);
     }
 }
