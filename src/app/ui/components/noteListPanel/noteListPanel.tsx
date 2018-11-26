@@ -71,8 +71,7 @@ export default class NoteListPanel extends UIComponent<any, NoteListPanelState>
         {
             return (
                 <div className="ui-note-list">
-                    <div className="ui-note-list-content"> 
-                        
+                    <div className="ui-note-list-content">  
                     </div>
                 </div>
             );

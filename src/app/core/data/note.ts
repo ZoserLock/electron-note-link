@@ -149,7 +149,7 @@ export default class Note
     {
         let note:Note = new Note();
         note._created = data.created;
-        note._updated = -1;
+        note._updated = data.updated;
         note._id = data.id;
         note._title = data.title;
         note._text = "";

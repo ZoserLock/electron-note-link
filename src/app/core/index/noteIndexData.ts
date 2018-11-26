@@ -10,6 +10,7 @@ export default class NoteIndexData
     public trashed:boolean;
 
     public created:number;
+    public updated:number;
 
     constructor()
     {
@@ -35,6 +36,7 @@ export default class NoteIndexData
         this.id      = note.id;
         this.title   = note.title;
         this.created = note.created;
+        this.updated = note.updated;
         this.started = note.started;
         this.trashed = note.trashed;
     }
@@ -70,6 +72,12 @@ export default class NoteIndexData
         if(this.created != note.created)
         {
             this.created = note.created;
+            changed = true;
+        }
+
+        if(this.updated != note.updated)
+        {
+            this.updated = note.updated;
             changed = true;
         }
 
