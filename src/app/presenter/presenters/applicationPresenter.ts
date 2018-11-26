@@ -15,6 +15,7 @@ export default class ApplicationPresenter extends Presenter
         this.registerUIListener(MessageChannel.windowMaximize    ,(data:any) => this.onWindowMaximize());
         this.registerUIListener(MessageChannel.windowClose       ,(data:any) => this.onWindowClose());
         this.registerUIListener(MessageChannel.windowLoaded      ,(data:any) => this.onWindowLoaded());
+        this.registerUIListener(MessageChannel.windowMenu        ,(data:any) => this.onWindowMenu());
     }
 
     // Window command
@@ -38,4 +39,8 @@ export default class ApplicationPresenter extends Presenter
         this._platform.windowLoadedEvent();
     }
 
+    public onWindowMenu():void
+    {
+        this._platform.windowMenuEvent();
+    }
 }

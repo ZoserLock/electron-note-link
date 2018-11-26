@@ -1,53 +1,52 @@
 // Node Modules
 import { Menu, MenuItem } from "electron";
 
-// Local Modules
-import Application      from "platform/application"
-
 export default class MainMenu
 {
-    private static _menu: Electron.Menu;
-    private static _fileMenu: Electron.MenuItem; 
+    private _menu: Electron.Menu;
+    private _fileMenu: Electron.MenuItem; 
 
-    public static initialize():void
+    public onHandleMenuClick:(command:string)=>void;
+
+    constructor()
     {
-        this._menu = new Menu(); 
- 
-        this.CreateFileMenu();
-    
-        this._menu.append(this._fileMenu);
-
-        Menu.setApplicationMenu(this._menu); 
+        this._menu = Menu.buildFromTemplate
+        ([
+            {
+                label:"New Note",
+                accelerator: "CmdOrCtrl+P",
+                click:() => 
+                {
+                    this.onMenuClick("New Note");
+                }
+            },
+            {
+                type:"separator"
+            },
+            {
+                label:"Close",
+                click:() =>
+                {
+                    this.onMenuClick("Exit");
+                },
+            },
+            {
+                label:"Exit",
+                click:() =>
+                {
+                    this.onMenuClick("Exit");
+                }
+            }
+        ]);
     }
 
-    private static CreateFileMenu()
+    private onMenuClick(name:string)
     {
-        this._fileMenu = new MenuItem(
-        { 
-            label:"File",
-            submenu: 
-            [ 
-                {
-                    label:"New Note",
-                    accelerator: "CmdOrCtrl+P",
-                    click:() => 
-                    {
-                    /*    let newNoteAction:AddNoteAction = new AddNoteAction("New note");
-                        ActionManager.instance.execute(newNoteAction);*/
-                    }
-                },
-                {
-                    type:"separator"
-                },
-                {
-                    label:"Exit",
-                    accelerator: "CmdOrCtrl+X",
-                    click:() =>
-                    {
-                       // Application.instance.exit();
-                    }
-                }
-            ]
-        });
+        this.onHandleMenuClick(name);
+    }
+
+    public show():void
+    {
+        this._menu.popup({});
     }
 } 

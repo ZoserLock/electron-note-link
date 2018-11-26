@@ -53,8 +53,12 @@ export default class MessageChannel
     public static readonly windowMinimize:string    = "action:window:Minimize";
     public static readonly windowMaximize:string    = "action:window:Maximize";
     public static readonly windowClose:string       = "action:window:Close";
+    public static readonly windowMenu:string        = "action:window:Menu";
     public static readonly windowLoaded:string      = "action:window:loaded";
    
+    //  Focus Related
+    public static readonly focusSearchBar:string    = "action:focus:SearchBar";
+
     // Test Related
     public static readonly testPopup:string         = "test:popup";
 

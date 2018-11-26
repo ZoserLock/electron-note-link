@@ -17,7 +17,6 @@ import NavigationPresenter      from "presenter/presenters/nagivationPresenter";
 import NoteListPresenter        from "presenter/presenters/noteListPresenter";
 import NoteViewPresenter        from "presenter/presenters/noteViewPresenter";
 import ApplicationPresenter     from "presenter/presenters/applicationPresenter";
-import PopupPresenter           from "presenter/presenters/popupPresenter";
 
 // Initialize NoteLink
 if(process.env.DEBUG)
@@ -43,7 +42,6 @@ presentation.setApplicationPresenter (new ApplicationPresenter());
 presentation.setNavigationPresenter  (new NavigationPresenter());
 presentation.setNoteListPresenter    (new NoteListPresenter());
 presentation.setNoteViewPresenter    (new NoteViewPresenter());
-presentation.setPopupPresenter       (new PopupPresenter());
 
 let core = new Core(platform, presentation);
 

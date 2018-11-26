@@ -7,7 +7,7 @@ export default interface Presentation
 {
     initialize(core:Core, platform:Platform):void;
 
-    // 
+    // Presentation update 
     updatePresentation():void;
     updateNavigationPanel():void;
     updateNoteListPanel():void;

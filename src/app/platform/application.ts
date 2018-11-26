@@ -1,5 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell,clipboard } from "electron"
-import * as Path from "path";
+import { app, ipcMain, dialog, shell,clipboard ,globalShortcut} from "electron"
 
 import Debug           from "tools/debug";
 
@@ -8,10 +7,9 @@ import Platform        from "core/platform";
 
 import Window          from "platform/window";
 import TrayController  from "platform/trayController";
+import MainMenu        from "platform/mainMenu";
 
 import MessageChannel  from "presenter/messageChannel";
-import PopupManager    from "core/controllers/popupController";
-
 
 export default class Application implements Platform
 {
@@ -21,6 +19,7 @@ export default class Application implements Platform
     
     // Member variables
     private _trayController:TrayController;
+    private _mainMenu:MainMenu;
     
     private _mainWindow:Window;
 
@@ -34,6 +33,7 @@ export default class Application implements Platform
             ()=>this.showApplication(),
             ()=>this.exitApplication()
         );
+
     }
 
     public initialize(core:Core):void
@@ -43,10 +43,22 @@ export default class Application implements Platform
         this._trayController.initialize();
         
         this._mainWindow = new Window();
-
         this._mainWindow.onHandleWindowClose = (e:Event)=>this.handleWindowClose(e);
         this._mainWindow.onHandleCommandLink = (command:string,value:string)=>this.handleCommandEvent(command,value);
 
+        this._mainMenu = new MainMenu();
+        this._mainMenu.onHandleMenuClick =(menu:string)=>this.handleMenuClick(menu);
+
+        this.registerShortcuts();
+    }
+
+    private registerShortcuts():void
+    {
+        globalShortcut.register("CommandOrControl+R", () =>
+        {
+            this._mainWindow.show();
+            this._core.beginQuickSearch();
+        }); 
     }
 
     public exitApplication():void
@@ -76,6 +88,30 @@ export default class Application implements Platform
         }, 100);
     }
 
+    // Menu events
+    public windowMenuEvent():void
+    {
+        Debug.log("[Application] Menu Show Called by user");
+        this._mainMenu.show();
+    }
+
+    private handleMenuClick(name:string):void
+    {
+        Debug.log("[Application] Menu Click: "+name);
+        switch(name)
+        {
+            case "Preferences":
+            
+            break;
+            case "Close":
+                this.handleWindowClose(null);
+            break;
+            case "Exit":
+                this.exitApplication();
+            break;
+        }
+    }
+
     // Window Event
     private handleWindowClose(event:Event):boolean
     {
@@ -84,7 +120,10 @@ export default class Application implements Platform
 
         if(!this._userExit)
         {
-            event.preventDefault()
+            if(event!=null)
+            {
+                event.preventDefault()
+            }
             this._mainWindow.hide();
         }
         return false;

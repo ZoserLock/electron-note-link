@@ -10,7 +10,6 @@ import Platform from "core/platform";
 import Core     from "core/core";
 import NoteViewPresenter from "./presenters/noteViewPresenter";
 import NoteListPresenter from "./presenters/noteListPresenter";
-import PopupPresenter from "./presenters/popupPresenter";
 
 export default class MainPresentation implements Presentation
 {
@@ -23,7 +22,6 @@ export default class MainPresentation implements Presentation
     private _navigationPresenter  :NavigationPresenter;
     private _noteViewPresenter    :NoteViewPresenter;
     private _noteListPresenter    :NoteListPresenter;
-    private _popupPresenter       :PopupPresenter;
 
     // Update Status
     private _willUpdateNextTick:boolean   = false;
@@ -55,11 +53,6 @@ export default class MainPresentation implements Presentation
         this._noteListPresenter = presenter;
     } 
 
-    public setPopupPresenter(presenter:PopupPresenter):void 
-    {
-        this._popupPresenter = presenter;
-    } 
-
     // Presentation functions
 
     public initialize(core:Core, platform:Platform):void
@@ -71,7 +64,6 @@ export default class MainPresentation implements Presentation
         this._presenters.push(this._navigationPresenter);
         this._presenters.push(this._noteListPresenter);
         this._presenters.push(this._noteViewPresenter);
-        this._presenters.push(this._popupPresenter);
 
         for(let a = 0; a < this._presenters.length; ++a)
         {

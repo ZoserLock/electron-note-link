@@ -25,13 +25,18 @@ export default class WindowBar extends UIComponent<any, any>
     {
         this.sendMainMessage(MessageChannel.windowClose);
     }
+
+    private onShowWindowMenu():void
+    {
+        this.sendMainMessage(MessageChannel.windowMenu);
+    }
     //#endregion
 
     public render() 
     {
         return (
             <header className="ui-windowbar">
-                <WindowbarItem type="options" onClick={()=>this.onClose()}/>
+                <WindowbarItem type="options" onClick={()=>this.onShowWindowMenu()}/>
                 <span className="ui-inline-spacer"></span>
                 <WindowbarItem type="minimize" onClick={()=>this.onMinimize()}/>
                 <WindowbarItem type="maximize" onClick={()=>this.onMaximize()}/>

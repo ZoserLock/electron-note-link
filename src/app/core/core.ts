@@ -15,6 +15,8 @@ import NotebookController       from "core/controllers/notebookController";
 import NoteController           from "core/controllers/noteController";
 import ApplicationController    from "core/controllers/applicationController";
 
+import MessageChannel from "presenter/messageChannel";
+
 export default class Core
 {
     // Dependencies
@@ -161,6 +163,12 @@ export default class Core
     }
 
     // Search
+
+    public beginQuickSearch():void
+    {
+        this._platform.sendUIMessage(MessageChannel.focusSearchBar);
+    }
+    
     public beginSearch(search:string):void
     {
         this._searchPhrase = search;
@@ -233,6 +241,18 @@ export default class Core
     }
 
     public setNoteListMode(mode:number):void
+    {
+        if(mode != this._noteListMode)
+        {
+            Debug.log("setNoteListMode: "+mode);
+            this._noteListMode = mode;
+
+            this._presentation.updateNavigationPanel();
+            this._presentation.updateNoteListPanel();
+        }
+    }
+
+    public focusSerchBar(mode:number):void
     {
         if(mode != this._noteListMode)
         {

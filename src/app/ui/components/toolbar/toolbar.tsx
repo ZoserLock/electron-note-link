@@ -25,11 +25,13 @@ export default class Toolbar extends UIComponent<any, any>
     public componentDidMount() 
     {
         this.registerMainListener(MessageChannel.searchBegin,this._beginSearchEvent);
+        this.registerMainListener(MessageChannel.focusSearchBar,this._beginSearchEvent);
     }
 
     public componentWillUnmount()
     {
         this.unregisterMainListener(MessageChannel.searchBegin,this._beginSearchEvent);
+        this.unregisterMainListener(MessageChannel.focusSearchBar,this._beginSearchEvent);
     }
 
     public beginSearchRequested(data:any):void
