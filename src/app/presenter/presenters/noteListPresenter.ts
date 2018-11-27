@@ -118,7 +118,7 @@ export default class NoteListPresenter extends Presenter
 
     private actionNewNote(data:any):void
     {
-        this._core.newNote(data);
+        this._core.createNewNote(data);
     }
 
     private actionDeleteNote(data:any):void

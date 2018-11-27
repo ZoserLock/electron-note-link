@@ -8,6 +8,7 @@ import MessageChannel  from "presenter/messageChannel"
 import UIComponent     from "ui/components/generic/uiComponent";
 import NoteListHeader  from "ui/components/noteListPanel/noteListHeader"; 
 import NoteListContent from "ui/components/noteListPanel/noteListContent"; 
+import Debug from "tools/debug";
 
 
 interface NoteListPanelState
@@ -17,11 +18,13 @@ interface NoteListPanelState
     status:ViewCoreData;
     validFilter:boolean;
     forceUpdate:boolean;
+    selectedRow:number;
 }
 
 export default class NoteListPanel extends UIComponent<any, NoteListPanelState> 
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
+    private _focusNoteEvent: (event: any, data: any) => void;
 
     constructor(props: any)
     {
@@ -38,19 +41,23 @@ export default class NoteListPanel extends UIComponent<any, NoteListPanelState>
             },
             validFilter:false,
             forceUpdate:true,
+            selectedRow:-1, 
         }
 
         this._updateRequestedEvent = (event:any,data:any)=>this.updateRequested(data);
+        this._focusNoteEvent = (event:any,data:any)=>this.focusNote(data);
     }
     
     public componentDidMount() 
     {
         this.registerMainListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
+        this.registerMainListener(MessageChannel.focusNote, this._focusNoteEvent);
     }
 
     public componentWillUnmount()
     {
         this.unregisterMainListener(MessageChannel.updateNoteListPanel,this._updateRequestedEvent);
+        this.unregisterMainListener(MessageChannel.focusNote, this._focusNoteEvent);
     }
 
     public updateRequested(data:any):void
@@ -61,8 +68,34 @@ export default class NoteListPanel extends UIComponent<any, NoteListPanelState>
             notes:data.notes,
             status:data.status,
             validFilter: data.validFilter,
-            forceUpdate:data.forceUpdate
+            forceUpdate:data.forceUpdate,
+            selectedRow:-1
         });
+        
+    }
+
+    public focusNote(data:any):void
+    {
+        if(data !=null && data.noteId != undefined)
+        {
+            let notes = this.state.notes;
+
+            let noteIndex = -1;
+
+            for(let a = 0;a < notes.length;++a)
+            {
+                if(notes[a].id == data.noteId)
+                {
+                    noteIndex=a;
+                    break;
+                }
+            }
+
+            if(noteIndex != -1)
+            {
+                this.setState({selectedRow:noteIndex});
+            }
+        }
     }
 
     public render() 
@@ -86,6 +119,7 @@ export default class NoteListPanel extends UIComponent<any, NoteListPanelState>
                     selectedNote = {this.state.status.selectedNote} 
                     search = {this.state.status.searchPhrase} 
                     forceUpdate = {this.state.forceUpdate}
+                    selectedRow = {this.state.selectedRow}
                 />
             </div>
         );

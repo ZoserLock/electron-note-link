@@ -125,14 +125,14 @@ export default class NoteListContent extends UIComponent<any, any>
                 <AutoSizer>
                 {({ height, width }) => (
                     <List 
-                       
-                        width={width}
-                        height={height}
-                        rowCount ={this.props.notes.length}
-                        rowHeight={80} 
-                        rowRenderer={this._rowRenderer}  
-                        selectedNote= {this.props.selectedNote}
-                        forceUpdate= {this.props.forceUpdate}
+                        scrollToIndex = {this.props.selectedRow}
+                        width = {width}
+                        height = {height}
+                        rowCount = {this.props.notes.length}
+                        rowHeight= {80} 
+                        rowRenderer  = {this._rowRenderer}  
+                        selectedNote = {this.props.selectedNote}
+                        forceUpdate  = {this.props.forceUpdate}
                         />
                     )}
                 </AutoSizer>

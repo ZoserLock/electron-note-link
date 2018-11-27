@@ -12,4 +12,9 @@ export default interface Presentation
     updateNavigationPanel():void;
     updateNoteListPanel():void;
     updateNoteViewPanel():void;
+
+    onceNextFrame(func:()=>void):void;
+
+    // Select Note
+    scrollToNote(noteId:string):void;
 }

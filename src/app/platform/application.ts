@@ -101,7 +101,7 @@ export default class Application implements Platform
         switch(name)
         {
             case "New Note":
-                this._core.newNote(null);
+                this._core.createNewNote(null);
             break;
             case "Preferences":
               //  this._core.showPreferences(null);

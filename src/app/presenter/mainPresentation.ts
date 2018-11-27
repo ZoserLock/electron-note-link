@@ -2,14 +2,16 @@
 import Presentation from "core/presentation";
 
 // Presenter
-import Presenter           from "presenter/presenter";
-import NavigationPresenter from "presenter/presenters/nagivationPresenter";
+import Presenter            from "presenter/presenter";
+import NavigationPresenter  from "presenter/presenters/nagivationPresenter";
 import ApplicationPresenter from "presenter/presenters/applicationPresenter";
+import NoteViewPresenter    from "presenter/presenters/noteViewPresenter";
+import NoteListPresenter    from "presenter/presenters/noteListPresenter";
+import MessageChannel       from "presenter/messageChannel";
 
 import Platform from "core/platform";
 import Core     from "core/core";
-import NoteViewPresenter from "./presenters/noteViewPresenter";
-import NoteListPresenter from "./presenters/noteListPresenter";
+
 
 export default class MainPresentation implements Presentation
 {
@@ -26,6 +28,8 @@ export default class MainPresentation implements Presentation
     // Update Status
     private _willUpdateNextTick:boolean   = false;
     private _pendingUpdate:number = PendingUpdate.None;
+
+    private _afterUpdateActions: Array<() => void> = [];
 
     constructor()
     {
@@ -105,7 +109,13 @@ export default class MainPresentation implements Presentation
             this._willUpdateNextTick = true;
         }
     }
-    
+
+    public onceNextFrame(f:()=>void):void
+    {
+        this._afterUpdateActions.unshift(f);
+        this.tryUpdateNextTick();
+    }
+
     private onNextTick():void
     {
         if((this._pendingUpdate & PendingUpdate.NavigationPanel) != 0)
@@ -123,7 +133,23 @@ export default class MainPresentation implements Presentation
             this._noteViewPresenter.update();
         }
 
+        while(this._afterUpdateActions.length > 0)
+        {
+            var action:()=>void = this._afterUpdateActions.shift();
+            action();
+        }
+
         this._willUpdateNextTick = false;
         this._pendingUpdate = PendingUpdate.None;
+    }
+
+    public scrollToNote(noteId:string)
+    {
+        let data =
+        {
+            noteId: noteId
+        }
+
+        this._platform.sendUIMessage(MessageChannel.focusNote, data);
     }
 }

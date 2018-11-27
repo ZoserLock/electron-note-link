@@ -451,7 +451,7 @@ export default class Core
     }
 
     // Actions
-    public newNote(data:any):void
+    public createNewNote(data:any):void
     {
         if(data == null || data.notebookId == undefined)
         {

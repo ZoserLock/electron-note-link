@@ -49,6 +49,11 @@ export default class NoteController
                 this._core.selectNote(note.id, true);
 
                 this._presentation.updateNoteListPanel();
+
+                this._presentation.onceNextFrame(()=>
+                {
+                    this._presentation.scrollToNote(note.id);
+                });
             }
         }
         else
