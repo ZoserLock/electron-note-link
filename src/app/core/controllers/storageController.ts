@@ -21,6 +21,7 @@ export default class StorageController
     private _presentation:Presentation;
     private _dataManager:DataManager;
 
+    private _noteLinkFileName ="notelink.json";
     // State?
 
     constructor(core:Core, platform:Platform, presentation:Presentation, dataManager:DataManager)
@@ -81,7 +82,7 @@ export default class StorageController
             return false;
         }
 
-        let storagePath = Path.join(path,"notelink.json");//TODO put that in a variable
+        let storagePath = Path.join(path,this._noteLinkFileName);
         let storage = this._core.dataManager.loadStorage(storagePath);
 
         if(storage != null)

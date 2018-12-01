@@ -80,21 +80,22 @@ export default class Application implements Platform
         
         this._mainWindow.show();
 
-        // Timeout needed to allow one render of the main window.
+        // Timeout needed to allow one render of the main window and also show the app logo.
         setTimeout(() => 
         {
             this._core.mainWindowLoaded();
             this.sendUIMessage(MessageChannel.hideLoading);
-        }, 100);
+        }, 1000);
     }
 
-    // Menu events
+    // Event to show the main menu to the user, called when the user press the top left button of the window.
     public windowMenuEvent():void
     {
         Debug.log("[Application] Menu Show Called by user");
         this._mainMenu.show();
     }
 
+    // Function called when an item of the file menu is pressed
     private handleMenuClick(name:string):void
     {
         Debug.log("[Application] Menu Click: "+name);
@@ -104,7 +105,7 @@ export default class Application implements Platform
                 this._core.createNewNote(null);
             break;
             case "Preferences":
-              //  this._core.showPreferences(null);
+              //  this._core.showPreferences(null); // TODO implement post v1.0
             break;
             case "Close":
                 this.handleWindowClose(null);
@@ -115,23 +116,28 @@ export default class Application implements Platform
         }
     }
 
-    // Window Event
+    // Function called when the app is requested to exit. If the user did not executed the action the window is closed to tray.
     private handleWindowClose(event:Event):boolean
     {
-        // Just for debug
-        return false;// Remove for release.
+        if(process.env.DEBUG)
+        {
+            // In debug mode close the application and do not throw it to tray
+            return false;
+        }
 
         if(!this._userExit)
         {
-            if(event!=null)
+            if(event != null)
             {
                 event.preventDefault()
             }
             this._mainWindow.hide();
+            return true;
         }
         return false;
     }
 
+    // Function called when an special link is opened. Right now is just used for the internal links
     private handleCommandEvent(command:string,value:string):void
     {
         if(command == "#note")

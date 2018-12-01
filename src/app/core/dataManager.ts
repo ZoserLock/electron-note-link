@@ -145,18 +145,10 @@ export default class DataManager
         {
             Debug.log("[DataManager] Creating new Storage File!");
             this.clearApplicationData();
-            this.createApplicationData();
             this.saveApplicationData();
         }
     }
     
-    // [TODO] Check the utility of this function
-    private createApplicationData():void
-    {
-        this._storageList  = new Array<Storage>();
-        this._notebookList = new Array<Notebook>();
-        this._noteList     = new Array<Note>();
-    }
 
     private clearApplicationData():boolean
     {
