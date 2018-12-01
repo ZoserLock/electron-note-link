@@ -79,8 +79,6 @@ export default class Toolbar extends UIComponent<any, any>
                 <ToolbarItem name="New Note" onClick={()=>this.handleCreateNewNote()}/>
                 <ToolbarSeparator/>
                 <ToolbarSearchBar ref={(ref) => this._searchBar = ref}/>
-                <ToolbarSeparator/>
-                <ToolbarItem name="Test Popup" onClick={()=>this.testPopup()}/>
             </header>
         );
     }
