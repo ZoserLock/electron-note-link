@@ -1093,6 +1093,13 @@ body
     height: 250px;
 }
 
+.ui-popup-loading
+{
+    width: 350px;
+    height: 350px;
+    content:url("../img/logo_main.png");
+}
+
 .ui-popup-modal header
 {
     flex-basis: 25%;

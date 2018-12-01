@@ -53,20 +53,7 @@ export default class LoadingLayer extends UIComponent<any, any>
         {
             return (
                 <div className="ui-popup-layer">
-                    <div className="ui-popup-modal ui-popup-loading">
-                        <header> 
-                            <h2>{"Loading"}</h2>
-                            <span>{"Loading"}</span>
-                        </header>
-                        <article> 
-                            <div className="ui-popup-modal-text">
-                                {"Loading Notes"}
-                            </div>
-                        </article> 
-                        <footer>       
-                            <div className="ui-inline-spacer"/>
-                        </footer>
-                    </div>
+                <div className="ui-popup-modal ui-popup-loading"></div>
                 </div>
             );
         }
