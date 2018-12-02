@@ -54,10 +54,16 @@ export default class Application implements Platform
 
     private registerShortcuts():void
     {
-        globalShortcut.register("CommandOrControl+R", () =>
+        globalShortcut.register("CommandOrControl+Alt+Shift+K", () =>
         {
             this._mainWindow.show();
             this._core.beginQuickSearch();
+        }); 
+
+        globalShortcut.register("CommandOrControl+Alt+N", () =>
+        {
+            this._mainWindow.show();
+            this._core.createNewNote(null);
         }); 
     }
 
