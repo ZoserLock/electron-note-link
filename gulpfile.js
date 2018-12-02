@@ -82,12 +82,6 @@ gulp.task("webpack:develop",function(cb)
 // PRODUCTION BUILD //
 //////////////////////
 
-// Compile and run the project in production mode
-gulp.task("prod",["build:production"],function(cb)
-{
-    run("electron .",cb);
-});
-
 // Build the project with post proccesses
 gulp.task("build:production",function(cb)
 {
@@ -98,9 +92,16 @@ gulp.task("build:production",function(cb)
     cb);
 });
 
+// Run Webpack using the production configuration
 gulp.task("webpack:production",function(cb)
 {
     run("webpack --config "+_webpackConfigProduction,cb);
+});
+
+// Compile and run the project in production mode
+gulp.task("prod",["build:production"],function(cb)
+{
+    run("electron .",cb);
 });
 
 /////////////////

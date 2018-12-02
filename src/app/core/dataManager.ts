@@ -585,7 +585,7 @@ export default class DataManager
 
     public deleteNotebook(notebook:Notebook):boolean
     {
-        if(this._notebooks[notebook.id] != undefined) // [TODO CHECK if is necesary to get the value from the dictionary]
+        if(this._notebooks[notebook.id] != undefined)
         {
             let path = notebook.getFullPath();
             

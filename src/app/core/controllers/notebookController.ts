@@ -57,7 +57,7 @@ export default class NotebookController
         }
     }
 
-    public deleteNotebook(notebookId:string):void // TODO Add callback?
+    public deleteNotebook(notebookId:string):void
     {
         let notebook:Notebook = this._core.dataManager.getNotebook(notebookId);
 

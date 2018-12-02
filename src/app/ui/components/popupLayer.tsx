@@ -51,6 +51,11 @@ export default class PopupLayer extends UIComponent<any, any>
             let activePopup:any = this.renderInputPopup(data.title,data.subTitle,data.text,data.okButton,data.cancelButton);
             this.setState({popupData:data, inputText: data.text, activePopup:activePopup});
         }
+        else if(data.type == "Info")
+        {
+            let activePopup:any = this.renderInfoPopup(data.title,data.subTitle,data.text,data.okButton);
+            this.setState({popupData:data, inputText: data.text, activePopup:activePopup});
+        }
     }
 
     private hidePopup():void
@@ -90,6 +95,37 @@ export default class PopupLayer extends UIComponent<any, any>
         this.sendMainMessage(MessageChannel.popupResult, data);
         this.hidePopup();
     }
+
+    private renderInfoPopup(title:string, subTitle:string, text:string, okButton:string):any
+    {
+        return(
+            <div className="ui-popup-modal ui-popup-confirmation">
+                <header> 
+                    <h2>{title}</h2>
+                    <span>{subTitle}</span>
+                </header>
+                <article> 
+                    <div className="ui-popup-modal-text">
+                        {text}
+                     </div>
+                </article> 
+                <footer>       
+                    <div className="ui-inline-spacer"/>
+                    <button onClick={()=>this.infoPopupResult()}> {okButton} </button>
+                </footer>
+            </div>
+        )
+    }
+    private infoPopupResult():void
+    {
+        let data:any =
+        {
+            success:true
+        }
+        this.sendMainMessage(MessageChannel.popupResult, data);
+        this.hidePopup();
+    }
+
 
     private inputPopupResult(value:boolean):void
     {

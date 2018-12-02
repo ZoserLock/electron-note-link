@@ -101,4 +101,27 @@ export default class PopupManager
             Debug.log("Trying to show a popup while already another popup is being shown");
         }
     }
+
+    public showInfoPanel(title:string, subTitle:string, text:string, okButton:string, onOk:DataAction):void
+    {
+        if(!this._popupShown)
+        {
+            let data:any =
+            {
+                type:"Info",
+                title:title,
+                subTitle:subTitle,
+                text:text,
+                okButton:okButton,
+            }
+
+            this._onOkFunction     = onOk;
+            this._onCancelFunction = null;
+            this._platform.sendUIMessage(Message.showPopup, data);
+        }
+        else
+        {
+            Debug.log("Trying to show a popup while already another popup is being shown");
+        }
+    }
 }

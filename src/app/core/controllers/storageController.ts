@@ -49,7 +49,10 @@ export default class StorageController
                 if(!this.addExistingStorage(storagePath))
                 {
                     Debug.logError("[Storage Controller] Can't add existing storage from that location");
-                    //TODO Show errror in a popup
+
+                    this._core.popupController.showInfoPanel("Storage Creation","Storage Name",
+                    "Can't add storage from that location or that storage is already in use \n Please select another folder",
+                    "Ok",null);
                 }
             }
             else
@@ -68,7 +71,10 @@ export default class StorageController
                 else
                 {
                     Debug.logError("[Storage Controller] Can't use that location as storage location");
-                    //TODO Show errror in a popup
+
+                    this._core.popupController.showInfoPanel("Storage Creation","Storage Name",
+                    "Can't use that location as storage location \n Please select another folder",
+                    "Ok",null);
                 }
             }
         }
@@ -76,7 +82,7 @@ export default class StorageController
     
     private addExistingStorage(path:string):boolean
     {
-        if(this._core.dataManager.hasStorageWithPath(path)) //TODO Check the id too
+        if(this._core.dataManager.hasStorageWithPath(path))
         {
             Debug.logError("[Storage Controller] Already have that storage");
             return false;
