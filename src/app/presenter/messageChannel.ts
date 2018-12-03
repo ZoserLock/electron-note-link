@@ -59,6 +59,8 @@ export default class MessageChannel
     //  Focus Related
     public static readonly focusSearchBar:string    = "action:focus:SearchBar";
     public static readonly focusNote:string         = "action:focus:Note";
+    public static readonly focusNotebook:string     = "action:focus:Notebook";
+    public static readonly focusStorage:string      = "action:focus:Storage";
 
     // Test Related
     public static readonly testPopup:string         = "test:popup";

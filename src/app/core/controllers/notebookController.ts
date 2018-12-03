@@ -47,7 +47,15 @@ export default class NotebookController
                 this._dataManager.saveStorage(storage);
             }
 
+            this._core.selectNotebook(notebook.id);
+
             this._presentation.updateNavigationPanel();
+
+            this._presentation.onceNextFrame(()=>
+            {
+                this._presentation.scrollToNotebook(notebook.id);
+            });
+
             return true;
         }
         else

@@ -12,6 +12,7 @@ import MessageChannel from "presenter/messageChannel";
 import NavigationStorageItem from "ui/components/navigationPanel/navigationStorageItem"
 import NavigationItem        from "ui/components/navigationPanel/navigationItem"
 import UIComponent from "../generic/uiComponent";
+import { debug } from "util";
 
 interface NavigationPanelState
 {
@@ -33,6 +34,10 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
     
     // Event Listeners
     private _updateRequestedEvent: (event: any, data: any) => void;
+    private _focusNotebook: (event: any, data: any) => void;
+    private _focusStorage: (event: any, data: any) => void;
+
+    private _contentScrollRef:React.RefObject<HTMLDivElement>;
 
     constructor(props: any)
     {
@@ -49,16 +54,24 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
         }  
 
         this._updateRequestedEvent = (event:any, data:any) => this.updateRequested(data);
+        this._focusNotebook = (event:any, data:any) => this.focusNotebook(data);
+        this._focusStorage = (event:any, data:any) => this.focusStorage(data);
+
+        this._contentScrollRef = React.createRef<HTMLDivElement>();
     }
  
     public componentDidMount() 
     {
         this.registerMainListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
+        this.registerMainListener(MessageChannel.focusNotebook,this._focusNotebook);
+        this.registerMainListener(MessageChannel.focusStorage,this._focusStorage);
     }
 
     public componentWillUnmount()
     {
         this.unregisterMainListener(MessageChannel.updateNavigationPanel,this._updateRequestedEvent);
+        this.unregisterMainListener(MessageChannel.focusNotebook,this._focusNotebook);
+        this.unregisterMainListener(MessageChannel.focusStorage,this._focusStorage);
     }
 
     public updateRequested(data:any):void
@@ -69,6 +82,45 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
             storages:data.storages,
             status:data.status
         });
+    }
+
+    // TODO: Find another way to reference an object.
+    public focusStorage(data:any):void
+    {
+        Debug.log("[UI] NavigationPanel Focus Storage Requested");
+        if(data != null && data.storageId != undefined)
+        {
+            Debug.log("[UI] scrollToElement: #"+data.storageId);
+            if( this._contentScrollRef.current)
+            {
+                var element:HTMLElement = document.getElementById(data.storageId);
+
+                if(element)
+                {
+                    this._contentScrollRef.current.scrollTop = element.offsetTop - this._contentScrollRef.current.offsetTop;
+                }
+            }
+            
+        }
+    }
+
+    // TODO: Find another way to reference an object.
+    public focusNotebook(data:any):void
+    {
+        Debug.log("[UI] NavigationPanel Focus Notebook Requested");
+        if(data != null && data.notebookId != undefined)
+        {
+            Debug.log("[UI] scrollToElement: #"+data.notebookId);
+            if( this._contentScrollRef.current)
+            {
+                var element:HTMLElement = document.getElementById(data.notebookId);
+
+                if(element)
+                {
+                    this._contentScrollRef.current.scrollTop = element.offsetTop - this._contentScrollRef.current.offsetTop;
+                }
+            }
+        }
     }
 
     //#region Navigation Item Handle Functions.
@@ -167,7 +219,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
         let mode:number = this.state.status.noteListMode;
         let contextMenuId = this.sStorageContextMenuId;
 
-        let storageList = this.state.storages.map((storage:any) =>
+        let storageList = this.state.storages.map((storage:any,index:number) =>
         {
             return (
             <ContextMenuTrigger id={contextMenuId} key = {storage.id} attributes={{id:storage.id}}>
@@ -175,7 +227,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
             </ContextMenuTrigger>
             )
         });
-
+        
         return (
             <div className = "ui-sidebar">
                 <ul className = "ui-sidebar-header-list">
@@ -184,7 +236,7 @@ export default class NavigationPanel extends UIComponent<any, NavigationPanelSta
                     <NavigationItem onClick={()=>this.handleTrashNotesClick()}   name = "Trash"     isSelected = {mode == NoteListMode.Trash}/>
                     <div className="ui-sidebar-header-list-separator" />
                 </ul>
-                <div className = "ui-sidebar-list">
+                <div ref={this._contentScrollRef} className = "ui-sidebar-list">
                     {storageList}
                 </div>
                 <ContextMenu id = {this.sStorageContextMenuId}>

@@ -152,4 +152,24 @@ export default class MainPresentation implements Presentation
 
         this._platform.sendUIMessage(MessageChannel.focusNote, data);
     }
+
+    public scrollToNotebook(notebookId:string)
+    {
+        let data =
+        {
+            notebookId: notebookId
+        }
+
+        this._platform.sendUIMessage(MessageChannel.focusNotebook, data);
+    }
+
+    public scrollToStorage(storageId:string)
+    {
+        let data =
+        {
+            storageId: storageId
+        }
+
+        this._platform.sendUIMessage(MessageChannel.focusStorage, data);
+    }
 }

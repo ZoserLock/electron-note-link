@@ -80,6 +80,11 @@ export default class NoteController
                 this._core.selectNote(duplicated.id, true);
 
                 this._presentation.updateNoteListPanel();
+
+                this._presentation.onceNextFrame(()=>
+                {
+                    this._presentation.scrollToNote(duplicated.id);
+                });
             }
         }    
         else

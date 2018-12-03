@@ -17,4 +17,6 @@ export default interface Presentation
 
     // Select Note
     scrollToNote(noteId:string):void;
+    scrollToNotebook(notebookId:string):void;
+    scrollToStorage(storageId:string):void;
 }

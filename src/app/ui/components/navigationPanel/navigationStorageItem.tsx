@@ -137,7 +137,7 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
 
             return  (
             <ContextMenuTrigger id={contextMenuId} key = {notebook.id} attributes={{id:notebook.id}}>
-                <NavigationNotebookItem  notebook={notebook} isSelected={selected} />
+                <NavigationNotebookItem  notebook={notebook} isSelected={selected} id={notebook.id} />
             </ContextMenuTrigger>
             )
         });
@@ -153,9 +153,9 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
                 </ul>
             );
         }
-
+                 
         return (
-            <div>
+            <div id = {this.props.storage.id}>
                 <div className="ui-sidebar-storage-item"> 
                     <div className="ui-sidebar-storage-item-container"> 
                         <EditableText 
@@ -175,7 +175,6 @@ export default class NavigationStorageItem extends UIComponent<NavigationStorage
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuViewSource }}>View Source</MenuItem>
                     <MenuItem divider /> 
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Notebook</MenuItem>
-                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuExport }}>Export Notebook</MenuItem>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNotebookContextMenu(e, data, target)}} data={{ action: this.sContextMenuDelete }}>Delete Notebook</MenuItem> 
                 </ContextMenu>
             </div>

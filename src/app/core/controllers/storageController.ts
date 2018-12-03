@@ -67,6 +67,11 @@ export default class StorageController
                     this._dataManager.saveStorage(storage);
             
                     this._presentation.updateNavigationPanel();
+
+                    this._presentation.onceNextFrame(()=>
+                    {
+                        this._presentation.scrollToStorage(storage.id);
+                    });
                 }
                 else
                 {
@@ -96,6 +101,12 @@ export default class StorageController
             if(this._core.dataManager.addStorage(storage))
             {
                 this._presentation.updateNavigationPanel();
+
+                this._presentation.onceNextFrame(()=>
+                {
+                    this._presentation.scrollToStorage(storage.id);
+                });
+
                 return true;
             }
         }
