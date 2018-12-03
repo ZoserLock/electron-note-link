@@ -935,7 +935,12 @@ body
     padding: 0 20px 0 20px;
     background: var(--bg-color-normal);
     color: var(--note-view-content-color);
-    font-weight:normal;
+
+    font-size: 15px;
+    line-height: 1.25;
+    letter-spacing: 0.1px;
+    font-weight: 300;
+
     flex: 1;
     overflow-x: hidden;
     overflow-y: auto;
@@ -953,6 +958,11 @@ body
 }
 
 .ui-note-view-content p>code
+{
+    color:var(--accent-bg-blue);
+    padding: 2px;
+}
+.ui-note-view-content li>code
 {
     color:var(--accent-bg-blue);
     padding: 2px;
@@ -979,6 +989,7 @@ body
 .ui-note-view-content a
 {
     color: var(--accent-bg-blue);
+    font-weight:bolder; 
     font-size: 14px;
 }
 
@@ -1292,7 +1303,6 @@ body
 }
 
 /* Virtual list */
-
 .ReactVirtualized__Grid:focus
 {
     outline: none;
