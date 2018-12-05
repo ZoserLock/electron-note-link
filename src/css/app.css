@@ -35,6 +35,7 @@
     --bg-color-dark: #1D1F24;
     --bg-color-normal: #24262D;
     --bg-color-normal-2: #2A2D35;
+    --bg-color-normal-3: #1f2128;
     --bg-color-light: #2D3038;
     --bg-color-lighter:#3A3D45;
     --bg-color-lightest: #44464D;
@@ -959,13 +960,20 @@ body
 
 .ui-note-view-content p>code
 {
-    color:var(--accent-bg-blue);
+    color: var(--accent-bg-blue);
+    background: var(--bg-color-dark);
     padding: 2px;
+    border: 1px solid var(--border-color-normal);
+    border-radius: 5px;
 }
+
 .ui-note-view-content li>code
-{
-    color:var(--accent-bg-blue);
+{ 
+    color: var(--accent-bg-blue);
+    background: var(--bg-color-dark);
     padding: 2px;
+    border: 1px solid var(--border-color-normal);
+    border-radius: 5px;
 }
 
 .ui-note-view-content pre>code 
@@ -993,6 +1001,47 @@ body
     font-size: 14px;
 }
 
+/* Noteview Content Table*/
+
+.ui-note-view-content table 
+{
+    border-collapse:collapse;
+    border: 1px solid #1C6EA4;
+}
+
+.ui-note-view-content table td
+{
+    border: 1px solid var(--border-color-normal);
+    padding: 6px 6px;
+}
+
+.ui-note-view-content table th 
+{
+    background: var(--bg-color-normal-3);
+    border: 1px solid var(--border-color-normal);
+    padding: 6px 6px;
+}
+.ui-note-view-content table tbody td 
+{
+    font-size: 13px;
+}
+
+.ui-note-view-content table tr:nth-child(even) 
+{
+    background: var(--bg-color-normal-3);
+}
+
+.ui-note-view-content table td 
+{
+    font-size: 14px;
+}
+
+.ui-note-view-content strong{
+    color: var(--font-brighter-color);
+}
+
+
+/* Note View content Misc*/
 .ui-note-view-content-editor
 {
     flex: 1;

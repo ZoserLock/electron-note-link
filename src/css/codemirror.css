@@ -28,7 +28,10 @@
   background-color: #f7f7f7;
   white-space: nowrap;
 }
-.CodeMirror-linenumbers {}
+.CodeMirror-linenumbers 
+{
+
+}
 .CodeMirror-linenumber {
   padding: 0 3px 0 5px;
   min-width: 20px;
@@ -37,30 +40,45 @@
   white-space: nowrap;
 }
 
-.CodeMirror-guttermarker { color: black; }
-.CodeMirror-guttermarker-subtle { color: #999; }
+.CodeMirror-guttermarker 
+{ 
+  color: black; 
+}
+
+.CodeMirror-guttermarker-subtle 
+{ 
+  color: #999; 
+}
 
 /* CURSOR */
 
-.CodeMirror-cursor {
+.CodeMirror-cursor 
+{
   border-left: 1px solid black;
   border-right: none;
   width: 0;
 }
+
 /* Shown when moving in bi-directional text */
-.CodeMirror div.CodeMirror-secondarycursor {
+.CodeMirror div.CodeMirror-secondarycursor 
+{
   border-left: 1px solid silver;
 }
-.cm-fat-cursor .CodeMirror-cursor {
+
+.cm-fat-cursor .CodeMirror-cursor 
+{
   width: auto;
   border: 0 !important;
   background: #7e7;
 }
-.cm-fat-cursor div.CodeMirror-cursors {
+
+.cm-fat-cursor div.CodeMirror-cursors 
+{
   z-index: 1;
 }
 
-.cm-animate-fat-cursor {
+.cm-animate-fat-cursor 
+{
   width: auto;
   border: 0;
   -webkit-animation: blink 1.06s steps(1) infinite;
@@ -68,33 +86,47 @@
   animation: blink 1.06s steps(1) infinite;
   background-color: #7e7;
 }
-@-moz-keyframes blink {
+
+@-moz-keyframes blink 
+{
   0% {}
   50% { background-color: transparent; }
   100% {}
 }
-@-webkit-keyframes blink {
+@-webkit-keyframes blink 
+{
   0% {}
   50% { background-color: transparent; }
   100% {}
 }
-@keyframes blink {
+@keyframes blink 
+{
   0% {}
   50% { background-color: transparent; }
   100% {}
 }
 
 /* Can style cursor different in overwrite (non-insert) mode */
-.CodeMirror-overwrite .CodeMirror-cursor {}
+.CodeMirror-overwrite .CodeMirror-cursor 
+{
 
-.cm-tab { display: inline-block; text-decoration: inherit; }
+}
 
-.CodeMirror-rulers {
+.cm-tab 
+{ 
+  display: inline-block; 
+  text-decoration: inherit; 
+}
+
+.CodeMirror-rulers 
+{
   position: absolute;
   left: 0; right: 0; top: -50px; bottom: -20px;
   overflow: hidden;
 }
-.CodeMirror-ruler {
+
+.CodeMirror-ruler 
+{
   border-left: 1px solid #ccc;
   top: 0; bottom: 0;
   position: absolute;
