@@ -34,25 +34,29 @@ loadCss("../css/app.css",()=>
 });
 
 
-let rightClickPosition:any = null;
+// Add the inspect element only in debug mode.
+if(process.env.DEBUG)
+{
+    let rightClickPosition:any = null;
 
-const menu = new Menu();
-const menuItem = new MenuItem({
-        label: 'Inspect Element',
-        click: () => 
-        {
-            remote.getCurrentWindow().webContents.inspectElement(rightClickPosition.x, rightClickPosition.y)
-        }
-    });
-    
-menu.append(menuItem);
+    const menu = new Menu();
+    const menuItem = new MenuItem({
+            label: 'Inspect Element',
+            click: () => 
+            {
+                remote.getCurrentWindow().webContents.inspectElement(rightClickPosition.x, rightClickPosition.y)
+            }
+        });
+        
+    menu.append(menuItem);
 
-window.addEventListener('contextmenu', (e) => {
-    e.preventDefault();
-    rightClickPosition = {x: e.x, y: e.y}
-    menu.popup({window: remote.getCurrentWindow()})
-}, false)
+    window.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        rightClickPosition = {x: e.x, y: e.y}
+        menu.popup({window: remote.getCurrentWindow()})
+    }, false)
 
+}
 
 // Render the actual application
 ReactDOM.render(<ApplicationWindow/>,document.getElementById("root"));

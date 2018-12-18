@@ -2,7 +2,8 @@
 const exec   = require("child_process").exec;
 const spawn  = require("child_process").spawn;
 const http   = require("https");
-const fs     = require("fs");
+const fs     = require("fs-extra");
+const Path   = require("path");
 const gulp   = require("gulp");
 
 const runSequence = require('run-sequence');
@@ -25,19 +26,6 @@ const _webpackConfigProduction  = "webpack.prod.config.js";
 gulp.task("clean", function (cb) 
 {
     run("rm -rf " + _outputDir + "/*" ,cb);
-});
-
-// Download some files and update them. (currently not being used)
-gulp.task("download-assets",function(cb)
-{
-    async.parallel(
-    [
-        function(callback){downloadFile("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css",_inputDir + "/lib/css/boostrap.min.css",callback)}
-    ], 
-    function(err, results) 
-    {
-        cb(err);
-    });
 });
 
 // Copy the non script assets to the destination folder
@@ -104,6 +92,41 @@ gulp.task("prod",["build:production"],function(cb)
     run("electron .",cb);
 });
 
+//////////////
+// Publish  //
+//////////////
+
+
+gulp.task("generate-publish-package-json",function(cb)
+{
+    gulp.src("package.json").pipe(gulp.dest(_outputDir)).on("end",()=>
+    {
+        let packagePath = Path.join(".",_outputDir,"package.json");
+        let json = fs.readJSONSync(packagePath);
+    
+        json.main = "main.js";
+    
+        fs.writeJSONSync(packagePath,json);
+    
+        cb();
+    });
+});
+
+gulp.task("package:win32",function(cb)
+{
+    run("electron-packager ./dist --overwrite --asar --platform=win32 --prune=true --out=publish",cb);
+});
+
+// Publish the proyect 
+gulp.task("publish:win32",function(cb)
+{
+    runSequence(
+        "build:production",
+        "generate-publish-package-json",
+        "package:win32",
+        cb);
+});
+
 /////////////////
 // OTHER TASKS //
 /////////////////
@@ -126,25 +149,6 @@ gulp.task("css",["build:refresh"],function(cb)
 gulp.task("run",function(cb)
 {
     run("electron .",cb);
-});
-
-////////////////
-// TEST BUILD //
-////////////////
-
-gulp.task("clean:tests", function (cb) 
-{
-    run("rm -rf " + _outputTestDir + "/*" ,cb);
-});
-
-gulp.task("build:tests",["clean:tests"],function(cb)
-{
-    run("tsc -p tsconfig.tests.json",cb);
-});
-
-gulp.task("test",["build:tests"],function(cb)
-{
-    run("mocha " + _outputTestDir,cb);
 });
 
 ///////////////////////
