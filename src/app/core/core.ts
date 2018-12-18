@@ -411,7 +411,7 @@ export default class Core
             let noteId = this._selectionHistoryBack[a];
             if(noteId == note.id)
             {
-                Debug.log("removeNoteFromHistory: Found");
+                Debug.log("removeNoteFromHistory:  Note Found In Back");
                 this._selectionHistoryBack.splice(a, 1);
                 a--;
             }
@@ -422,7 +422,7 @@ export default class Core
             let noteId = this._selectionHistoryFront[a];
             if(noteId == note.id)
             {
-                Debug.log("removeNoteFromHistory: Found");
+                Debug.log("removeNoteFromHistory: Note Found In Front");
                 this._selectionHistoryFront.splice(a, 1);
                 a--;
             }

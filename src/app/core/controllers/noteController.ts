@@ -99,26 +99,58 @@ export default class NoteController
 
         if(note != null)
         {
-            if(this._core.selectedNote == note)
-            {
-                this._core.unselectNote();
-            }
-
             if(note.trashed)
             {
-                this._dataManager.deleteNote(note);
+                this._core.popupController.showConfirmationPanel("Delete Note?","", "Are you sure you want to delete this Note. This operation cannot be undone.","Yes","Cancel",(data:any)=>
+                {
+                    this._dataManager.deleteNote(note);
+
+                    if(this._core.selectedNote == note)
+                    {
+                        this._core.unselectNote();
+                    }
+
+                    this._presentation.updateNoteListPanel();
+                    this._presentation.updateNoteViewPanel();
+    
+                },null);
             }
             else
             {
-                note.setTrashed(true);
-                this._dataManager.saveNote(note);
+                this._core.popupController.showConfirmationPanel("Send to Trash?","", "Are you sure you want to send this Note to Trash.","Yes","Cancel",(data:any)=>
+                {
+                    note.setTrashed(true);
+                    this._dataManager.saveNote(note);
+
+                    if(this._core.selectedNote == note)
+                    {
+                        this._core.unselectNote();
+                    }
+
+                    this._presentation.updateNoteListPanel();
+                    this._presentation.updateNoteViewPanel();
+    
+                },null);
             }
-            
-            this._presentation.updateNoteListPanel();
-            this._presentation.updateNoteViewPanel();
         }
     }
     
+    public restoreNote(id:string):void
+    {
+        let note:Note = this._core.dataManager.getNote(id);
+
+        if(note != null)
+        {
+            if(note.trashed)
+            {
+                note.setTrashed(false);
+                
+                this._presentation.updateNoteListPanel();
+                this._presentation.updateNoteViewPanel();
+            }
+        }
+    }
+
     public updateNote(noteUpdate:NoteUpdateData):boolean
     {
         let note:Note = this._dataManager.getNote(noteUpdate.id);
