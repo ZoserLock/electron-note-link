@@ -144,6 +144,7 @@ export default class NoteController
             if(note.trashed)
             {
                 note.setTrashed(false);
+                this._dataManager.saveNote(note);
                 
                 this._presentation.updateNoteListPanel();
                 this._presentation.updateNoteViewPanel();
