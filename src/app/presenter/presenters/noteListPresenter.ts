@@ -29,6 +29,7 @@ export default class NoteListPresenter extends Presenter
         this.registerUIListener(MessageChannel.viewNoteSource      , (data:any) => this.actionViewNoteSource(data));
         this.registerUIListener(MessageChannel.createNoteLink      , (data:any) => this.actionCreateNoteLink(data));
         this.registerUIListener(MessageChannel.renameNote          , (data:any) => this.actionRenameNote(data));
+        this.registerUIListener(MessageChannel.restoreNote         , (data:any) => this.actionRestoreNote(data));
 
         this.registerUIListener(MessageChannel.searchUpdated       , (data:any) => this.actionSearchUpdated(data));
     }
@@ -172,6 +173,16 @@ export default class NoteListPresenter extends Presenter
             return;
         }
         this._core.noteController.renameNote(data.noteId);
+    }
+
+    private actionRestoreNote(data:any):void
+    {
+        if(data == null || data.noteId == undefined)
+        {
+            Debug.log("actionRestoreNote Failed Invalid data payload");
+            return;
+        }
+        this._core.noteController.restoreNote(data.noteId);
     }
 
     private actionSelectNote(data:any):void

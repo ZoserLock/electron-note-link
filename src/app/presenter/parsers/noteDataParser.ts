@@ -27,6 +27,7 @@ export default class NodeDataParser
                 title:note.title,
                 created:note.created,
                 updated:note.updated,
+                trashed:note.trashed,
                 notebookName:note.parent.name,
             }
         });

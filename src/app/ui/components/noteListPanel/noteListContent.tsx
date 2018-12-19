@@ -21,6 +21,7 @@ export default class NoteListContent extends UIComponent<any, any>
     private readonly sContextMenuViewSource:string  = "ViewSource"; 
     private readonly sContextMenuDuplicate:string   = "Duplicate"; 
     private readonly sContextMenuRename:string      = "Rename"; 
+    private readonly sContextMenuRestore:string     = "Restore"; 
     private readonly sContextMenuDelete:string      = "Delete"; 
 
     constructor(props: any)
@@ -49,6 +50,9 @@ export default class NoteListContent extends UIComponent<any, any>
             case this.sContextMenuRename:
                 this.renameNote(noteId);
             break; 
+            case this.sContextMenuRestore:
+                this.restoreNote(noteId);
+        break; 
             case this.sContextMenuDelete:
                 this.deleteNote(noteId);
             break; 
@@ -93,6 +97,16 @@ export default class NoteListContent extends UIComponent<any, any>
         }
 
         this.sendMainMessage(MessageChannel.renameNote, data);
+    }
+
+    public restoreNote(noteId:string):void
+    {
+        let data = 
+        {
+            noteId:noteId
+        }
+
+        this.sendMainMessage(MessageChannel.restoreNote, data);
     }
 
     public deleteNote(noteId:string):void
@@ -142,6 +156,15 @@ export default class NoteListContent extends UIComponent<any, any>
                     <MenuItem divider /> 
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuDuplicate }}>Duplicate Note</MenuItem>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Note</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuDelete }}>Trash Note</MenuItem> 
+                </ContextMenu>
+                <ContextMenu id={"NoteItemTrash"}>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuCopyLink }}>Copy Link</MenuItem> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuViewSource }}>View Source</MenuItem>
+                    <MenuItem divider /> 
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuDuplicate }}>Duplicate Note</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuRename }}>Rename Note</MenuItem>
+                    <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuRestore }}>Restore Note</MenuItem>
                     <MenuItem onClick={(e:any, data:any, target:HTMLElement)=>{this.handleNoteContextMenu(e, data, target)}} data={{ action: this.sContextMenuDelete }}>Delete Note</MenuItem> 
                 </ContextMenu>
             </div>
@@ -153,6 +176,18 @@ export default class NoteListContent extends UIComponent<any, any>
     private rowRenderer({index, isScrolling, key, style}:any)
     {
         let note = this.props.notes[index];
+        
+        if(note.trashed)
+        {
+            return (
+                <div key = {key} style = {style}>
+                <ContextMenuTrigger id={"NoteItemTrash"} key = {note.id} attributes={{id:note.id}}>
+                    <NoteListItem note = {note} isSelected={this.props.selectedNote == note.id}/>
+                </ContextMenuTrigger>
+                </div>
+            );
+        }
+        
 
         return (
             <div key = {key} style = {style}>
