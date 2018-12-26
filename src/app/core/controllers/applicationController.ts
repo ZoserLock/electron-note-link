@@ -12,7 +12,7 @@ import Platform         from "core/platform";
 import Presentation     from "core/presentation";
 import DataManager      from "core/dataManager";
 
-import Note             from "core/data/Note";
+import Note             from "core/data/note";
 import Notebook         from "core/data/notebook";
 
 export default class ApplicationController
@@ -100,6 +100,7 @@ export default class ApplicationController
 
         if(this._core.selectedNotebook != null && this._core.dataManager.notes.length != 0)
         {
+            this._core.selectedNotebook.sort();
             notes = this._core.selectedNotebook.notes.filter((note:Note)=>
             {
                 return (!note.trashed);

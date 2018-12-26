@@ -18,6 +18,8 @@ export default class Notebook
 
     private _selected:boolean;
 
+    private _needSorting:boolean;
+
     //#region Get/Set
     get storage(): Storage
     {
@@ -70,6 +72,7 @@ export default class Notebook
         this._created = -1;
         this._updated = -1;
         this._folderPath = "";
+        this._needSorting = false;
     }
 
     public static create(id:string, path:string):Notebook
@@ -100,6 +103,8 @@ export default class Notebook
 
         note.setParent(this);
         this.notes.push(note);
+
+        this._needSorting = true;
     }
 
     public removeNote(note:Note):void
@@ -189,6 +194,7 @@ export default class Notebook
         {
             this._name = updateData.name;
             dataUpdated = true;
+            this._storage.requestSort();
         }
 
         if(dataUpdated)
@@ -199,5 +205,17 @@ export default class Notebook
         return dataUpdated;
     }
 
+    // Sorting
 
+    public sort()
+    {
+        if(this._needSorting)
+        {
+            this._notes.sort((a:Note, b:Note)=>
+            {
+                return a.title.localeCompare(b.title);
+            });
+            this._needSorting = false;
+        }
+    }
 }

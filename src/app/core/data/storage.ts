@@ -35,12 +35,6 @@ export default class Storage
 
     get notebooks(): Notebook[]
     {
-        if(this._needSorting)
-        {
-            this.sortNotebooks();
-            this._needSorting = false;
-        }
-
         return this._notebooks;
     }
 
@@ -77,21 +71,25 @@ export default class Storage
         return storage;
     }
 
-    private sortNotebooks():void
+    public sort():void
     {
-        this._notebooks.sort((a,b)=>
+        if(this._needSorting)
         {
-            if (a.name > b.name) 
+            this._notebooks.sort((a,b)=>
             {
-                return 1;
-            }
-            if (a.name < b.name) 
-            {
-                return -1;
-            }
+                if (a.name > b.name) 
+                {
+                    return 1;
+                }
+                if (a.name < b.name) 
+                {
+                    return -1;
+                }
 
-            return 0;
-        });
+                return 0;
+            });
+            this._needSorting = false;
+        }
     }
 
     public addNotebook(notebook:Notebook):void
@@ -160,10 +158,16 @@ export default class Storage
         if(updateData.name)
         {
             this._name = updateData.name;
+            this._needSorting = true;
             dataUpdated = true;
         }
         
         return dataUpdated;
+    }
+
+    public requestSort():void
+    {
+        this._needSorting = true;
     }
 
 }

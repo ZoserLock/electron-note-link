@@ -8,8 +8,11 @@ export default class StorageDataParser
 {
     public static createStorageListData(storages:Storage[]):ViewStorageItemData[]
     {
+
+
         let storagesData:ViewStorageItemData[] = storages.map((storage:Storage) =>
         {
+            storage.sort();
             let notebooks:ViewNotebookItemData[] = storage.notebooks.map((notebook:Notebook) =>
             {
                 return{

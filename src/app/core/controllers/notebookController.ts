@@ -121,6 +121,9 @@ export default class NotebookController
                 }
 
                 this.updateNotebook(updateData);
+
+                this._presentation.updateNoteListPanel();
+                this._presentation.updateNavigationPanel();
                 
             },null);
         }
