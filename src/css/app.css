@@ -534,6 +534,11 @@ body
     color: var(--font-brighter-color);
 }
 
+.ui-sidebar-notebook-item.drag-over
+{
+    background: var(--bg-color-darker);
+}
+
 .ui-sidebar-notebook-item span
 {
     width: 5px;

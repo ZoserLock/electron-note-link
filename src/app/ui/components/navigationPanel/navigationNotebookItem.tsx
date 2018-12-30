@@ -10,6 +10,18 @@ import Debug from "tools/debug";
 
 export default class NavigationNotebookItem extends UIComponent<any, any>
 {
+    constructor(props: any)
+    {
+        super(props);
+
+        this.state =
+        {
+            dragingOver:false
+        };
+
+
+    }
+
     //#region Function Handles
     private handleItemClick()
     {
@@ -18,12 +30,23 @@ export default class NavigationNotebookItem extends UIComponent<any, any>
         this.sendMainMessage(MessageChannel.selectNotebook, data);
     }
 
+
+    
     private handleDragOver(event:React.DragEvent)
     {
         event.preventDefault();
+    }
 
+    private handleDragEnter(event:React.DragEvent)
+    {
+        Debug.log("handleDragEnter");
+        this.setState({dragingOver:true});
+    }
 
-        //Debug.log("handleDragOver: "+event.target.className);
+    private handleDragExit(event:React.DragEvent)
+    {
+        Debug.log("handleDragExit");
+        this.setState({dragingOver:false});
     }
 
     private handleDropOver(event:React.DragEvent)
@@ -38,6 +61,7 @@ export default class NavigationNotebookItem extends UIComponent<any, any>
         }
 
         this.sendMainMessage(MessageChannel.moveNote, data);
+        this.setState({dragingOver:false});
     }
     //#endregion
     
@@ -53,6 +77,11 @@ export default class NavigationNotebookItem extends UIComponent<any, any>
             return true;
         }
 
+        if(nextState.dragingOver!= this.state.dragingOver)
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -60,9 +89,12 @@ export default class NavigationNotebookItem extends UIComponent<any, any>
     {
         let displayClass = "ui-sidebar-notebook-item";
         displayClass += (this.props.isSelected)? " selected":"";
+        displayClass +=(this.state.dragingOver)? " drag-over":"";
 
         return (
             <li className={displayClass} onClick={()=>this.handleItemClick()} 
+                onDragEnter={(event:any)=>this.handleDragEnter(event)}
+                onDragLeave={(event:any)=>this.handleDragExit(event)}
                 onDragOver={(event:any)=>this.handleDragOver(event)}
                 onDrop={(event:any)=>this.handleDropOver(event)}
                 >
