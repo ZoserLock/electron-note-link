@@ -45,6 +45,19 @@ presentation.setNoteViewPresenter    (new NoteViewPresenter());
 
 let core = new Core(platform, presentation);
 
-// Launch Application
-app.on("ready",() => core.initialize());
+
+const gotTheLock = app.requestSingleInstanceLock();
+
+// Check if there is other running application
+if (!gotTheLock) 
+{
+    app.quit();
+}
+else 
+{
+    // Launch Application
+    app.on("ready",() => core.initialize());
+}
+
+app.on("second-instance",() => platform.showApplication());
 
