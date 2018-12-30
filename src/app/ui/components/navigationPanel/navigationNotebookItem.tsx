@@ -6,6 +6,7 @@ import MessageChannel from "presenter/messageChannel";
 
 // UI
 import UIComponent from "ui/components/generic/uiComponent";
+import Debug from "tools/debug";
 
 export default class NavigationNotebookItem extends UIComponent<any, any>
 {
@@ -15,6 +16,28 @@ export default class NavigationNotebookItem extends UIComponent<any, any>
         let data = {notebookId:this.props.notebook.id}
         
         this.sendMainMessage(MessageChannel.selectNotebook, data);
+    }
+
+    private handleDragOver(event:React.DragEvent)
+    {
+        event.preventDefault();
+
+
+        //Debug.log("handleDragOver: "+event.target.className);
+    }
+
+    private handleDropOver(event:React.DragEvent)
+    {
+        let noteId     = event.dataTransfer.getData("noteId");
+        let notebookId = this.props.notebook.id;
+
+        let data = 
+        {
+            noteId:noteId,
+            notebookId:notebookId
+        }
+
+        this.sendMainMessage(MessageChannel.moveNote, data);
     }
     //#endregion
     
@@ -39,7 +62,10 @@ export default class NavigationNotebookItem extends UIComponent<any, any>
         displayClass += (this.props.isSelected)? " selected":"";
 
         return (
-            <li className={displayClass} onClick={()=>this.handleItemClick()}>
+            <li className={displayClass} onClick={()=>this.handleItemClick()} 
+                onDragOver={(event:any)=>this.handleDragOver(event)}
+                onDrop={(event:any)=>this.handleDropOver(event)}
+                >
                 <span></span> 
                 <div className="ui-sidebar-notebook-item-title">{this.props.notebook.name}</div>
             </li>

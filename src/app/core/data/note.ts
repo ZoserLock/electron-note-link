@@ -266,6 +266,12 @@ export default class Note
 
         return dataUpdated;
     }
+
+    public changePath(newPath:string):void
+    {
+        this._folderPath = newPath;
+        this._fullPath = Path.join(this._folderPath, this._fileName);
+    }
     
 
 

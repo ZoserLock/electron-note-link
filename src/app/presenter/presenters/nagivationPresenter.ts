@@ -21,6 +21,8 @@ export default class NavigationPresenter extends Presenter
         this.registerUIListener(MessageChannel.selectNotebook     ,(data:any) => this.actionSelectNotebook(data));
         this.registerUIListener(MessageChannel.renameNotebook     ,(data:any) => this.actionRenameNotebook(data));
 
+        this.registerUIListener(MessageChannel.moveNote           ,(data:any) => this.actionMoveNote(data));
+
         this.registerUIListener(MessageChannel.setNoteListMode    ,(data:any) => this.actionSetNoteListMode(data));
 
         this.registerUIListener(MessageChannel.viewNotebookSource ,(data:any) => this.actionViewNotebookSource(data));
@@ -95,18 +97,19 @@ export default class NavigationPresenter extends Presenter
         this._core.notebookController.deleteNotebook(notebookId);
     }
 
-    private actionUpdateNotebook(data:any)
-    {
-        let updateData:NotebookUpdateData = data as NotebookUpdateData;
-    
-        this._core.notebookController.updateNotebook(updateData);
-    };
-
     private actionRenameNotebook(data:any)
     {
         let notebookId = data.notebookId;
         
         this._core.notebookController.renameNotebook(notebookId);
+    };
+
+    private actionMoveNote(data:any)
+    {
+        let notebookId = data.notebookId;
+        let noteId      = data.noteId;
+        
+        this._core.moveNoteToNotebook(noteId,notebookId);
     };
 
     ///////////////////////////////

@@ -466,6 +466,36 @@ export default class Core
         }
     }
 
+    public moveNoteToNotebook(noteId:string, notebookId:string)
+    {
+        let notebook = this._dataManager.getNotebook(notebookId);
+        let note = this._dataManager.getNote(noteId);
+
+        if(notebook != null && note != null)
+        {
+            if(note.parent != null)
+            {
+                let parentNotebook = note.parent;
+
+                if(parentNotebook!= notebook)
+                {
+                    this._dataManager.moveNote(note, notebook);
+                    
+                    this._presentation.updateNoteListPanel();
+                    this._presentation.updateNoteViewPanel();
+                }
+            }
+            else
+            {
+                Debug.log("moveNoteToNotebook: Selected note does not have an assigned notebook");
+            }
+        }
+        else
+        {
+            Debug.log("moveNoteToNotebook: Selected note or notebook does not exist ");
+        }
+    }
+
     // Events
     private onNoteRegistered(note:Note):void
     {

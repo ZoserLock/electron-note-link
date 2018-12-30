@@ -101,6 +101,8 @@ export default class Notebook
     {
         this.setUpdated();
 
+        note.removeFromParent();
+        
         note.setParent(this);
         this.notes.push(note);
 

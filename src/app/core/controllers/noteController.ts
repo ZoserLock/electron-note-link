@@ -10,7 +10,7 @@ import Platform         from "core/platform";
 import Presentation     from "core/presentation";
 import DataManager      from "core/dataManager";
 
-import Note             from "core/data/Note";
+import Note             from "core/data/note";
 import Notebook         from "core/data/notebook";
 import NavigationNotebookItem from "ui/components/navigationPanel/navigationNotebookItem";
 
@@ -38,7 +38,7 @@ export default class NoteController
 
         if(notebook != null)
         {
-            let note:Note = Note.createNew(Path.join(notebook.folderPath,notebook.id));
+            let note:Note = Note.createNew(notebook.getNotesFolderPath());
             
             if(this._dataManager.addNote(note))
             {

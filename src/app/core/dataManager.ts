@@ -687,6 +687,70 @@ export default class DataManager
         return note; 
     }
 
+    public moveNote(note:Note, newNotebook:Notebook):boolean
+    {
+        var newFolder = newNotebook.getNotesFolderPath();
+        var oldFile   = note.fullPath; 
+        var newFile   = Path.join(newFolder,note.fileName);
+
+        Debug.log("newFolder: "+ newFolder);
+        Debug.log("OldFile: "+ oldFile);
+        Debug.log("newFile: "+ newFile);
+
+        // Copy file
+        try 
+        {
+            fs.ensureDirSync(newFolder);
+            let buffer = fs.readFileSync(oldFile);
+            fs.writeFileSync(newFile, buffer);
+        }
+        catch(error)
+        {
+            Debug.log("moveNote: Copy Failed: " +error);
+            return false;
+        }
+
+        // Check if copy is the same that current.
+        try {
+
+            var oldBuffer = fs.readFileSync(oldFile);
+            var newBuffer = fs.readFileSync(newFile);
+            if(!oldBuffer.equals(newBuffer))
+            {
+                Debug.log("moveNote: Copy have been corrupted aborting")
+                fs.removeSync(newFile);
+                return false;
+            }
+        } 
+        catch (error) 
+        {
+            // Release copy
+            fs.removeSync(newFile);
+            return false;    
+        }
+
+        // Remove old note
+        try 
+        {
+            fs.removeSync(oldFile);
+        }
+        catch(error)
+        {
+            return false;    
+        }
+
+        // Change note
+        note.changePath(newFolder);
+        newNotebook.addNote(note);
+
+        this.saveNote(note);
+        this.saveNotebook(newNotebook);
+
+        Debug.log("moveNote: Move Completed");
+
+        return true;
+    }
+
     // Function used to load all the data of a note in the case that only the index data is loaded.
     public ensureNoteLoaded(note:Note):void
     {

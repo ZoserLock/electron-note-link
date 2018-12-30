@@ -8,6 +8,7 @@ import MessageChannel from "presenter/messageChannel";
 // UI
 import UIComponent  from "ui/components/generic/uiComponent";
 import EditableText from "ui/components/generic/editableText";
+import Debug from "tools/debug";
 
 export default class NoteListItem extends UIComponent<any, any> 
 {
@@ -40,6 +41,17 @@ export default class NoteListItem extends UIComponent<any, any>
         this.sendMainMessage(MessageChannel.updateNote,data);
     }
 
+    private handleDragStart(event:React.DragEvent)
+    {
+        let noteId = this.props.note.id;
+        event.dataTransfer.setData("noteId",noteId);
+    }
+
+    private handleDragEnd(event:React.DragEvent)
+    {
+        Debug.log("Drag End");
+    }
+
     public render() 
     {
         let value:string = (this.props.note.title == "")?"<Empty>":this.props.note.title;
@@ -54,7 +66,10 @@ export default class NoteListItem extends UIComponent<any, any>
         }
 
         return(
-            <li className="ui-note-list-item" onClick={()=>this.onItemClick()} >
+            <li className="ui-note-list-item" onClick={()=>this.onItemClick()} 
+                draggable={true}
+                onDragStart={(event)=>this.handleDragStart(event)}
+                onDragEnd ={(event)=>this.handleDragEnd(event)}>
                 <div className = {"ui-note-list-item-content" + addClass}>
                     <div className = "ui-note-list-item-header" >
                         <span className ="badge"></span>

@@ -181,7 +181,7 @@ export default class NoteListContent extends UIComponent<any, any>
         {
             return (
                 <div key = {key} style = {style}>
-                <ContextMenuTrigger id={"NoteItemTrash"} key = {note.id} attributes={{id:note.id}}>
+                <ContextMenuTrigger id={"NoteItemTrash"} key = {note.id} attributes={{id:note.id}} holdToDisplay={-1}>
                     <NoteListItem note = {note} isSelected={this.props.selectedNote == note.id}/>
                 </ContextMenuTrigger>
                 </div>
@@ -191,7 +191,7 @@ export default class NoteListContent extends UIComponent<any, any>
 
         return (
             <div key = {key} style = {style}>
-            <ContextMenuTrigger id={"NoteItem"} key = {note.id} attributes={{id:note.id}}>
+            <ContextMenuTrigger id={"NoteItem"} key = {note.id} attributes={{id:note.id}} holdToDisplay={-1}>
                 <NoteListItem note = {note} isSelected={this.props.selectedNote == note.id}/>
             </ContextMenuTrigger>
             </div>
