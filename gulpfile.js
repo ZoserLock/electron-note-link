@@ -6,8 +6,6 @@ const fs     = require("fs-extra");
 const Path   = require("path");
 const gulp   = require("gulp");
 
-const runSequence = require('run-sequence');
-
 // Constants
 const _outputDir = "dist";
 const _outputTestDir = "test/build/test";
@@ -23,13 +21,13 @@ const _webpackConfigProduction  = "webpack.prod.config.js";
 ////////////////////
 
 // Clean all the content in the build directory
-gulp.task("clean", function (cb) 
+function clean(cb) 
 {
-    run("rm -rf " + _outputDir + "/*" ,cb);
-});
+    runCmd("rm -rf " + _outputDir + "/*" ,cb);
+};
 
 // Copy the non script assets to the destination folder
-gulp.task("copy-assets",function(cb)
+function copyAssets(cb)
 {
     gulp.src(_inputDir + "/css/**/*").pipe(gulp.dest(_outputDir + "/css"));
     gulp.src(_inputDir + "/lib/**/*").pipe(gulp.dest(_outputDir + "/lib"));
@@ -38,66 +36,49 @@ gulp.task("copy-assets",function(cb)
     gulp.src(_inputDir + "/fonts/**/*").pipe(gulp.dest(_outputDir + "/fonts"));
 
     cb();
-});
+};
 
 ///////////////////////
 // DEVELOPMENT BUILD //
 ///////////////////////
-
-// Compile and run the project in develop mode
-gulp.task("dev",["build:develop"],function(cb)
+function run(cb)
 {
-    run("electron .",cb);
-});
-
-// Build the project in develop mode
-gulp.task("build:develop",function(cb)
-{
-    runSequence(
-    'clean',            // Clean the output directory
-    'copy-assets',      // Copy assets (html/css/images)
-    'webpack:develop',  // Build ts in develop mode
-    cb);
-});
+    runCmd("electron .",cb);
+}
 
 // Compile the proyect into to files using webpack
-gulp.task("webpack:develop",function(cb)
+function webpackDevelop(cb)
 {
-    run("webpack --config "+_webpackConfigDevelop,cb);
-});
+    runCmd("webpack --config "+_webpackConfigDevelop,cb);
+};
+
+// Build the project in develop mode
+let buildDevelop = gulp.series(clean,copyAssets,webpackDevelop);
+
+// Compile and run the project in develop mode
+exports.dev = gulp.series(buildDevelop, run);
 
 //////////////////////
 // PRODUCTION BUILD //
 //////////////////////
 
-// Build the project with post proccesses
-gulp.task("build:production",function(cb)
+// Compile the proyect into to files using webpack
+function webpackProduction(cb)
 {
-    runSequence(
-    'clean',                // Clean the output directory
-    'copy-assets',          // Copy assets (html/css/images)
-    'webpack:production',   // Build ts in production mode
-    cb);
-});
+    runCmd("webpack --config "+_webpackConfigProduction,cb);
+};
 
-// Run Webpack using the production configuration
-gulp.task("webpack:production",function(cb)
-{
-    run("webpack --config "+_webpackConfigProduction,cb);
-});
+// Build the project with post proccesses
+let buildProduction = gulp.series(clean,copyAssets,webpackProduction);
 
 // Compile and run the project in production mode
-gulp.task("prod",["build:production"],function(cb)
-{
-    run("electron .",cb);
-});
+exports.prod = gulp.series(buildProduction, run);
 
 //////////////
 // Publish  //
 //////////////
 
-
-gulp.task("generate-publish-package-json",function(cb)
+function publishPostProcess(cb)
 {
     gulp.src("package.json").pipe(gulp.dest(_outputDir)).on("end",()=>
     {
@@ -110,53 +91,28 @@ gulp.task("generate-publish-package-json",function(cb)
     
         cb();
     });
-});
+}
 
-gulp.task("package:win32",function(cb)
+function packageWin32(cb)
 {
-    run("electron-packager ./dist --overwrite --asar --platform=win32 --prune=true --out=publish",cb);
-});
+    runCmd("electron-packager ./dist --overwrite --asar --platform=win32 --prune=true --out=publish",cb);
+};
 
-// Publish the proyect 
-gulp.task("publish:win32",function(cb)
-{
-    runSequence(
-        "build:production",
-        "generate-publish-package-json",
-        "package:win32",
-        cb);
-});
+// Publish the project 
+exports.publishWin32 = gulp.series(buildProduction, publishPostProcess, packageWin32);
 
 /////////////////
 // OTHER TASKS //
 /////////////////
 
-// Refresh Assets
-gulp.task("build:refresh",function(cb)
-{
-    runSequence(
-    'copy-assets',
-    cb);
-});
-
-// Copy just the resources. The proyect is not built
-gulp.task("css",["build:refresh"],function(cb)
-{
-    run("electron .",cb);
-});
-
-// Just run the project
-gulp.task("run",function(cb)
-{
-    run("electron .",cb);
-});
+exports.css = gulp.series(copyAssets,run);
 
 ///////////////////////
 // Utility Functions //
 ///////////////////////
 
 // Run function to run a command and write the output live.
-function run(command, callback)
+function runCmd(command, callback)
 {
     let process = exec(command, function (err, stdout, stderr)
     {
