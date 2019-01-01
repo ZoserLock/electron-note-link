@@ -5,6 +5,8 @@ const http   = require("https");
 const fs     = require("fs-extra");
 const Path   = require("path");
 const gulp   = require("gulp");
+const gulpClean = require("gulp-clean");
+
 
 // Constants
 const _outputDir = "dist";
@@ -20,10 +22,13 @@ const _webpackConfigProduction  = "webpack.prod.config.js";
 // UTILITY TASKS  //
 ////////////////////
 
-// Clean all the content in the build directory
-function clean(cb) 
+// Clean all the content in the dist directory
+function clean() 
 {
-    runCmd("rm -rf " + _outputDir + "/*" ,cb);
+    return gulp.src(_outputDir, {read: false, allowEmpty:true})
+    .pipe(gulpClean());
+
+    //runCmd("rm -rf " + _outputDir + "/*" ,cb);
 };
 
 // Copy the non script assets to the destination folder
@@ -106,7 +111,7 @@ exports.publishWin32 = gulp.series(buildProduction, publishPostProcess, packageW
 /////////////////
 
 exports.css = gulp.series(copyAssets,run);
-
+exports.clean = clean;
 ///////////////////////
 // Utility Functions //
 ///////////////////////
