@@ -100,7 +100,7 @@ function publishPostProcess(cb)
 
 function packageWin32(cb)
 {
-    runCmd("electron-packager ./dist --overwrite --asar --platform=win32 --prune=true --out=publish",cb);
+    runCmd("electron-packager ./dist --overwrite --asar --platform=win32 --prune=true --out=publish --icon=src/img/tray.ico",cb);
 };
 
 // Publish the project 

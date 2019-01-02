@@ -94,7 +94,8 @@ const mainConfig =
       new webpack.DefinePlugin({ "global.GENTLY": false }),
       new webpack.DefinePlugin({ 
           'process.env': {
-              "DEBUG":"true"
+              "DEBUG":"true",
+              "VERSION":"'1.0.0'"
           } 
         }),
       new webpack.SourceMapDevToolPlugin({ filename: 'main.js.map' }),

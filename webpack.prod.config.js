@@ -43,7 +43,8 @@ const rendererConfig =
       new webpack.DefinePlugin({ "global.GENTLY": false }),
       new webpack.DefinePlugin({ 
         'process.env': {
-            "DEBUG":"false"
+            "DEBUG":"false",
+            "VERSION":"'1.0.0'"
         } 
       })
     ],
@@ -93,7 +94,8 @@ const mainConfig =
       new webpack.DefinePlugin({ "global.GENTLY": false }),
       new webpack.DefinePlugin({ 
           'process.env': {
-              "DEBUG":"false"
+              "DEBUG":"false",
+              "VERSION":"'1.0.0'"
           } 
         })
     ],
