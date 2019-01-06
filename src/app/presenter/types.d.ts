@@ -40,6 +40,7 @@ declare interface ViewNoteFullItemData
     readonly updated:number,
     readonly notebookId:string,
     readonly notebookName:string,
+    readonly storagePath:string
 }
 
 declare interface ViewNoteItemData

@@ -15,6 +15,7 @@ export default class NodeDataParser
             updated:note.updated,
             notebookId:note.parent.id,
             notebookName:note.parent.name,
+            storagePath:note.parent.getDataStoragePath()
         };
     }
 

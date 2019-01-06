@@ -39,6 +39,7 @@ function copyAssets(cb)
     gulp.src(_inputDir + "/html/**/*").pipe(gulp.dest(_outputDir + "/html"));
     gulp.src(_inputDir + "/img/**/*").pipe(gulp.dest(_outputDir + "/img"));
     gulp.src(_inputDir + "/fonts/**/*").pipe(gulp.dest(_outputDir + "/fonts"));
+    gulp.src(_inputDir + "/js/**/*").pipe(gulp.dest(_outputDir + "/js"));
 
     cb();
 };

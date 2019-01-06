@@ -220,4 +220,9 @@ export default class Notebook
             this._needSorting = false;
         }
     }
+
+    public getDataStoragePath():string
+    {
+        return  Path.join(this.storage.folderPath, "store");
+    }
 }

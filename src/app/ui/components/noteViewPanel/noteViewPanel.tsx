@@ -105,7 +105,7 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
             }
             else
             {
-                currentPanel = <NoteViewContent text = {this.state.note.text} onDoubleClick={()=>this.onContentClick()}/>
+                currentPanel = <NoteViewContent text = {this.state.note.text} store = {this.state.note.storagePath} onDoubleClick={()=>this.onContentClick()}/>
             }
 
             return (

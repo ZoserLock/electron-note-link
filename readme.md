@@ -1,6 +1,8 @@
 # NoteLink Markdown based Note App
 
-Note Link is a simple app to store text based notes. The notes support markdown notation.
+Note Link is a simple app to store text based notes. The notes support markdown notation. 
+
+There is plans to support attached files in the future and note encryption.
 
 ## Releases
 
@@ -8,21 +10,12 @@ Note Link is a simple app to store text based notes. The notes support markdown 
 
 ## Instalation
  
-Just extract the zip and run NoteLink.exe
+Just extract the zip file and run NoteLink.exe. 
 
 ## Screenshots
 
 ![Screenshot 001](https://github.com/ZoserLock/electron-note-link/raw/master/images/ss_001.png)
 
 ![Screenshot 002](https://github.com/ZoserLock/electron-note-link/raw/master/images/ss_002.png)
-
-## Development
-
-### Build
-
-### Publish
-
-### Data location
-
 
 
