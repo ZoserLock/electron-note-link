@@ -2,6 +2,7 @@
 import * as React from "react";
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import applyOnClickOutside from 'react-onclickoutside'
+import Debug from "tools/debug";
 
 require("codemirror/mode/gfm/gfm");
 require("codemirror/mode/javascript/javascript");
@@ -11,6 +12,8 @@ require("codemirror/keyMap/sublime");
 class NoteViewContentEditor extends React.Component<any, any> 
 {
     private _codeMirror:any = null;
+
+    private _scroll:number=0.0;
 
     constructor(props: any)
     {
@@ -33,6 +36,17 @@ class NoteViewContentEditor extends React.Component<any, any>
     private handleClickOutside(event:any)
     {
         this.props.onClickOutside(event); 
+    }
+
+    private handleOnScroll(instance:any, scroll:any)
+    {
+        Debug.logVar(scroll);
+       this._scroll = scroll.top;
+    }
+
+    public getScroll()
+    {
+        return this._scroll;
     }
 
     public render() 
@@ -61,6 +75,8 @@ class NoteViewContentEditor extends React.Component<any, any>
                     value={this.state.code} 
                     options={options}
                     onChange={this.props.onCodeChanged}
+                    onScroll={(instance:any,scroll:any)=>this.handleOnScroll(instance,scroll)}
+                    scroll={{y:this.props.scroll}}
                 />
             </div>
         );

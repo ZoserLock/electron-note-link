@@ -18,6 +18,7 @@ import NoteViewContentEditor from "ui/components/noteViewPanel/noteViewContentEd
 interface NavigationPanelState
 {
     note:ViewNoteFullItemData;
+    scroll:number;
     editing:boolean;
 }
 
@@ -25,7 +26,12 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
 {
     private _updateRequestedEvent: (event: any, data: any) => void;
 
+    private _getComponentReference: (ref: any) => void;
+
     private _newText:string = "";
+
+    private _viewContentEditor:any;
+    private _viewContent:React.RefObject<NoteViewContent>;
 
     constructor(props: any)
     {
@@ -34,10 +40,14 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
         this.state =
         {
             note:null,
+            scroll:0,
             editing:false
         }
 
         this._updateRequestedEvent = (event:any,data:any) => this.updateRequested(event,data);
+        this._getComponentReference = (data:any)=>this.getReference(data);
+        
+        this._viewContent = React.createRef<NoteViewContent>();
     }
 
     public componentDidMount() 
@@ -56,7 +66,6 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
 
         let note:ViewNoteFullItemData = data.note;
 
-        Debug.logVar(data);
 
         this._newText = (data.note != null)?data.note.text:"";
 
@@ -65,11 +74,22 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
         });
     }
 
+    public getReference(data:any):void
+    {
+        this._viewContentEditor = data;
+    }
+    // Check if text changed.
     private handleClickOutside(event:any)
     {
         if(this.state.editing)
         {
-            this.setState({editing:false});
+            let scroll = 0.0;
+            if(this._viewContentEditor)
+            {
+                scroll = this._viewContentEditor.getInstance().getScroll();
+            }
+            
+            this.setState({editing:false, scroll:scroll});
 
             let data:NoteUpdateData =
             {
@@ -83,7 +103,13 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
 
     private onContentClick()
     {
-        this.setState({editing:true});
+        let scroll:number = 0.0;
+        if( this._viewContent.current)
+        {
+            scroll = this._viewContent.current.getScroll();
+        }
+        
+        this.setState({editing:true, scroll:scroll});
     }
 
     private onCodeChanged(editor:any, data:any, value:any)
@@ -91,21 +117,20 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
         this._newText = value;
     }
 
-
     public render() 
     {
         let currentPanel:any;
 
         if(this.state.note != null)
         {
-            Debug.logVar(this.state.note);
+           // Debug.logVar(this.state.note);
             if(this.state.editing)
             {
-                currentPanel = <NoteViewContentEditor code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)} onClickOutside={(event:any)=>this.handleClickOutside(event)}/>
+                currentPanel = <NoteViewContentEditor ref={this._getComponentReference} scroll={this.state.scroll} code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)} onClickOutside={(event:any)=>this.handleClickOutside(event)}/>
             }
             else
             {
-                currentPanel = <NoteViewContent text = {this.state.note.text} store = {this.state.note.storagePath} onDoubleClick={()=>this.onContentClick()}/>
+                currentPanel = <NoteViewContent ref={this._viewContent} scroll={this.state.scroll} text = {this.state.note.text} store = {this.state.note.storagePath} onDoubleClick={()=>this.onContentClick()}/>
             }
 
             return (

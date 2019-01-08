@@ -15,6 +15,7 @@ interface NoteViewContentData
 {
     text:string;
     store:string;
+    scroll:number;
     onDoubleClick:any;
 }
 
@@ -22,6 +23,8 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
 {
     private _markdownRenderer:any;
     private _htmlParser:any;
+
+    private _contentScrollRef:React.RefObject<HTMLDivElement>;
 
     constructor(props: any)
     {
@@ -35,10 +38,23 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
         this._htmlParser = new HtmlToReactParser();
 
 
-        
+        this._contentScrollRef = React.createRef<HTMLDivElement>();
     }
 
-    // add should update text == new text
+    public componentDidMount() 
+    {
+        this._contentScrollRef.current.scrollTop=this.props.scroll;
+    }
+    
+    public getScroll()
+    {
+        if( this._contentScrollRef.current)
+        {
+            return this._contentScrollRef.current.scrollTop;
+        }
+
+        return 0.0;
+    }
 
     public render() 
     {
@@ -50,7 +66,7 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
             var reactElement =  this._htmlParser.parse(htmlInput);
 
             return (
-                <div className="ui-note-view-content" onDoubleClick={this.props.onDoubleClick}> 
+                <div ref={this._contentScrollRef} className="ui-note-view-content" onDoubleClick={this.props.onDoubleClick}> 
                     {reactElement}
                 </div>
             );
