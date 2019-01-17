@@ -2,6 +2,7 @@
 import * as React from "react";
 import * as Path from "path"
 import * as Markdown from "markdown-it";
+import Debug from "tools/debug";
 
 const markdownHighlight = require('markdown-it-highlightjs');
 const markdownHashtag   = require('markdown-it-hashtag');
@@ -43,14 +44,24 @@ export default class NoteViewContent extends React.Component<NoteViewContentData
 
     public componentDidMount() 
     {
-        this._contentScrollRef.current.scrollTop=this.props.scroll;
+        this._contentScrollRef.current.scrollTop = this.props.scroll * (this._contentScrollRef.current.scrollHeight - this._contentScrollRef.current.clientHeight);
     }
     
-    public getScroll()
+    public getScroll():number
     {
         if( this._contentScrollRef.current)
         {
             return this._contentScrollRef.current.scrollTop;
+        }
+
+        return 0.0;
+    }
+
+    public getScrollPerUnit():number
+    {
+        if( this._contentScrollRef.current)
+        {
+            return this._contentScrollRef.current.scrollTop / (this._contentScrollRef.current.scrollHeight - this._contentScrollRef.current.clientHeight);
         }
 
         return 0.0;

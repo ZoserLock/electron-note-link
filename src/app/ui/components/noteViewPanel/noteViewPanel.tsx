@@ -86,7 +86,7 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
             let scroll = 0.0;
             if(this._viewContentEditor)
             {
-                scroll = this._viewContentEditor.getInstance().getScroll();
+                scroll = this._viewContentEditor.getInstance().getScrollPerUnit();
             }
             
             this.setState({editing:false, scroll:scroll});
@@ -106,7 +106,7 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
         let scroll:number = 0.0;
         if( this._viewContent.current)
         {
-            scroll = this._viewContent.current.getScroll();
+            scroll = this._viewContent.current.getScrollPerUnit();
         }
         
         this.setState({editing:true, scroll:scroll});

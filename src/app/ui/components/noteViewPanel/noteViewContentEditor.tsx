@@ -13,7 +13,10 @@ class NoteViewContentEditor extends React.Component<any, any>
 {
     private _codeMirror:any = null;
 
+    private _initialScroll:number=0.0;
     private _scroll:number=0.0;
+    private _scrollPerUnit:number=0.0;
+    private _updateScroll:boolean = false;
 
     constructor(props: any)
     {
@@ -29,10 +32,33 @@ class NoteViewContentEditor extends React.Component<any, any>
         this._codeMirror = editor; 
         this._codeMirror.setSize("100%", "100%");
 
+        // editor.getScrollerElement().clientHeight
+        // getWrapperElement()
+
+        var info = editor.getScrollInfo();
+
+        let scroll = this.props.scroll * (info.height - info.clientHeight);
+        
+        Debug.logVar(info);
+
+
+        Debug.log(" this.props.scroll: "+ this.props.scroll );
+        Debug.logVar("Scroll base: "+scroll);
+
+        this._codeMirror.scrollTo(0,scroll);
+
         // Hack for now to avoid the bad cursor size on the first render
-        setTimeout(()=>{this._codeMirror.refresh()}, 100);
+        setTimeout(()=>{
+            this._codeMirror.refresh();
+        }, 100);
+        
     }
 
+    public componentDidMount() 
+    {
+
+    }
+    
     private handleClickOutside(event:any)
     {
         this.props.onClickOutside(event); 
@@ -40,13 +66,19 @@ class NoteViewContentEditor extends React.Component<any, any>
 
     private handleOnScroll(instance:any, scroll:any)
     {
-        Debug.logVar(scroll);
-       this._scroll = scroll.top;
+        //Debug.logVar(scroll);
+        this._scroll        = scroll.top;
+        this._scrollPerUnit = scroll.top / (scroll.height - scroll.clientHeight);
     }
 
     public getScroll()
     {
         return this._scroll;
+    }
+
+    public getScrollPerUnit()
+    {
+        return this._scrollPerUnit;
     }
 
     public render() 
@@ -63,6 +95,9 @@ class NoteViewContentEditor extends React.Component<any, any>
             indentUnit:4,
             highlightFormatting:true,
         };
+
+        Debug.log("Render Editor A: "+ this.state.effectiveScroll);
+        Debug.log("Render Editor B: "+ this._initialScroll);
         
         return (
             <div className="ui-note-view-content-editor"> 
@@ -75,8 +110,7 @@ class NoteViewContentEditor extends React.Component<any, any>
                     value={this.state.code} 
                     options={options}
                     onChange={this.props.onCodeChanged}
-                    onScroll={(instance:any,scroll:any)=>this.handleOnScroll(instance,scroll)}
-                    scroll={{y:this.props.scroll}}
+                    onScroll={(instance:any,scroll:any)=>this.handleOnScroll(instance, scroll)}
                 />
             </div>
         );
