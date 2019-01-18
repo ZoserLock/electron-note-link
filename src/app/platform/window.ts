@@ -20,7 +20,8 @@ export default class Window
             minHeight: 600,
             frame:false,
             show:false,
-            backgroundColor:'#00FFFFFF'
+            backgroundColor:'#00FFFFFF',
+            webPreferences:{nodeIntegration: true}
         });
 
         this._window.loadURL("file://" + __dirname + "/html/index.html");
