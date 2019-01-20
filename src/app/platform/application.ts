@@ -24,16 +24,17 @@ export default class Application implements Platform
     private _mainWindow:Window;
 
     private _userExit:boolean;
+    private _startMinimized:boolean;
 
-    constructor()
+    constructor(startMinimized:boolean)
     {
         this._userExit = false;
+        this._startMinimized = startMinimized;
 
         this._trayController = new TrayController(
             ()=>this.showApplication(),
             ()=>this.exitApplication()
         );
-
     }
 
     public initialize(core:Core):void
@@ -84,8 +85,11 @@ export default class Application implements Platform
     {
         Debug.log("[Application] Main Window Loaded");
         
-        this._mainWindow.show();
-
+        if(!this._startMinimized)
+        {
+            this._mainWindow.show();
+        }
+     
         // Timeout needed to allow one render of the main window and also show the app logo.
         setTimeout(() => 
         {

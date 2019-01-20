@@ -2,6 +2,10 @@
 import { app } from "electron";
 import * as uuid from "uuid/v4"
 
+import * as minimist from "minimist";
+
+var argv = minimist(process.argv.slice(2));
+
 // Tools
 import Debug           from "tools/debug";
 
@@ -28,13 +32,21 @@ else
     console.log("Notelink [Production Mode] version: "+process.env.VERSION);
 }
 
+console.log("Parameters: "+JSON.stringify(argv));
+
 Debug.log("Initializing NoteLink");
 
 // Called to avoid slow loading when is used for the fist time
 uuid();
 
+let startMinimized = false;
+if(argv.minimize != undefined)
+{
+    startMinimized = true;
+}
+
 // Create dependencies
-let platform     = new Application();
+let platform     = new Application(startMinimized);
 
 let presentation = new MainPresentation();
 
