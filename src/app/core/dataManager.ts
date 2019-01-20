@@ -41,6 +41,8 @@ export default class DataManager
     public onNoteRegistered:(note:Note)=>void = (note:Note)=>{};
     public onNoteUnregistered:(note:Note)=>void = (note:Note)=>{};
 
+    // Events
+    public onNoteLoaded:(note:Note)=>void= (note:Note)=>{};
     // Get/Set
     
     get noteStorages(): Array<Storage>  
@@ -638,7 +640,7 @@ export default class DataManager
         {
             let note = this._notes[id];
 
-            if(!note.isLoaded)
+            if(!note.isLoaded) // just the index is loaded.
             {
                 this.ensureNoteLoaded(note);
             }
@@ -754,9 +756,22 @@ export default class DataManager
     // Function used to load all the data of a note in the case that only the index data is loaded.
     public ensureNoteLoaded(note:Note):void
     {
-        let noteDataRaw:any = FileTools.readJsonSync(note.fullPath);
-        note.setData(noteDataRaw);
-        note.setLoaded();
+        if(!note.isLoaded && !note.isLoading)
+        {
+            note.setLoading();
+            FileTools.readJsonAsync(note.fullPath,(err:any, noteDataRaw:any)=>
+            {
+                if (err) 
+                {
+                    Debug.logError(err);
+                    note.cancelLoading();
+                    return;
+                }
+                note.setData(noteDataRaw);
+                note.setLoaded();
+                this.onNoteLoaded(note);
+            });
+        }
     }
 
     private removeNote(note:Note):boolean

@@ -26,6 +26,7 @@ export default class Note
     private _selected:boolean;
 
     private _loaded:boolean;
+    private _loading:boolean;
 
     private _started:boolean;
     private _trash:boolean;
@@ -96,6 +97,11 @@ export default class Note
     get isLoaded(): boolean
     {
         return this._loaded;
+    }
+
+    get isLoading(): boolean
+    {
+        return this._loading;
     }
 
     get parent():Notebook
@@ -190,9 +196,20 @@ export default class Note
 
     public setLoaded():void
     {
-        this._loaded = true;
+        this._loaded  = true;
+        this._loading = false;
     }
-    
+
+    public setLoading():void
+    {
+        this._loading =true;
+    }
+
+    public cancelLoading():void
+    {
+        this._loading = false;
+    }
+
     public removeFromParent()
     {
         if(this._notebook != null)

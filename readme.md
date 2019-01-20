@@ -6,7 +6,7 @@ There is plans to support attached files in the future and note encryption.
 
 ## Releases
 
-[Version 1.0.0](https://github.com/ZoserLock/electron-note-link/releases/tag/v1.0.0)
+[Version 1.1.0](https://github.com/ZoserLock/electron-note-link/releases/tag/v1.1.0)
 
 ## Instalation
  

@@ -34,6 +34,7 @@ declare interface ViewNoteFullItemData
     readonly id:string, 
     readonly title:string, 
     readonly text:string,
+    readonly loaded:boolean,
     readonly trashed:boolean,
     readonly started:boolean,
     readonly created:number,

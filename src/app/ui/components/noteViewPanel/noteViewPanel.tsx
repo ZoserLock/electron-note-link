@@ -66,7 +66,6 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
 
         let note:ViewNoteFullItemData = data.note;
 
-
         this._newText = (data.note != null)?data.note.text:"";
 
         this.setState({
@@ -78,6 +77,7 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
     {
         this._viewContentEditor = data;
     }
+
     // Check if text changed.
     private handleClickOutside(event:any)
     {
@@ -103,13 +103,16 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
 
     private onContentClick()
     {
-        let scroll:number = 0.0;
-        if( this._viewContent.current)
+        if(this.state.note.loaded)
         {
-            scroll = this._viewContent.current.getScrollPerUnit();
+            let scroll:number = 0.0;
+            if( this._viewContent.current)
+            {
+                scroll = this._viewContent.current.getScrollPerUnit();
+            }
+            
+            this.setState({editing:true, scroll:scroll});
         }
-        
-        this.setState({editing:true, scroll:scroll});
     }
 
     private onCodeChanged(editor:any, data:any, value:any)
@@ -123,22 +126,35 @@ export default class NoteViewPanel extends UIComponent<any, NavigationPanelState
 
         if(this.state.note != null)
         {
-           // Debug.logVar(this.state.note);
-            if(this.state.editing)
+            if(this.state.note.loaded)
             {
-                currentPanel = <NoteViewContentEditor ref={this._getComponentReference} scroll={this.state.scroll} code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)} onClickOutside={(event:any)=>this.handleClickOutside(event)}/>
+            // Debug.logVar(this.state.note);
+                if(this.state.editing)
+                {
+                    currentPanel = <NoteViewContentEditor ref={this._getComponentReference} scroll={this.state.scroll} code = {this.state.note.text} onCodeChanged = {(editor:any, data:any, value:any)=>this.onCodeChanged(editor,data,value)} onClickOutside={(event:any)=>this.handleClickOutside(event)}/>
+                }
+                else
+                {
+                    currentPanel = <NoteViewContent ref={this._viewContent} scroll={this.state.scroll} text = {this.state.note.text} store = {this.state.note.storagePath} onDoubleClick={()=>this.onContentClick()}/>
+                }
+
+                return (
+                    <div className="ui-note-view"> 
+                        <NoteViewHeader note = {this.state.note}/>
+                        {currentPanel}
+                    </div>
+                );
             }
             else
             {
-                currentPanel = <NoteViewContent ref={this._viewContent} scroll={this.state.scroll} text = {this.state.note.text} store = {this.state.note.storagePath} onDoubleClick={()=>this.onContentClick()}/>
+                return (
+                    <div className="ui-note-view"> 
+                        <div className="center"> 
+                            Loading Note
+                        </div> 
+                    </div>
+                    );
             }
-
-            return (
-                <div className="ui-note-view"> 
-                    <NoteViewHeader note = {this.state.note}/>
-                    {currentPanel}
-                </div>
-            );
         }
         else
         {

@@ -110,6 +110,8 @@ export default class Core
         this._dataManager.onNoteRegistered   = (note:Note)=>{ this.onNoteRegistered(note);}
         this._dataManager.onNoteUnregistered = (note:Note)=>{ this.onNoteUnregistered(note);}
 
+        this._dataManager.onNoteLoaded       = (note:Note)=>{ this.onNoteLoaded(note);}
+
         this._popupController       = new PopupController(this,this._platform, this._presentation,this._dataManager);
         this._storageController     = new StorageController(this,this._platform, this._presentation,this._dataManager);
         this._notebookController    = new NotebookController(this,this._platform, this._presentation,this._dataManager);
@@ -291,7 +293,7 @@ export default class Core
         let note:Note = this._dataManager.getNote(noteId);
 
         if(note != null)
-        {
+        {111
             if( this._selectedNote != null)
             {
                 this._selectedNote.SetAsUnselected();
@@ -507,4 +509,11 @@ export default class Core
         this.removeNoteFromHistory(note);
     }
 
+    private onNoteLoaded(note:Note):void
+    {
+        if(note.id==this.selectedNote.id)
+        {
+            this._presentation.updateNoteViewPanel();
+        }
+    }
 }

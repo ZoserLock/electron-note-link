@@ -1,5 +1,6 @@
 // Core
 import Note from "core/data/note";
+import { nominalTypeHack } from "prop-types";
 
 export default class NodeDataParser
 {
@@ -9,6 +10,7 @@ export default class NodeDataParser
             id:note.id, 
             title:note.title, 
             text:note.text,
+            loaded:note.isLoaded,
             trashed:note.trashed,
             started:note.started,
             created:note.created,
